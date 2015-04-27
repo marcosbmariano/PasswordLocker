@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PasswordLocker</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="need_help">Need Help?</string>
+    <string name="enter_password_hint">Enter Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="hint_hint">Add Your Hint</string>
+    <string name="bt_enter">Enter</string>
+    <string name="btn_save">Save</string>
+    <string name="dial_title_create_pass">Create Password</string>
+    <string name="pos_btn_crea_pass">Enter Password</string>
+    <string name="neg_btn_crea_pass">Create For Me</string>
+    <string name="ok">OK</string>
+    <string name="copy">Copy</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="label">LabelLabel</string>
+    <string name="invalid">Invalid</string>
+    <string name="poor">poor</string>
+    <string name="weak">weak</string>
+    <string name="good">good</string>
+    <string name="strong">StrongS</string>
+    <string name="add_acount">Add Account</string>
+    <string name="hint_enter_account">Enter Account</string>
+    <string name="label_new_account">New Account</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="need_help_tutorial1">We touched on cryptography very briefly in Chapter 4. This
+        chapter will focus more on the importance of using cryptography to obfuscate and secure
+        user data that you will either store or transport. First, we will cover the basics of
+        cryptography and how they apply to us in the context of application development. Next,
+        we will look at the various mechanisms of storing data on the Android platform.</string>
+
+    <string name="need_help_tutorial2">
+        Along the way, I will give examples of how to store and retrieve data from different
+        mechanisms and outline what function each store is ideally suited toperform.</string>
+
+    <string name="need_help_tutorial3">
+        One very important point to keep in mind is you should never attempt to write your own
+        cryptographic routines unless you are familiar with cryptographic topics.</string>
+
+    <string name="need_help_tutorial4">
+        I have seen many developers try to do this and end up with vulnerable applications both
+        on mobile devices and in web applications. Cryptography is a vast subject by itself;
+        and, in my opinion, I think it is best left to the folks who dedicate their lives to
+        the subject.</string>
+
+
+    <string name="need_help_tutorial5">
+        As an application developer, you will only be interested in a specific subset of topics in
+        cryptography. I won’t cover the history of cryptography. You only need to keep one thing in
+        mind: make your sensitive user data unreadable to unauthorized users.
+        If an attacker compromises your application using either an indirect or direct attack,
+        then your additional layer (see Figure 5-1) of cryptography will not make it trivial
+        for him to steal the sensitive user data. Instead, he has an additional layer that he has
+        to attack.</string>
+
+    <string name="need_help_tutorial6">
+        This principle is similar to the Information Assurance principle of Defense in Depth that
+        the US National Security Agency developed.</string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <!--These string are keys used for preferences -->
+    <string name="preferences_clipboard_minutes_key">CLIP_BOARD_MINUTES</string>
+    <string name="pref_password_length">PREF_PASSWORD_LENGTH</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
+
+
+
+
+</resources>

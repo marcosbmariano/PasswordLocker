@@ -1,0 +1,33 @@
+class Model // class that is a base class for any model that will be stored in a database
+    public fields
+        final String ID
+
+    public methods
+        a public parameterless constructor
+        clone // returns a clone of the model with the id set to 0
+        getID // returns the model id
+        equals // check if another model from the same class has the same id
+        hashCode // returns a object hashcode
+        delete // delete the model from database and all of its children and all it's references from
+               // other tables
+        getChildren(Class<? extends Model>) // get all of it's children from the argument class
+        getColumnOnRelational() //returns the class name on relational tables
+        getChildColumnOnRelational(String relationalTable) //returns the children class column name on
+                           // the argument table
+        hasRelationWith(String tableName) //returns a boolean if the class has a relation to the table
+        hasRelationWith(Model model) //returns a boolean if the class has a relation with the model class
+        save // if the model was not saved in it's tables, save it, otherwise update it
+        addRelation(Model) //if the class has relation with the argument model, set a relational info
+                           // in it's relational table
+        setId(long) // set the model id to a new value
+        getTableName() //returns the class table name
+        toString() // returns the Class, table name and model id
+
+
+    public static methods
+        getModel( Class<? extends Model>, long id) // (if exists) returns a model from the database
+        getModels( Class<? extends Model> ) // returns all models object from the Class table
+
+
+
+

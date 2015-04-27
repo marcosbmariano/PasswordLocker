@@ -1,0 +1,10 @@
+1 phase:
+user open app
+APP asks user to create an password
+APP asks user to confirm the password
+if confirmed, app asks about hint
+
+App hash the password and stores it in the preferences
+
+=======================================
+

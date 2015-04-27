@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/eT_app_pass_crea_pass"
+        android:hint="@string/enter_password_hint"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/eT_app_pass_crea_confirm"
+        android:hint="@string/confirm_password_hint"
+        android:layout_below="@+id/eT_app_pass_crea_pass"
+        android:layout_alignLeft="@+id/eT_app_pass_crea_pass"
+        android:layout_alignStart="@+id/eT_app_pass_crea_pass" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/eT_app_pass_crea_hint"
+        android:hint="@string/hint_hint"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/eT_app_pass_crea_confirm"
+        android:layout_alignLeft="@+id/eT_app_pass_crea_confirm"
+        android:layout_alignStart="@+id/eT_app_pass_crea_confirm" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_app_pass_crea_check"
+        android:src="@drawable/ic_no_match"
+        android:layout_alignBottom="@+id/eT_app_pass_crea_confirm"
+        android:layout_toRightOf="@+id/eT_app_pass_crea_pass"
+        android:layout_toEndOf="@+id/eT_app_pass_crea_pass" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_new_account"
+        android:id="@+id/tv_pass_creat_strength"
+        android:layout_above="@+id/iv_app_pass_crea_check"
+        android:layout_toRightOf="@+id/eT_app_pass_crea_pass"
+        android:layout_toEndOf="@+id/eT_app_pass_crea_pass"
+        android:textColor="@color/red"
+        />
+</RelativeLayout>

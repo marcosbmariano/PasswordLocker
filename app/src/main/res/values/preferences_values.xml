@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="clipboard_minutes_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="clipboard_minutes_entries">
+        <item>One minute</item>
+        <item>Two minutes</item>
+        <item>Three minutes</item>
+    </string-array>
+
+    <string-array name="pref_password_length_values">
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="pref_password_length_entries">
+        <item>8 characters</item>
+        <item>10 characters</item>
+        <item>12 characters</item>
+    </string-array>
+
+</resources>

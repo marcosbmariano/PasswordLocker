@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="ExpandableView">
+        <attr name="LabelText" format="integer" />
+        <attr name="MainText" format="integer" />
+        <attr name="CloseIcon" format="integer"/>
+        <attr name="OpenIcon" format="integer"/>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/et_app_enter_pass_pass"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="215dp"
+        android:hint="@string/confirm_password_hint"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bt_enter"
+        android:id="@+id/bt_app_enter_pass_enter"
+        android:layout_below="@+id/et_app_enter_pass_pass"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Hint"
+        android:id="@+id/btn_enter_pass_show_hint"
+        android:layout_below="@+id/bt_app_enter_pass_enter"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

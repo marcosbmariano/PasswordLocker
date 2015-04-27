@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory >
+
+
+        <ListPreference
+            android:key="@string/preferences_clipboard_minutes_key"
+            android:title="Clipboard minutes"
+            android:summary="How many minutes the password"
+            android:defaultValue="1"
+            android:entries="@array/clipboard_minutes_entries"
+            android:entryValues="@array/clipboard_minutes_values"
+            />
+
+        <ListPreference
+            android:key="@string/pref_password_length"
+            android:title="Password length"
+            android:summary="How many characters the generated password will have"
+            android:defaultValue="8"
+            android:entries="@array/pref_password_length_entries"
+            android:entryValues="@array/pref_password_length_values"
+
+            />
+    </PreferenceCategory>
+
+
+
+
+
+
+</PreferenceScreen>
