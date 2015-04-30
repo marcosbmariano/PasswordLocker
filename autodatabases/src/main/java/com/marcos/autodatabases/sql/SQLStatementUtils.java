@@ -3,7 +3,7 @@ package com.marcos.autodatabases.sql;
 /**
  * Created by mark on 4/24/15.
  */
-public class SQLStatementUtils {
+class SQLStatementUtils {
 
     public static String setupValueForStatement(Object obj) {
 

@@ -10,57 +10,38 @@ import com.marcos.autodatabases.utils.ModelUtils;
  * Created by marcos on 11/24/14.
  */
 public class Update {
-    private String mSQLStatement;
+    private SQLUpdateCommand mSQLUpdateCommand;
 
-
-    private Update() {
-        mSQLStatement = "UPDATE ";
-    }
-
-
-
-    public void execute() {
-        DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DATABASE TRANSACTIONS", "Update: " + mSQLStatement);
-        helper.executeSQL(mSQLStatement);
-        helper.closeDatabase();
+    Update() {
+        mSQLUpdateCommand = new SQLUpdateCommand();
     }
 
     public Update getValuesFromModel(Model model) {
-        mSQLStatement += ModelUtils.getQueryFromFields(model, false);
+        mSQLUpdateCommand.addMapColumnsAndValues(ModelUtils.getColumnAndValues(model));
         return this;
     }
 
     public static Update from(String tableName) {
         Update up = new Update();
-        up.mSQLStatement += tableName + " SET ";
+        up.mSQLUpdateCommand.setTableName(tableName);
         return up;
     }
 
     public Update whereId(long id) {
-        mSQLStatement += " WHERE " + Model.ID + " = " + id + " ;";
-        return this;
-    }
-
-    public Update where(String column, String value) {
-        mSQLStatement += " where " + column + " = " + "'" + value + "'";
-        return this;
-    }
-
-    public Update andWhere(String column, String value) {
-        mSQLStatement += " AND " + column + " = " + "'" + value + "'";
+        mSQLUpdateCommand.where(Model.ID, id);
         return this;
     }
 
     public Update where(String column, Object value) {
-        mSQLStatement += " where " + column + " = " + value.toString();
+        mSQLUpdateCommand.where(column, value);
         return this;
     }
 
-    public Update andWhere(String column, Object value) {
-        mSQLStatement += " AND " + column + " = " + value.toString();
-        return this;
+    public void execute() {
+        DatabaseHelper helper = DatabaseHelper.getInstance();
+        Log.d("DATABASE TRANSACTIONS", "Update: " + mSQLUpdateCommand.getSQLStatement());
+        helper.executeSQL(mSQLUpdateCommand.getSQLStatement());
+        helper.closeDatabase();
     }
-
 
 }

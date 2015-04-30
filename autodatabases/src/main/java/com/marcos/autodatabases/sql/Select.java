@@ -17,57 +17,35 @@ import java.util.List;
  * Created by marcos on 11/24/14.
  */
 public class Select {
-    private String mQuery;
-    private String mTableName;
+
+    private SQLSelectStatement mSQLSelect;
 
     private Select() {
-        mQuery = "SELECT ";
-        mTableName = "";
+        mSQLSelect = new SQLSelectStatement();
     }
 
-    public static Select all() {
-        return new Select();
+    public static Select from(String tableName) {
+        Select result = new Select();
+        result.mSQLSelect.setTableName(tableName);
+        return result;
     }
 
-    public Select from(String tableName) {
-        mQuery += " * FROM " + tableName + " ";
-        mTableName = tableName;
-        return this;
-    }
-
-    public Select from(Class<? extends Model> aClass) {
-        mTableName = ModelsInfo.getInstance().getTableFromClass(aClass);
-        mQuery += " * FROM " + mTableName + " ";
-        return this;
-    }
-
-    public Select where(String column, String value) {
-        mQuery += " where " + column + " = " + "'" + value + "'";
-        return this;
-    }
-
-    public Select andWhere(String column, String value) {
-        mQuery += " AND " + column + " = " + "'" + value + "'";
-        return this;
+    public static Select from(Class<? extends Model> aClass) {
+        return Select.from(ModelsInfo.getInstance().getTableFromClass(aClass));
     }
 
     public Select where(String column, Object value) {
-        mQuery += " where " + column + " = " + value.toString();
-        return this;
-    }
-
-    public Select andWhere(String column, Object value) {
-        mQuery += " AND " + column + " = " + value.toString();
+        mSQLSelect.where(column, value);
         return this;
     }
 
     public Model executeSingle() {
         DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DATABASE TRANSACTION ", mQuery + " ;");
-        Cursor cv = helper.query(mQuery + " ;");
+
+        Cursor cv = executeForCursor();
 
         Class<? extends Model> aClass = ModelsInfo.getInstance()
-                .getClassFromTable(mTableName);
+                .getClassFromTable(mSQLSelect.getTableName());
 
         Model model = null;
         if (cv != null && cv.moveToFirst()) {
@@ -80,12 +58,11 @@ public class Select {
     }
 
     public List<Model> execute() {
-        DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DATABASE TRANSACTION ", mQuery + " ;");
-        Cursor cv = helper.query(mQuery + " ;");
+
+        Cursor cv = executeForCursor();
 
         Class<? extends Model> aClass =
-                ModelsInfo.getInstance().getClassFromTable(mTableName);
+                ModelsInfo.getInstance().getClassFromTable( mSQLSelect.getTableName());
 
         List<Model> items = new ArrayList<Model>();
         Field[] fields = aClass.getDeclaredFields();
@@ -94,16 +71,15 @@ public class Select {
             items.add(ModelUtils.buildModel(aClass, cv, fields));
         }
         cv.close();
-        helper.closeDatabase();
+
         return items;
     }
 
-
     public Cursor executeForCursor() {
         DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("INSIDE SELECT ", mQuery + " ;");
+        Log.d("INSIDE SELECT ", mSQLSelect.getSQLStatement());
 
-        return helper.query(mQuery + " ;");
+        return helper.query(mSQLSelect.getSQLStatement());
     }
 
 

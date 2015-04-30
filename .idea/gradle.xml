@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/autodatabases" />
             <option value="$PROJECT_DIR$/expandabletextview" />
+            <option value="$PROJECT_DIR$/myutils" />
             <option value="$PROJECT_DIR$/passwordmanager" />
           </set>
         </option>

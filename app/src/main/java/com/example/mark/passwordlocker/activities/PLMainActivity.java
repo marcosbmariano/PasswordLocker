@@ -36,6 +36,7 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
         setFirstFragment();
 
         setupDatabase();
+
     }
 
     private void setupSingletons(){

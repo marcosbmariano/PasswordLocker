@@ -20,15 +20,11 @@ import java.util.List;
  * Created by marcos on 11/24/14.
  */
 public class Insert {
-    //private static Insert mInsert;
-    private String mSQLStatement;
-    private List<String> mColumns;
-    private List<Object> mValues;
+
+    private SQLInsertCommand mSQLInsert;
 
     private Insert() {
-        mSQLStatement = "INSERT INTO ";
-        mColumns = new ArrayList<>();
-        mValues = new ArrayList<>();
+        mSQLInsert = new SQLInsertCommand();
     }
 
     public static long model(Model model) { //todo check if needs to be closed
@@ -52,71 +48,26 @@ public class Insert {
 
     public static Insert into(String tableName) {
         Insert mInsert = new Insert();
-        mInsert.mSQLStatement += tableName;
+        mInsert.mSQLInsert.setTableName(tableName);
         return mInsert;
     }
 
     public static Insert into(Class<? extends Model> aClass) {
         Insert mInsert = new Insert();
-        mInsert.mSQLStatement += ModelsInfo.getInstance().getTableFromClass(aClass);
+        mInsert.mSQLInsert.setTableName(ModelsInfo.getInstance().getTableFromClass(aClass));
         return mInsert;
     }
 
     public final Insert columnAndValues(String column, Object values) {
-        mColumns.add(column);
-        mValues.add(values);
-        return this;
-    }
-
-    public final Insert columnAndValues(String[] column, Object[] values) {
-        mColumns.addAll(Arrays.asList(column));
-        mValues.addAll(Arrays.asList(values));
+        mSQLInsert.insertValue(column, values);
         return this;
     }
 
     public final void execute() {
-        Log.d("DATABASE TRANSACTIONS ", mSQLStatement + getColumnAndValues());
+        Log.d("DATABASE TRANSACTIONS ", mSQLInsert.getSQLStatement());
         DatabaseHelper helper = DatabaseHelper.getInstance();
-        helper.executeSQL(mSQLStatement + getColumnAndValues());
+        helper.executeSQL(mSQLInsert.getSQLStatement());
     }
-
-    private String getColumnAndValues() {
-        String open = "( ";
-        String close = " )";
-        String columns = "";
-        String values = "";
-
-        for (int i = 0; i < mColumns.size(); i++) {
-            if (columns.isEmpty()) {
-                columns += open + mColumns.get(i);
-                values += open + setupValue(mValues.get(i));
-            } else {
-                columns += " , " + mColumns.get(i);
-                values += " , " + setupValue(mValues.get(i));
-            }
-        }
-
-        if (!columns.isEmpty()) {
-            columns += close;
-            values += close;
-        }
-        return columns + " VALUES " + values + ";";
-    }
-
-    private String setupValue(Object value) {
-        if (value instanceof String) {
-            return "\'" + value.toString() + "\'";
-        } else if (value instanceof Boolean) {
-            if (value.equals(true)) {
-                return "1";
-            } else {
-                return "0";
-            }
-        } else {
-            return value.toString();
-        }
-    }
-
 
     private static ContentValues getContentValues(Model model) { //TODO private stat
         ContentValues cv = new ContentValues();
@@ -130,7 +81,6 @@ public class Insert {
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
-
             }
         }
         return cv;
@@ -213,6 +163,3 @@ public class Insert {
         return cv;
     }
 }
-
-
-//Insert.into(databaseName).model(model);

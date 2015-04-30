@@ -49,11 +49,11 @@ public class Model implements Cloneable{
     } //ok
 
     public static Model getModel(Class<? extends Model> aClass, long id) { //ok
-        return Select.all().from(aClass).where(ID, id).executeSingle();
+        return Select.from(aClass).where(ID, id).executeSingle();
     }
 
     public static List<Model> getModels(Class<? extends Model> aClass) { //ok
-        return Select.all().from(aClass).execute();
+        return Select.from(aClass).execute();
     }
 
     @Override
@@ -136,8 +136,10 @@ public class Model implements Cloneable{
 
 
     private final void update() {
-        Update.from(getTableName()).
-                getValuesFromModel(this).whereId(getId()).execute();
+        Update.from(getTableName())
+                .getValuesFromModel(this)
+                .whereId(getId())
+                .execute();
     }
 
     private final long addNewModel() {

@@ -5,13 +5,14 @@ import com.marcos.autodatabases.models.Model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by mark on 4/24/15.
  */
-public abstract class SQLCommandBase {
+abstract class SQLCommandBase {
     private StringBuilder mSQLStatement;
     private String mTableName;
     private Map<String, Object> mModelColumnsAndValues;
@@ -20,7 +21,7 @@ public abstract class SQLCommandBase {
 
 
     SQLCommandBase(){
-        mModelColumnsAndValues = new HashMap<>();
+        mModelColumnsAndValues = new LinkedHashMap<>();
         mSQLStatement = new StringBuilder(150);
     }
 
@@ -36,17 +37,30 @@ public abstract class SQLCommandBase {
     }
 
     public String getSQLStatement(){
-        if ( !mIsStatementFinalized ){
-            finalizeStatement();
-            addSemiColonToStatement();
-            mSQLStatement.trimToSize();
-            mIsStatementFinalized = true;
+        if ( hasTableName()){
+            if ( !mIsStatementFinalized ){
+                finalizeStatement();
+                addSemiColonToStatement();
+                mSQLStatement.trimToSize();
+                mIsStatementFinalized = true;
+            }
+            return mSQLStatement.toString();
+
+        }else{
+            throw new IllegalStateException("A SQL statement must have a table name, "
+                    + this.getClass().getSimpleName());
         }
-        return mSQLStatement.toString();
+
     }
+
+    private boolean hasTableName(){
+        return ( null != mTableName && !mTableName.isEmpty() );
+    }
+
     private void addSemiColonToStatement(){
         appendToStatement(";");
     }
+
     abstract void finalizeStatement();
 
     public void insertColumnsAndValues(String column, Object value){
@@ -87,23 +101,6 @@ public abstract class SQLCommandBase {
         }
         return result;
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//DELETE FROM database_name.table_name;
-//DELETE FROM database_name.table_name WHERE id = 42;
-//INSERT INTO database_name.table_name ( col1, col2 ) VALUES ( val1, val2 );
-//INSERT INTO table_name VALUES ( val1, val2, val3... );
-//SELECT * FROM tbl;
-//SELECT name FROM employees WHERE employee_id = 54923;
-//UPDATE database_name.table_name SET col5 = val5, col2 = val2 WHERE id = 42;

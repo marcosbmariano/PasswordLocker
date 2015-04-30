@@ -22,7 +22,7 @@ public class SQLDeleteCommandTest extends AndroidTestCase {
         mDeleteCommand.setTableName(mTableName);
         String match = "DELETE FROM myTable;";
         String statement = mDeleteCommand.getSQLStatement();
-        Log.e("inside Delete", statement);
+        Log.e("inside delete", statement);
         assertTrue(match.equals(statement));
     }
 

@@ -1,1 +1,1 @@
-include ':app', ':expandabletextview', ':passwordmanager', ':autodatabases'
+include ':app', ':expandabletextview', ':passwordmanager', ':autodatabases', ':myutils'

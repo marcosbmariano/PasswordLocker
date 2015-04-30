@@ -17,53 +17,39 @@ import java.util.Map;
  */
 public class Delete {
 
-    private String mSQLStatement;
+    private SQLDeleteCommand mSQLDelete;
 
     private Delete() {
-        mSQLStatement = "DELETE FROM ";
+        mSQLDelete = new SQLDeleteCommand();
+
     }
 
     public static Delete from(String tableName) {
         Delete delete = new Delete();
-        delete.mSQLStatement += tableName;
+        delete.mSQLDelete.setTableName(tableName);
         return delete;
     }
 
     public static Delete from(Class<? extends Model> aClass) {
         Delete delete = new Delete();
-        delete.mSQLStatement += ModelsInfo.getInstance().getTableFromClass(aClass);
+        delete.mSQLDelete.setTableName( ModelsInfo.getInstance().getTableFromClass(aClass));
         return delete;
     }
 
     public Delete whereId(long id) {
-        mSQLStatement += " WHERE " + Model.ID + " = " + id + " ;";
-        return this;
-    }
-
-    public Delete where(String column, String value) {
-        mSQLStatement += " where " + column + " = " + "'" + value + "'";
-        return this;
-    }
-
-    public Delete andWhere(String column, String value) {
-        mSQLStatement += " AND " + column + " = " + "'" + value + "'";
+        mSQLDelete.where(Model.ID, id);
         return this;
     }
 
     public Delete where(String column, Object value) {
-        mSQLStatement += " where " + column + " = " + value.toString();
-        return this;
-    }
-
-    public Delete andWhere(String column, Object value) {
-        mSQLStatement += " AND " + column + " = " + value.toString();
+        mSQLDelete.where(column, value);
         return this;
     }
 
     public void execute() {
         DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DB DELETE TRANSACTIONS", "Delete: " + mSQLStatement);
-        helper.executeSQL(mSQLStatement);
+        Log.d("DB DELETE TRANSACTIONS", "Delete: " + mSQLDelete.getSQLStatement());
+        helper.executeSQL(mSQLDelete.getSQLStatement());
         helper.closeDatabase();
 
     }

@@ -32,6 +32,7 @@ public class ModelUtils {
         HashMap<String, Object> result = new HashMap<>(fieldsList.length + 1);
 
         for (Field field : fieldsList) {
+            field.setAccessible(true);
             Column col = field.getAnnotation(Column.class);
             if (col != null) {
                 try {
@@ -42,35 +43,15 @@ public class ModelUtils {
                     e.printStackTrace();
                 }
 
+            field.setAccessible(false);
+
             }
         }
         return result;
     }
 
 
-    public static String getQueryFromFields(Model model, boolean usesAnd) {
-        //todo check if AND is used, if not remove it
-        String divisor = "";
-        if (usesAnd) {
-            divisor = " AND ";
-        } else {
-            divisor = " , ";
-        }
-        HashMap<String, String> fields = getColumnAndValuesString(model);
-        String result = "";
-        for (String key : fields.keySet()) {
-            String value = fields.get(key);
-            if (!value.equals("\'\'")) {
-                if (result.isEmpty()) {
-                    result = key + " = " + value;
-                } else {
-                    result += divisor + key + " = " + value;
-                }
-            }
-        }
 
-        return result;
-    }
 
     public static HashMap<String, String> getColumnAndValuesString(Model model) {
         Field[] fieldsList = model.getClass().getDeclaredFields();
@@ -129,7 +110,7 @@ public class ModelUtils {
 
         if (model.hasRelationWith(relationsTable)) {
 
-            Cursor cv = Select.all().from(relationsTable).
+            Cursor cv = Select.from(relationsTable).
                     where(model.getColumnOnRelational(), model.getId()).executeForCursor();
 
             if (cv.getCount() > 0) {
@@ -149,7 +130,7 @@ public class ModelUtils {
 
         HashMap<Integer, Integer> relationalIds = new HashMap<>();
 
-        Cursor cv = Select.all().from(relationalTable).
+        Cursor cv = Select.from(relationalTable).
                 where(model.getColumnOnRelational(), model.getId()).executeForCursor();
 
         String childColumn = model.getChildColumnOnRelational(relationalTable);
