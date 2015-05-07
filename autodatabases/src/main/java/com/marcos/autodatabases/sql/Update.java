@@ -5,6 +5,7 @@ import android.util.Log;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 import com.marcos.autodatabases.utils.ModelUtils;
+import com.marcos.autodatabases.utils.SQLConstants;
 
 /**
  * Created by marcos on 11/24/14.
@@ -28,7 +29,7 @@ public class Update {
     }
 
     public Update whereId(long id) {
-        mSQLUpdateCommand.where(Model.ID, id);
+        mSQLUpdateCommand.where(SQLConstants.ID, id);
         return this;
     }
 

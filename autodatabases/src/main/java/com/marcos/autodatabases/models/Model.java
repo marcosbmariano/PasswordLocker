@@ -7,9 +7,10 @@ import com.marcos.autodatabases.sql.Insert;
 import com.marcos.autodatabases.sql.Select;
 import com.marcos.autodatabases.sql.Update;
 import com.marcos.autodatabases.utils.ModelUtils;
+import com.marcos.autodatabases.utils.SQLConstants;
+
 import java.util.HashMap;
 import java.util.List;
-
 
 //todo catch android.database.sqlite.SQLiteException:
 
@@ -18,9 +19,9 @@ import java.util.List;
  * Created by marcos on 11/13/14.
  */
 public class Model implements Cloneable{
-    public final static String ID = "id";
+
     private ModelInfo mModelInfo;
-    private long id = 0;
+    private long mId = 0;
     private static final int HASH_PRIME = 1583;
 
 
@@ -28,10 +29,9 @@ public class Model implements Cloneable{
         setModelInfo();
     }
 
-
     //when an model object is cloned, if was cloned after the obj being saved,
-    //the clone will have the same id as the main object, so it's necessary that
-    //the clone have it's id set to 0
+    //the clone will have the same mId as the main object, so it's necessary that
+    //the clone have it's mId set to 0
     //if used, Override in the subclass
     public final Model clone() throws CloneNotSupportedException { //TODO fix this clone
         Model clone = null;
@@ -45,11 +45,15 @@ public class Model implements Cloneable{
     }
 
     public final long getId() {
-        return id;
-    } //ok
+        return mId;
+    }
+
+    public final void setId(int id) {
+        mId = id;
+    }
 
     public static Model getModel(Class<? extends Model> aClass, long id) { //ok
-        return Select.from(aClass).where(ID, id).executeSingle();
+        return Select.from(aClass).where(SQLConstants.ID, id).executeSingle();
     }
 
     public static List<Model> getModels(Class<? extends Model> aClass) { //ok
@@ -64,14 +68,12 @@ public class Model implements Cloneable{
                 result = true;
             }
         }
-
         return result;
     }
 
     @Override
     public final int hashCode() {
         return (HASH_PRIME * ( this.getClass().hashCode() + (int)this.getId() ) );
-
     }
 
     public static void delete(Class<? extends Model> modelClass, long modelId){
@@ -126,14 +128,12 @@ public class Model implements Cloneable{
         saveOrUpdate();
     }
     private final void saveOrUpdate(){
-        if (id == 0) {
-            id = addNewModel();
+        if (0 == mId) {
+            mId = addNewModel();
         } else {
             update();
         }
-
     }
-
 
     private final void update() {
         Update.from(getTableName())
@@ -146,19 +146,23 @@ public class Model implements Cloneable{
         return Insert.model(this);
     }
 
-    public final void addRelation(Model model) {
-        if (hasRelationWith(model)) {
-            String parentTable = getTableName();
-            String childTable = model.getTableName();
-            String tableName = parentTable + childTable;
+    public final void addChildModel(Model child) {
+        if (hasRelationWith(child)) {
+            String tableName = getRelationalTableName(child);
 
             Insert.into(tableName).columnAndValues(getColumnOnRelational(), getId()).
-                    columnAndValues(model.getColumnOnRelational(), model.getId()).execute();
+                    columnAndValues(child.getColumnOnRelational(), child.getId()).execute();
         }
     }
 
-    public final void setId(int id) {
-        this.id = id;
+    private final String getRelationalTableName(Model model){
+        String parentTable = "";
+        String childTable = "";
+        if (hasRelationWith(model)) {
+            parentTable = this.getTableName();
+            childTable = model.getTableName();
+        }
+        return parentTable + childTable;
     }
 
     private void setModelInfo() {
@@ -170,9 +174,9 @@ public class Model implements Cloneable{
     }
 
 
-    //Returns the class, the table name and the object id in the table
+    //Returns the class, the table name and the object mId in the table
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ", table: " + getTableName() + ", id: " + id;
+        return getClass().getSimpleName() + ", table: " + getTableName() + ", mId: " + mId;
     }
 }

@@ -23,6 +23,4 @@ class SQLStatementUtils {
         return "\'" + string + "\'";
     }
 
-
-
 }

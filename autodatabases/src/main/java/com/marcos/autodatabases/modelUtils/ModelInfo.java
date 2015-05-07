@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ModelInfo {
 
-    private final String  mClassName; //stores full name;
+    private final String mClassName; //stores full name;
     private final String mTableName;
     private final String mSimpleClassName;
     private final List<String> mModelSchemas; //is it really final???
@@ -25,11 +25,10 @@ public class ModelInfo {
         mThisClass = aClass;
         mClassName = aClass.getName();
         mSimpleClassName = aClass.getSimpleName();
-        mTableName = SQLiteUtils.getTableName(aClass);
-        mModelSchemas = SQLiteUtils.getSQLCommands(aClass);
-        mRelationalTables = SQLiteUtils.getRelationalTables(aClass);
+        mTableName = SQLiteUtils.getTableNameFromClass(aClass);
+        mModelSchemas = SQLiteUtils.generateSQLCommands(aClass);
+        mRelationalTables = SQLiteUtils.getRelationalTablesNameAndClass(aClass);
     }
-
 
     public Class<? extends Model> getModelClass() {
         return mThisClass;

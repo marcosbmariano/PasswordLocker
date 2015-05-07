@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:mId="@+mId/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PLMainActivity"
@@ -8,35 +8,35 @@
 
 
     <FrameLayout
-        android:id="@+id/MainFragContainer"
+        android:mId="@+mId/MainFragContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignTop="@+id/SecondFragContainer"
+        android:layout_alignTop="@+mId/SecondFragContainer"
         android:layout_alignParentTop="true" />
 
     <FrameLayout
-        android:id="@+id/SecondFragContainer"
+        android:mId="@+mId/SecondFragContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/MainFragContainer"
-        android:layout_alignEnd="@+id/MainFragContainer"
-        android:layout_alignLeft="@+id/MainFragContainer"
-        android:layout_alignStart="@+id/MainFragContainer" />
+        android:layout_alignRight="@+mId/MainFragContainer"
+        android:layout_alignEnd="@+mId/MainFragContainer"
+        android:layout_alignLeft="@+mId/MainFragContainer"
+        android:layout_alignStart="@+mId/MainFragContainer" />
 
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="com.example.mark.passwordlocker.fragments.NeedHelpFrag"
-        android:id="@+id/FGNeedHelp"
+        android:mId="@+mId/FGNeedHelp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
 
 
 
-<!-- android:layout_alignTop="@+id/FGNeedHelp"
-        android:layout_above="@+id/FGNeedHelp"-->
+<!-- android:layout_alignTop="@+mId/FGNeedHelp"
+        android:layout_above="@+mId/FGNeedHelp"-->
 
 
 

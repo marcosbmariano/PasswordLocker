@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.marcos.autodatabases.models.Model;
+import com.marcos.autodatabases.utils.SQLConstants;
 
 /**
  * Created by mark on 4/28/15.
@@ -27,14 +28,14 @@ public class SQLSelectStatementTest extends AndroidTestCase {
 
 
     public void test1(){
-        String expected = "SELECT * FROM myTable WHERE "+ Model.ID + " = 23;";
-        mSelectStatement.where(Model.ID, 23);
+        String expected = "SELECT * FROM myTable WHERE "+ SQLConstants.ID + " = 23;";
+        mSelectStatement.where(SQLConstants.ID, 23);
         assertTrue(expected.equals(mSelectStatement.getSQLStatement()));
     }
 
     public void test2(){
-        String expected = "SELECT columnName FROM myTable WHERE "+ Model.ID + " = 23;";
-        mSelectStatement.where(Model.ID, 23);
+        String expected = "SELECT columnName FROM myTable WHERE "+ SQLConstants.ID + " = 23;";
+        mSelectStatement.where(SQLConstants.ID, 23);
         mSelectStatement.column("columnName");
         assertTrue(expected.equals(mSelectStatement.getSQLStatement()));
     }

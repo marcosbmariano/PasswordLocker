@@ -16,7 +16,6 @@ abstract class SQLCommandBase {
     private StringBuilder mSQLStatement;
     private String mTableName;
     private Map<String, Object> mModelColumnsAndValues;
-    public final String ID = Model.ID;
     private boolean mIsStatementFinalized = false;
 
 
@@ -102,5 +101,8 @@ abstract class SQLCommandBase {
         return result;
     }
 
+    interface Execute{
+        public void execute();
+    }
 
 }

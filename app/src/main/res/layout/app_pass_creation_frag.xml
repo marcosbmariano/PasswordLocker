@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/eT_app_pass_crea_pass"
+        android:mId="@+mId/eT_app_pass_crea_pass"
         android:hint="@string/enter_password_hint"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -18,41 +18,41 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/eT_app_pass_crea_confirm"
+        android:mId="@+mId/eT_app_pass_crea_confirm"
         android:hint="@string/confirm_password_hint"
-        android:layout_below="@+id/eT_app_pass_crea_pass"
-        android:layout_alignLeft="@+id/eT_app_pass_crea_pass"
-        android:layout_alignStart="@+id/eT_app_pass_crea_pass" />
+        android:layout_below="@+mId/eT_app_pass_crea_pass"
+        android:layout_alignLeft="@+mId/eT_app_pass_crea_pass"
+        android:layout_alignStart="@+mId/eT_app_pass_crea_pass" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/eT_app_pass_crea_hint"
+        android:mId="@+mId/eT_app_pass_crea_hint"
         android:hint="@string/hint_hint"
         android:layout_centerVertical="true"
-        android:layout_below="@+id/eT_app_pass_crea_confirm"
-        android:layout_alignLeft="@+id/eT_app_pass_crea_confirm"
-        android:layout_alignStart="@+id/eT_app_pass_crea_confirm" />
+        android:layout_below="@+mId/eT_app_pass_crea_confirm"
+        android:layout_alignLeft="@+mId/eT_app_pass_crea_confirm"
+        android:layout_alignStart="@+mId/eT_app_pass_crea_confirm" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/iv_app_pass_crea_check"
+        android:mId="@+mId/iv_app_pass_crea_check"
         android:src="@drawable/ic_no_match"
-        android:layout_alignBottom="@+id/eT_app_pass_crea_confirm"
-        android:layout_toRightOf="@+id/eT_app_pass_crea_pass"
-        android:layout_toEndOf="@+id/eT_app_pass_crea_pass" />
+        android:layout_alignBottom="@+mId/eT_app_pass_crea_confirm"
+        android:layout_toRightOf="@+mId/eT_app_pass_crea_pass"
+        android:layout_toEndOf="@+mId/eT_app_pass_crea_pass" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_new_account"
-        android:id="@+id/tv_pass_creat_strength"
-        android:layout_above="@+id/iv_app_pass_crea_check"
-        android:layout_toRightOf="@+id/eT_app_pass_crea_pass"
-        android:layout_toEndOf="@+id/eT_app_pass_crea_pass"
+        android:mId="@+mId/tv_pass_creat_strength"
+        android:layout_above="@+mId/iv_app_pass_crea_check"
+        android:layout_toRightOf="@+mId/eT_app_pass_crea_pass"
+        android:layout_toEndOf="@+mId/eT_app_pass_crea_pass"
         android:textColor="@color/red"
         />
 </RelativeLayout>

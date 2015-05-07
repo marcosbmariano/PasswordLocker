@@ -2,6 +2,7 @@ package com.example.mark.myutils;
 
 import android.test.AndroidTestCase;
 
+import java.lang.reflect.Array;
 import java.util.SimpleTimeZone;
 
 
@@ -25,26 +26,50 @@ public class ClassSelectorTest extends AndroidTestCase {
     }
 
     public void testInteger(){
+        int x = 3;
+        assertEquals(INTEGER, mSelector.getResult(x));
         Integer test = 5;
         assertEquals(BOXED_INTEGER, mSelector.getResult(test));
     }
 
     public void testShort(){
+        short x = Short.MAX_VALUE;
+        assertEquals(SHORT, mSelector.getResult(x));
         Short test = Short.MAX_VALUE;
         assertEquals(BOXED_SHORT, mSelector.getResult(test));
     }
 
     public void testLong(){
+        long x = Long.MAX_VALUE;
+        assertEquals(LONG, mSelector.getResult(x));
         Long test = Long.MAX_VALUE;
         assertEquals(BOXED_LONG, mSelector.getResult(test));
     }
 
     public void testBoolean(){
+        boolean x = true;
+        assertEquals(BOOLEAN, mSelector.getResult(x));
         Boolean test = Boolean.FALSE;
         assertEquals(BOXED_BOOLEAN, mSelector.getResult(test));
     }
 
-    public void testSChar(){
+    public void testDouble(){
+        double x = Double.MAX_VALUE;
+        assertEquals(DOUBLE, mSelector.getResult(x));
+        Double test = Double.MAX_VALUE;
+        assertEquals(BOXED_DOUBLE, mSelector.getResult(test));
+    }
+
+    public void testFloat(){
+        float x = Float.MAX_VALUE;
+        assertEquals(FLOAT, mSelector.getResult(x));
+        Float test = Float.MAX_VALUE;
+        assertEquals(BOXED_FLOAT, mSelector.getResult(test));
+    }
+
+    public void testChar(){
+        char x = 'h';
+        assertEquals(CHAR, mSelector.getResult(x));
         Character test = 'C';
         assertEquals(BOXED_CHAR, mSelector.getResult(test));
     }
@@ -57,12 +82,15 @@ public class ClassSelectorTest extends AndroidTestCase {
     public void testDefault(){
         Object test = null;
         assertEquals(DEFAULT, mSelector.getResult(test));
+        //it does not expect an array, so it defaults
+        String [] x = {"", ""};
+        assertEquals(DEFAULT, mSelector.getResult(x));
     }
 
-
-
-
-
+    public void testInCaseOfOtherClass(){
+        AnotherClass x = new AnotherClass();
+        assertEquals(ANOTHER_CLASS, mSelector.getResult(x));
+    }
 
     String BYTE = "byte";
     String BOXED_BYTE ="boxedByte";
@@ -82,98 +110,117 @@ public class ClassSelectorTest extends AndroidTestCase {
     String BOXED_CHAR = "boxedChar";
     String STRING = "string";
     String DEFAULT = "default";
+    String ANOTHER_CLASS = "anotherClass";
 
     class ClassSelectorForTest extends ClassSelector<String>{
 
-
-        @Override
-        String getByte() {
-            return BYTE;
+        private Object mObj;
+        public String getResult(Object obj){
+            mObj = obj;
+            return super.getResult(obj);
         }
 
         @Override
-        String getBoxedByte() {
+        protected String getByte() { return BYTE; }
+
+        @Override
+        protected String getBoxedByte() {
             return BOXED_BYTE;
         }
 
         @Override
-        String getInt() {
+        protected String getInt() {
             return INTEGER;
         }
 
         @Override
-        String getBoxedInteger() {
+        protected String getBoxedInteger() {
             return BOXED_INTEGER;
         }
 
         @Override
-        String getShort() {
+        protected String getShort() {
             return SHORT;
         }
 
         @Override
-        String getBoxedShort() {
+        protected String getBoxedShort() {
             return BOXED_SHORT;
         }
 
         @Override
-        String getLong() {
+        protected String getLong() {
             return LONG;
         }
 
         @Override
-        String getBoxedLong() {
+        protected String getBoxedLong() {
             return BOXED_LONG;
         }
 
         @Override
-        String getFloat() {
+        protected String getFloat() {
             return FLOAT;
         }
 
         @Override
-        String getBoxedFloat() {
+        protected String getBoxedFloat() {
             return BOXED_FLOAT;
         }
 
         @Override
-        String getDouble() {
+        protected String getDouble() {
             return DOUBLE;
         }
 
         @Override
-        String getBoxedDouble() {
+        protected String getBoxedDouble() {
             return BOXED_DOUBLE;
         }
 
         @Override
-        String getBoolean() {
+        protected String getBoolean() {
             return BOOLEAN;
         }
 
         @Override
-        String getBoxedBoolean() {
+        protected String getBoxedBoolean() {
             return BOXED_BOOLEAN;
         }
 
         @Override
-        String getChar() {
+        protected String getChar() {
             return CHAR;
         }
 
         @Override
-        String getBoxedChar() {
+        protected String getBoxedChar() {
             return BOXED_CHAR;
         }
 
         @Override
-        String getString() {
+        protected String getString() {
             return STRING;
         }
 
         @Override
-        String getDefault(String index) {
-            return DEFAULT;
+        protected String getDefault() {
+            if (mObj instanceof AnotherClass){
+                return getAnotherClass((AnotherClass)mObj);
+            }else{
+                return DEFAULT;
+            }
         }
+
+        //this is in case of the need to extend the class to handle another case of
+        //object
+
+        String getAnotherClass(AnotherClass anotherClass){
+            return ANOTHER_CLASS;
+        }
+    }
+
+    class AnotherClass{
+
     }
 }

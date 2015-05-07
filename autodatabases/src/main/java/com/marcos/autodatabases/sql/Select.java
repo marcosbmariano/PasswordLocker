@@ -49,7 +49,7 @@ public class Select {
 
         Model model = null;
         if (cv != null && cv.moveToFirst()) {
-            model = ModelUtils.buildModel(aClass, cv, null);
+            model = ModelUtils.buildModel(aClass, cv);
             cv.close();
         }
         helper.closeDatabase();
@@ -65,10 +65,9 @@ public class Select {
                 ModelsInfo.getInstance().getClassFromTable( mSQLSelect.getTableName());
 
         List<Model> items = new ArrayList<Model>();
-        Field[] fields = aClass.getDeclaredFields();
 
         while (cv.moveToNext()) {
-            items.add(ModelUtils.buildModel(aClass, cv, fields));
+            items.add(ModelUtils.buildModel(aClass, cv));;
         }
         cv.close();
 

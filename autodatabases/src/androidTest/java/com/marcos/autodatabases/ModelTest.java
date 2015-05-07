@@ -48,8 +48,8 @@ public class ModelTest extends AndroidTestCase {
         address.setNumber(333);
         address.save();
 
-        user.addRelation(costumer);
-        costumer.addRelation(address);
+        user.addChildModel(costumer);
+        costumer.addChildModel(address);
 
     }
 

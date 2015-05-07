@@ -1,20 +1,22 @@
 package com.example.mark.myutils;
 
-import android.util.Log;
 
-import java.lang.reflect.Type;
+
+
 
 /**
  * Created by mark on 4/29/15.
+ * In case the need of extend to user this class for another type of class, look the example
+ * in this class test
  */
 public abstract class ClassSelector<E> {
-    private final static String BYTE = "byte";
+    private final static String BYTE ="byte";
     private final static String BOXED_BYTE ="java.lang.Byte";
     private final static String INTEGER = "int";
     private final static String BOXED_INTEGER = "java.lang.Integer";
     private final static String SHORT = "short";
     private final static String BOXED_SHORT ="java.lang.Short";
-    private final static String LONG = "long";
+    private final static String LONG  = "long";
     private final static String BOXED_LONG  = "java.lang.Long";
     private final static String FLOAT = "float";
     private final static String BOXED_FLOAT = "java.lang.Float";
@@ -27,31 +29,55 @@ public abstract class ClassSelector<E> {
     private final static String STRING = "java.lang.String";
 
 
-
-
-    E getResult(Object obj){
-
-        String className = getClassName(obj);
-        Log.e("Inside ClassSelector", className);
-        return selectMethod(getClassName(obj), obj);
+    protected E getResult(Object obj){
+        return selectMethod(getClassName(obj));
     }
-    E getResult(byte x){
-        return getByte(x);
+    protected E getResult(byte x){
+        return getByte();
     }
 
-    String getClassName(Object obj){
+    protected E getResult(int x){
+        return getInt();
+    }
+
+    protected E getResult(short x){
+        return getShort();
+    }
+
+    protected E getResult(long x){
+        return getLong();
+    }
+
+    protected E getResult(char x){
+        return getChar();
+    }
+
+    protected E getResult(boolean x){
+        return getBoolean();
+    }
+
+    protected E getResult(double x){
+        return getDouble();
+    }
+
+    protected E getResult(float x){
+        return getFloat();
+    }
+
+    protected String getClassName(Object obj){
         if ( null == obj){
             return "null";
         }
         return String.valueOf(obj.getClass().getName());
     }
 
-
-    final E selectMethod(String index, Object obj) {
+    protected final E selectMethod(String index) {
 
         switch (index) {
+            case BYTE:
+                return getByte();
             case BOXED_BYTE:
-                return getBoxedByte((Byte)obj);
+                return getBoxedByte();
             case INTEGER:
                 return getInt();
             case BOXED_INTEGER:
@@ -83,27 +109,27 @@ public abstract class ClassSelector<E> {
             case STRING:
                 return getString();
             default:
-                return getDefault(index);
+                return getDefault();
         }
     }
 
-    abstract E getByte(byte x);
-    abstract E getBoxedByte(Byte x);
-    abstract E getInt();
-    abstract E getBoxedInteger();
-    abstract E getShort();
-    abstract E getBoxedShort();
-    abstract E getLong();
-    abstract E getBoxedLong();
-    abstract E getFloat();
-    abstract E getBoxedFloat();
-    abstract E getDouble();
-    abstract E getBoxedDouble();
-    abstract E getBoolean();
-    abstract E getBoxedBoolean();
-    abstract E getChar();
-    abstract E getBoxedChar();
-    abstract E getString();
-    abstract E getDefault(String index);
+    protected abstract E getByte();
+    protected abstract E getBoxedByte();
+    protected abstract E getInt();
+    protected abstract E getBoxedInteger();
+    protected abstract E getShort();
+    protected abstract E getBoxedShort();
+    protected abstract E getLong();
+    protected abstract E getBoxedLong();
+    protected abstract E getFloat();
+    protected abstract E getBoxedFloat();
+    protected abstract E getDouble();
+    protected abstract E getBoxedDouble();
+    protected abstract E getBoolean();
+    protected abstract E getBoxedBoolean();
+    protected abstract E getChar();
+    protected abstract E getBoxedChar();
+    protected abstract E getString();
+    protected abstract E getDefault();
 
 }

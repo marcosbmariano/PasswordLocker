@@ -25,7 +25,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         List<String> schemas = mModelsInfo.getSchemas();
         for (String schema : schemas) {
-            Log.d("DATABASE TRANSACTION", "Eschema:" + schema);
+            Log.d("DATABASE TRANSACTION", "Schema:" + schema);
             db.execSQL(schema);
         }
     }

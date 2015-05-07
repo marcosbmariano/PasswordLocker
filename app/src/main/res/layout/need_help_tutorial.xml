@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/sv_need_help_tutorial"
+    android:mId="@+mId/sv_need_help_tutorial"
     android:layout_gravity="center_horizontal"
     android:scrollbars="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
@@ -11,7 +11,7 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.example.mark.expandabletextview.ExpandableView
-            android:id="@+id/expv_1"
+            android:mId="@+mId/expv_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             custom:LabelText="@string/label"
@@ -19,28 +19,28 @@
         </com.example.mark.expandabletextview.ExpandableView>
 
         <com.example.mark.expandabletextview.ExpandableView
-            android:id="@+id/expv_2"
+            android:mId="@+mId/expv_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             custom:LabelText="@string/label"
             custom:MainText="@string/need_help_tutorial2"/>
 
         <com.example.mark.expandabletextview.ExpandableView
-            android:id="@+id/expv_3"
+            android:mId="@+mId/expv_3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             custom:LabelText="@string/label"
             custom:MainText="@string/need_help_tutorial3"/>
 
         <com.example.mark.expandabletextview.ExpandableView
-            android:id="@+id/expv_4"
+            android:mId="@+mId/expv_4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             custom:LabelText="@string/label"
             custom:MainText="@string/need_help_tutorial4"/>
 
         <com.example.mark.expandabletextview.ExpandableView
-            android:id="@+id/expv_5"
+            android:mId="@+mId/expv_5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             custom:LabelText="@string/label"

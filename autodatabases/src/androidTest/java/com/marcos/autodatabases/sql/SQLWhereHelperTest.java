@@ -2,7 +2,8 @@ package com.marcos.autodatabases.sql;
 
 import android.test.AndroidTestCase;
 
-import com.marcos.autodatabases.models.Model;
+
+import com.marcos.autodatabases.utils.SQLConstants;
 
 /**
  * Created by mark on 4/28/15.
@@ -17,8 +18,8 @@ public class SQLWhereHelperTest extends AndroidTestCase {
     }
 
     public void test1(){
-        String expected = " WHERE id = 15";
-        mWhereHelper.where(Model.ID, 15);
+        String expected = " WHERE "+ SQLConstants.ID + " = 15";
+        mWhereHelper.where(SQLConstants.ID, 15);
         assertTrue(expected.equals(mWhereHelper.getWhereStatement()));
     }
 

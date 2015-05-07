@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 
-@Table(name = "account")
+@Table(name = "Account")
 public class Account extends Model{
 
     @Column( name = "name")

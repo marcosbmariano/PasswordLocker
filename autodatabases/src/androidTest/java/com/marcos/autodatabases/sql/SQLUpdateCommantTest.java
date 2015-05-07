@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.marcos.autodatabases.models.Model;
+import com.marcos.autodatabases.utils.SQLConstants;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,21 +33,21 @@ public class SQLUpdateCommantTest extends AndroidTestCase {
     }
 
     public void test1(){
-        String expected = "UPDATE myTable SET columnName = 'value' WHERE id = 5;";
+        String expected = "UPDATE myTable SET columnName = 'value' WHERE "+ SQLConstants.ID + " = 5;";
         mUpdate.setTableName(mTableName);
         mUpdate.newValue("columnName", "value");
-        mUpdate.where(Model.ID,5);
+        mUpdate.where(SQLConstants.ID,5);
         assertTrue(expected.equals(mUpdate.getSQLStatement()));
     }
 
     public void test2(){
         String expected = "UPDATE myTable SET columnName =" +
-                " 'value', int = 5, double = 3.33 WHERE id = 10;";
+                " 'value', int = 5, double = 3.33 WHERE " + SQLConstants.ID+ " = 10;";
         mUpdate.setTableName(mTableName);
         mUpdate.newValue("columnName", "value");
         mUpdate.newValue("int", 5);
         mUpdate.newValue("double", 3.33);
-        mUpdate.where(Model.ID,10);
+        mUpdate.where(SQLConstants.ID,10);
         //Log.e("inside Update", mUpdate.getSQLStatement());
         assertTrue(expected.equals(mUpdate.getSQLStatement()));
 

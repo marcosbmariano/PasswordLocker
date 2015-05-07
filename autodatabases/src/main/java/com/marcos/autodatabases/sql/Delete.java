@@ -6,6 +6,7 @@ import com.marcos.autodatabases.modelUtils.ModelsInfo;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 import com.marcos.autodatabases.utils.ModelUtils;
+import com.marcos.autodatabases.utils.SQLConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,44 +16,42 @@ import java.util.Map;
 /**
  * Created by marcos on 11/24/14.
  */
-public class Delete {
+public class Delete implements SQLCommandBase.Execute{
 
-    private SQLDeleteCommand mSQLDelete;
+    private SQLDeleteCommand mSQLDeleteCommand;
 
     private Delete() {
-        mSQLDelete = new SQLDeleteCommand();
-
+        mSQLDeleteCommand = new SQLDeleteCommand();
     }
 
     public static Delete from(String tableName) {
         Delete delete = new Delete();
-        delete.mSQLDelete.setTableName(tableName);
+        delete.mSQLDeleteCommand.setTableName(tableName);
         return delete;
     }
 
     public static Delete from(Class<? extends Model> aClass) {
         Delete delete = new Delete();
-        delete.mSQLDelete.setTableName( ModelsInfo.getInstance().getTableFromClass(aClass));
+        delete.mSQLDeleteCommand.setTableName(ModelsInfo.getInstance().getTableFromClass(aClass));
         return delete;
     }
 
     public Delete whereId(long id) {
-        mSQLDelete.where(Model.ID, id);
+        mSQLDeleteCommand.where(SQLConstants.ID, id);
         return this;
     }
 
     public Delete where(String column, Object value) {
-        mSQLDelete.where(column, value);
+        mSQLDeleteCommand.where(column, value);
         return this;
     }
 
-    public void execute() {
-        DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DB DELETE TRANSACTIONS", "Delete: " + mSQLDelete.getSQLStatement());
-        helper.executeSQL(mSQLDelete.getSQLStatement());
-        helper.closeDatabase();
-
-    }
+//    public void execute() {
+//        DatabaseHelper helper = DatabaseHelper.getInstance();
+//        Log.d("DB DELETE TRANSACTIONS", "Delete: " + mSQLDeleteCommand.getSQLStatement());
+//        helper.executeSQL(mSQLDeleteCommand.getSQLStatement());
+//        helper.closeDatabase();
+//    }
 
     public static void deleteChildren(Model model) {
         List<Model> childrenList = new ArrayList<>();
@@ -89,4 +88,8 @@ public class Delete {
                 .where(model.getColumnOnRelational(), model.getId()).execute();
     }
 
+    @Override
+    public void execute() {
+        new SQLExecutor(DatabaseHelper.getInstance()).execute(mSQLDeleteCommand);
+    }
 }

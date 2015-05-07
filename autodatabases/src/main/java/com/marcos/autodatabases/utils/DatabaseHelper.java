@@ -75,7 +75,7 @@ public class DatabaseHelper {
     public void executeSQL(String command) {
         mDb = mHelper.getWritableDatabase();
         mDb.execSQL(command);
-        closeDatabase();
+        //closeDatabase();
     }
 
     public Cursor query(String query) {
