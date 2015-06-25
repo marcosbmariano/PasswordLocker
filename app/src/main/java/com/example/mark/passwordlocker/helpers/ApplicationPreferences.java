@@ -12,7 +12,7 @@ import com.example.mark.passwordlocker.R;
 public class ApplicationPreferences {
     private static Context mContext;
     private static ApplicationPreferences mIntance;
-    private static SharedPreferences mPreferences;
+    private static SharedPreferences mApllicationsPreferences;
 
     private ApplicationPreferences(){
         if (null == mContext){
@@ -24,7 +24,7 @@ public class ApplicationPreferences {
     }
 
     private void setupPreferences(){
-        mPreferences = getSharedPreferences();
+        mApllicationsPreferences = getSharedPreferences();
     }
 
     public static ApplicationPreferences getInstance(){

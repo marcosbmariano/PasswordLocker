@@ -15,7 +15,7 @@ public class ModelsInfo {
     private static ModelsInfo instance = null;
     private static List<ModelInfo> mModelsInfo;
     private static List<Class<? extends Model>> classList;
-    private HashMap<String, Class<? extends Model>> mAllRelationalTables; //Final????
+    private HashMap<String, Class<? extends Model>> mAllRelationalTables;
 
     private ModelsInfo() {
         classList = new ArrayList<>();
@@ -66,24 +66,6 @@ public class ModelsInfo {
         return relativeTable;
     }
 
-    public Class<? extends Model> getClassFromSimpleName(String simpleName) {// check that
-        for (Class<? extends Model> model : classList) {
-            if (model.getSimpleName().equals(simpleName)) {
-                return model;
-            }
-        }
-        return null;
-    }
-
-    public Class<? extends Model> getClassFromName(String name) {// check that
-        for (Class<? extends Model> model : classList) {
-            if (model.getName().equals(name)) {
-                return model;
-            }
-        }
-        return null;
-    }
-
     public Class<? extends Model> getClassFromTable(String tableName) {
 
         for (ModelInfo info : mModelsInfo) {
@@ -113,6 +95,4 @@ public class ModelsInfo {
         }
         return null;
     }
-
-
 }

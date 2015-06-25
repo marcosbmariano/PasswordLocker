@@ -1,4 +1,4 @@
-package com.marcos.autodatabases;
+package com.marcos.autodatabases.modelUtils;
 
 import android.test.AndroidTestCase;
 

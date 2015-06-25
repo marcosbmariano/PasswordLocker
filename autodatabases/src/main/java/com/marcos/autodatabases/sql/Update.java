@@ -39,10 +39,7 @@ public class Update {
     }
 
     public void execute() {
-        DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("DATABASE TRANSACTIONS", "Update: " + mSQLUpdateCommand.getSQLStatement());
-        helper.executeSQL(mSQLUpdateCommand.getSQLStatement());
-        helper.closeDatabase();
+        mSQLUpdateCommand.execute();
     }
 
 }

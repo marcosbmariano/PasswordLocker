@@ -1,10 +1,9 @@
 package com.marcos.autodatabases.sql;
 
-import android.util.Log;
+
 
 import com.marcos.autodatabases.modelUtils.ModelsInfo;
 import com.marcos.autodatabases.models.Model;
-import com.marcos.autodatabases.utils.DatabaseHelper;
 import com.marcos.autodatabases.utils.ModelUtils;
 import com.marcos.autodatabases.utils.SQLConstants;
 
@@ -16,7 +15,7 @@ import java.util.Map;
 /**
  * Created by marcos on 11/24/14.
  */
-public class Delete implements SQLCommandBase.Execute{
+public class Delete {
 
     private SQLDeleteCommand mSQLDeleteCommand;
 
@@ -45,13 +44,6 @@ public class Delete implements SQLCommandBase.Execute{
         mSQLDeleteCommand.where(column, value);
         return this;
     }
-
-//    public void execute() {
-//        DatabaseHelper helper = DatabaseHelper.getInstance();
-//        Log.d("DB DELETE TRANSACTIONS", "Delete: " + mSQLDeleteCommand.getSQLStatement());
-//        helper.executeSQL(mSQLDeleteCommand.getSQLStatement());
-//        helper.closeDatabase();
-//    }
 
     public static void deleteChildren(Model model) {
         List<Model> childrenList = new ArrayList<>();
@@ -88,8 +80,8 @@ public class Delete implements SQLCommandBase.Execute{
                 .where(model.getColumnOnRelational(), model.getId()).execute();
     }
 
-    @Override
-    public void execute() {
-        new SQLExecutor(DatabaseHelper.getInstance()).execute(mSQLDeleteCommand);
+    public void execute(){
+        mSQLDeleteCommand.execute();
     }
+
 }

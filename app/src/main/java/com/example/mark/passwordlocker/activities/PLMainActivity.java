@@ -32,9 +32,7 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
         setContentView(R.layout.activity_plmain);
 
         setupSingletons();
-
         setFirstFragment();
-
         setupDatabase();
 
     }
@@ -70,7 +68,7 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
     }
 
 
-    private boolean isApplicationPasswordDefined(){
+    boolean isApplicationPasswordDefined(){
         if ( null == mApplicationPassword){
             mApplicationPassword = ApplicationPassword.getInstance();
         }

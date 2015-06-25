@@ -2,14 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".PLMainActivity">
     <item
-        android:mId="@+mId/action_settings"
+        android:id="@+id/action_settings"
         android:icon="@drawable/ic_action_name"
         android:title="@string/action_settings"
         android:orderInCategory="2"
         app:showAsAction="always"
         android:visible="true"/>
     <item
-        android:mId="@+mId/action_add_account"
+        android:id="@+id/action_add_account"
         android:orderInCategory="1"
         android:title="@string/add_acount"
         android:icon="@drawable/ic_add"

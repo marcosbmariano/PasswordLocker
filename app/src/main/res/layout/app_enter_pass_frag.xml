@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:mId="@+mId/et_app_enter_pass_pass"
+        android:id="@+id/et_app_enter_pass_pass"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="215dp"
@@ -17,15 +17,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bt_enter"
-        android:mId="@+mId/bt_app_enter_pass_enter"
-        android:layout_below="@+mId/et_app_enter_pass_pass"
+        android:id="@+id/bt_app_enter_pass_enter"
+        android:layout_below="@+id/et_app_enter_pass_pass"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Hint"
-        android:mId="@+mId/btn_enter_pass_show_hint"
-        android:layout_below="@+mId/bt_app_enter_pass_enter"
+        android:id="@+id/btn_enter_pass_show_hint"
+        android:layout_below="@+id/bt_app_enter_pass_enter"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

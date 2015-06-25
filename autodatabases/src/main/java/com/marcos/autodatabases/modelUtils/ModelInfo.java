@@ -1,6 +1,7 @@
 package com.marcos.autodatabases.modelUtils;
 
 import com.marcos.autodatabases.models.Model;
+import com.marcos.autodatabases.utils.SQLConstants;
 import com.marcos.autodatabases.utils.SQLiteUtils;
 
 import java.util.HashMap;
@@ -16,8 +17,8 @@ public class ModelInfo {
     private final String mClassName; //stores full name;
     private final String mTableName;
     private final String mSimpleClassName;
-    private final List<String> mModelSchemas; //is it really final???
-    private final HashMap<String, Class<? extends Model>> mRelationalTables; //private??? //is it really final?
+    private final List<String> mModelSchemas;
+    private final HashMap<String, Class<? extends Model>> mRelationalTables;
     private final Class<? extends Model> mThisClass;
 
 
@@ -71,13 +72,13 @@ public class ModelInfo {
     }
 
     //returns the column name related to the child class of the relational table
-    public String getChildRelationalColumn(String relationaltable) {
-        return mRelationalTables.get(relationaltable).getSimpleName() + "Id";
+    public String getChildRelationalColumn(String relationalTable) {
+        return mRelationalTables.get(relationalTable).getSimpleName() + SQLConstants.ID;
     }
 
     //returns the column name related to this model
     public String getRelationalColumn() {
-        return mSimpleClassName + "Id";
+        return mSimpleClassName + SQLConstants.ID;
     }
 
 }

@@ -34,7 +34,6 @@ class SQLUpdateCommand extends SQLCommandBase {
     }
 
     void addMapColumnsAndValues(Map<String, Object> map){
-        Log.e("Inside SQLUpdate", "how many " + map.size());
         insertColumnsAndValues(map);
     }
 

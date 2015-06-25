@@ -1,7 +1,6 @@
 package com.example.mark.passwordlocker.helpers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.cipher.PasswordCipher;
@@ -12,7 +11,7 @@ import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
 public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewed
     private final String PREFERENCES_NAME = "app_pref";
-    private final String APP_PASSWORD_NAME = "app_password";
+    private final String APP_PASSWORD_KEY = "app_password";
     private final String APP_PASSWORD_HINT = "password_kint";
     private static boolean isPasswordValid;
     private static Context mContext;
@@ -37,7 +36,11 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
     }
 
     public void saveApplicationPassword(String password){
-        saveDataToSharedPref(APP_PASSWORD_NAME, encryptBoolean(password) );
+        saveDataToSharedPref(APP_PASSWORD_KEY, encryptBoolean(password) );
+    }
+
+    public void deleteApplicationPassword(){
+        deleteDataFromSharedPref(APP_PASSWORD_KEY);
     }
 
     private String encryptBoolean(String password){
@@ -72,27 +75,26 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
     }
 
     public boolean isPasswordDefined(){
-        return hasDataOnSharedPref(APP_PASSWORD_NAME);
+        return hasDataOnSharedPref(APP_PASSWORD_KEY);
     }
 
     public boolean checkPassword(String password){
-
         isPasswordValid = Boolean.valueOf( decryptBoolean(password) );
         return isPasswordValid;
     }
 
     private String decryptBoolean(String password){
-        String cipheredPasswordCheck = getStringFromPreferences(APP_PASSWORD_NAME);
+        String cipheredPasswordCheck = getStringFromPreferences(APP_PASSWORD_KEY);
         byte [] keyAndIv = generateKeyFromPassword(password);
         byte [] data = PasswordUtils.stringToBytes(cipheredPasswordCheck);
         byte [] decryptedByte = PasswordCipher.decrypt(data, keyAndIv, keyAndIv);
 
-        return PasswordUtils.byteToString(decryptedByte );
+        return PasswordUtils.byteToString(decryptedByte);
     }
 
     public byte [] getAppKey(){
         return PasswordUtils.stringToBytes(
-                getStringFromPreferences(APP_PASSWORD_NAME));
+                getStringFromPreferences(APP_PASSWORD_KEY));
     }
 
     public boolean isPasswordValid(){

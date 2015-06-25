@@ -53,12 +53,30 @@ public class PasswordCipher {
         return result;
     }
 
-    public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv){
-        return decryptEncript( data,key, Cipher.ENCRYPT_MODE, iv );
+    public static byte[] encrypt(byte [] data, byte [] salt,  byte [] key,  byte [] iv){
+        return decryptEncript( addSaltToData(data, salt),key, Cipher.ENCRYPT_MODE, iv );
     }
 
-    public static byte[] decrypt(byte [] data, byte [] key,  byte [] iv){
-        return decryptEncript( data ,key, Cipher.DECRYPT_MODE, iv);
+    public static byte[] decrypt(byte [] data, byte [] salt,  byte [] key,  byte [] iv){
+        return subtractSaltFromData(decryptEncript( data ,key, Cipher.DECRYPT_MODE, iv),salt);
+    }
+
+    private static byte [] addSaltToData(byte [] data, byte [] salt ){
+
+        byte [] result = new byte[data.length + salt.length];
+
+        for ( int i = 0; i < data.length; i++){
+            result[i] = data[i];
+        }
+        int difference = data.length;
+        for ( int i = 0; i < salt.length; i++){
+            result[difference + i] = salt[i];
+        }
+        return result;
+    }
+
+    private static byte [] subtractSaltFromData(byte [] data, byte [] salt){
+        return Arrays.copyOfRange(data, 0, data.length - salt.length);
     }
 
 

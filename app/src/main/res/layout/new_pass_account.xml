@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_new_account"
-        android:mId="@+mId/textView"
+        android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
@@ -16,7 +16,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:mId="@+mId/et_new_account_account"
+        android:id="@+id/et_new_account_account"
         android:hint="@string/hint_enter_account"
         android:layout_centerHorizontal="true"
         android:singleLine="true"
@@ -25,8 +25,8 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:mId="@+mId/new_account_container"
-        android:layout_below="@+mId/et_new_account_account"
+        android:id="@+id/new_account_container"
+        android:layout_below="@+id/et_new_account_account"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
@@ -38,17 +38,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="gen pass"
-            android:mId="@+mId/btn_new_pass_acc_generate"/>
+            android:id="@+id/btn_new_pass_acc_generate"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:mId="@+mId/btn_new_pass_acc_save"/>
+            android:id="@+id/btn_new_pass_acc_save"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="cancel"
-            android:mId="@+mId/btn_new_pass_cancel" />
+            android:id="@+id/btn_new_pass_cancel" />
     </LinearLayout>
 
 

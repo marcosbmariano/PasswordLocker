@@ -2,13 +2,10 @@ package com.marcos.autodatabases.sql;
 
 import android.database.Cursor;
 import android.util.Log;
-
 import com.marcos.autodatabases.modelUtils.ModelsInfo;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 import com.marcos.autodatabases.utils.ModelUtils;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +64,7 @@ public class Select {
         List<Model> items = new ArrayList<Model>();
 
         while (cv.moveToNext()) {
-            items.add(ModelUtils.buildModel(aClass, cv));;
+            items.add(ModelUtils.buildModel(aClass, cv));
         }
         cv.close();
 
@@ -76,7 +73,7 @@ public class Select {
 
     public Cursor executeForCursor() {
         DatabaseHelper helper = DatabaseHelper.getInstance();
-        Log.d("INSIDE SELECT ", mSQLSelect.getSQLStatement());
+        Log.d("Database Transaction: ", mSQLSelect.getSQLStatement());
 
         return helper.query(mSQLSelect.getSQLStatement());
     }

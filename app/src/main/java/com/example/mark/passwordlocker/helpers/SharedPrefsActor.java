@@ -21,6 +21,12 @@ public abstract class SharedPrefsActor { // TODO ensure that a called to the con
         editor.commit();
     }
 
+    protected void deleteDataFromSharedPref(String key){
+        SharedPreferences.Editor editor = getSharedPref().edit();
+        editor.remove(key);
+        editor.commit();
+    }
+
     protected boolean hasDataOnSharedPref(String dataName){
         SharedPreferences pref = getSharedPref();
         return pref.contains(dataName);

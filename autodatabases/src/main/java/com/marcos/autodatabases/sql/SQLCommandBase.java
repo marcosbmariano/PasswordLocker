@@ -1,6 +1,9 @@
 package com.marcos.autodatabases.sql;
 
+import android.util.Log;
+
 import com.marcos.autodatabases.models.Model;
+import com.marcos.autodatabases.utils.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,8 +104,11 @@ abstract class SQLCommandBase {
         return result;
     }
 
-    interface Execute{
-        public void execute();
+    public void execute() {
+        DatabaseHelper helper = DatabaseHelper.getInstance();
+        Log.d("Database Transaction: ", getSQLStatement());
+        helper.executeSQL(getSQLStatement());
+        helper.closeDatabase();
     }
 
 }
