@@ -15,9 +15,9 @@ public class PasswordCipherTest extends AndroidTestCase{
     public void testDataEncode(){
         String text = "Mariquitachiquechique";
 
-        byte [] iv = PasswordCipher.generateIv();
+        byte [] iv = PasswordCipher.generateRandomIv();
         byte [] data = PasswordUtils.charToBytes(text.toCharArray());
-        byte [] key = PasswordCipher.generateKey();
+        byte [] key = PasswordCipher.generateRandomKey();
         byte [] salt = PasswordUtils.stringToBytes("SaltSalt");
 
         byte [] cipherText = PasswordCipher.encrypt(data, salt, key, iv);
@@ -30,9 +30,9 @@ public class PasswordCipherTest extends AndroidTestCase{
     public void testEmptyData(){
         String text = "";
 
-        byte [] iv = PasswordCipher.generateIv();
+        byte [] iv = PasswordCipher.generateRandomIv();
         byte [] data = PasswordUtils.charToBytes(text.toCharArray());
-        byte [] key = PasswordCipher.generateKey();
+        byte [] key = PasswordCipher.generateRandomKey();
         byte [] salt = PasswordUtils.stringToBytes("SaltSalt");
 
         byte [] cipherText = PasswordCipher.encrypt(data, salt, key, iv);

@@ -14,56 +14,68 @@ public final class DatabaseKey extends SharedPrefsActor {
     private final String IV_NAME = "database_iv";
     private byte [] mKey;
     private byte [] mIv;
-    private Context mContext;
-    private ApplicationPassword mApplicationPassword;
+    private byte [] mSalt;
+    private static Context mContext;
+    private static ApplicationPassword mApplicationPassword;
+    private static DatabaseKey mDatabaseKeyInstance;
 
-    public DatabaseKey(Context context){
-        if ( null == context){
+
+    public DatabaseKey(){
+        if ( null == mContext){
             throw new NullPointerException(
-                    "DatabaseKey must have a valid Context reference!");
+                    "DatabaseKey must have a valid Context reference before being used!");
         }else{
-            mContext = context;
             mApplicationPassword = ApplicationPassword.getInstance();
-            createKeyIfNoKey();
-            createIvIfNoIv();
         }
     }
 
-    private void createKeyIfNoKey(){
-        byte [] key = PasswordCipher.generateKey();
-        createData(getKeyName(), key );
+    public static void setContext( Context context){
+        mContext = context;
     }
 
-    private void createIvIfNoIv(){
-        byte [] iv = PasswordCipher.generateIv();
-        createData(getIvName(), iv);
-    }
-
-    private void createData(String dataName, byte [] data){
-        if (!hasDataOnSharedPref( dataName )){
-            saveDataToSharedPref(
-                    dataName,
-                    encryptData(data, mApplicationPassword.getAppKey()));
+    public static DatabaseKey getInstance(){
+        if ( null == mDatabaseKeyInstance){
+            mDatabaseKeyInstance = new DatabaseKey();
         }
+        return mDatabaseKeyInstance;
     }
 
-    private String encryptData(byte[] data, byte[] keyAndIv){
+
+    private String encryptMetadata(byte[] data){
+
+        if ( !isDatabaseAcessible()){
+            throw new SecurityException("Application is locked!");
+        }
+
         return PasswordUtils.byteToString(
-                PasswordCipher.encrypt(data, keyAndIv, keyAndIv));
+                PasswordCipher.encrypt(data, mApplicationPassword.getAppKey(),
+                        mApplicationPassword.getAppKey()));
+    }
+
+    private boolean isDatabaseAcessible(){
+        return !mApplicationPassword.isApplicationLocked();
     }
 
     public byte [] getKey(){
-        if ( null == mKey ){
-            mKey = getDecryptedData(getKeyName());
+        if ( mApplicationPassword.isApplicationLocked() ){
+            throw new IllegalStateException("The key cannot be used if the Application is locked!!");
         }
-        return mKey;
+        return mApplicationPassword.getAppKey();
     }
 
     public byte [] getIv(){
-        if ( null == mIv){
-            mIv = getDecryptedData(getIvName());
+        if ( mApplicationPassword.isApplicationLocked() ){
+            throw new IllegalStateException("The key cannot be used if the Application is locked!!");
         }
-        return mIv;
+        return mApplicationPassword.getAppIv();
+
+    }
+
+    public byte [] getSalt(){
+        if ( mApplicationPassword.isApplicationLocked() ){
+            throw new IllegalStateException("The key cannot be used if the Application is locked!!");
+        }
+        return mApplicationPassword.getAppKey();
     }
 
     private byte [] getDecryptedData(String dataName){

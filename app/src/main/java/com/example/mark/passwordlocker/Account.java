@@ -8,13 +8,17 @@ import com.example.mark.passwordmanager.RawData;
 public class Account {
     private final RawData mPassword;
     private final RawData mAccount;
+    //private final RawData mSalt;
+    //private final RawData mIv;
 
-    public Account(RawData account, RawData password){
+    public Account(RawData account, RawData password){//}, RawData salt, RawData iv){
         if (account.isEmpty() || password.isEmpty()){
             throw new IllegalArgumentException("Account and password cannot be empty");
         }
         mAccount = account;
         mPassword = password;
+        //mSalt = salt;
+        //mIv = iv;
     }
 
     public byte [] getPassword(){
@@ -24,5 +28,13 @@ public class Account {
     public byte [] getAccount(){
         return mAccount.getDataByteArray();
     }
+
+//    public byte [] getmIv() {
+//        return mIv.getDataByteArray();
+//    }
+//
+//    public byte [] getmSalt() {
+//        return mSalt.getDataByteArray();
+//    }
 
 }

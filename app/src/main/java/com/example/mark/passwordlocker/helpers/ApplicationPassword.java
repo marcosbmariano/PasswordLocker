@@ -5,6 +5,8 @@ import android.content.Context;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
+import java.util.Arrays;
+
 /**
  * Created by mark on 3/12/15.
  */
@@ -16,12 +18,15 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
     private static boolean isPasswordValid;
     private static Context mContext;
     private static ApplicationPassword mInstance;
+    private static boolean mIsAppLocked;
+    private static byte [] mKey;
 
     private ApplicationPassword(){
         if ( null == mContext){
             throw new NullPointerException(
                     "ApplicationPassword must have an context reference, use setContext");
         }
+        lockPassword();
     }
 
     public static void setContext(Context context){
@@ -35,6 +40,20 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
         return mInstance;
     }
 
+    private void unlockedPassword(){
+        mIsAppLocked = false;
+    }
+
+    public void lockPassword(){
+        mIsAppLocked = true;
+        mKey = null; //clean the reference to the key
+    }
+
+    public boolean isApplicationLocked(){
+        return mIsAppLocked;
+    }
+
+
     public void saveApplicationPassword(String password){
         saveDataToSharedPref(APP_PASSWORD_KEY, encryptBoolean(password) );
     }
@@ -43,31 +62,11 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
         deleteDataFromSharedPref(APP_PASSWORD_KEY);
     }
 
-    private String encryptBoolean(String password){
-        byte [] data = PasswordUtils.stringToBytes( String.valueOf(Boolean.TRUE) );
-        byte [] keyAndIv = generateKeyFromPassword(password);
-        byte [] cipherData = PasswordCipher.encrypt(data, keyAndIv, keyAndIv);
-
-        return PasswordUtils.byteToString(cipherData);
-    }
-
-    private byte [] generateKeyFromPassword(String input){
-        byte [] result = new byte [0];
-
-        if ( !input.isEmpty()){
-            result = PasswordUtils.stringToBytes( ensure16Char(input) );
+    private byte [] generateKeyFromPassword(String password){
+        if (null == mKey){
+            mKey = PasswordCipher.generateKeyFromPassword(password);
         }
-        return result;
-    }
-
-    private String ensure16Char(String input){
-        int keySize = 16;
-        StringBuilder builder = new StringBuilder( 2 * keySize);
-
-        while (builder.length() < keySize){
-            builder.append(input);
-        }
-        return builder.substring(0,keySize);
+        return mKey;
     }
 
     public void saveHint(String hint){
@@ -79,22 +78,43 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
     }
 
     public boolean checkPassword(String password){
-        isPasswordValid = Boolean.valueOf( decryptBoolean(password) );
-        return isPasswordValid;
+        if ( Boolean.valueOf( decryptBoolean(password) )){
+            unlockedPassword();
+            return true;
+        }else{
+            lockPassword();
+            return false;
+        }
+    }
+    private String encryptBoolean(String password){
+        byte [] data = PasswordUtils.stringToBytes( String.valueOf(Boolean.TRUE) );
+        byte [] key = generateKeyFromPassword(password);
+        byte [] iv = generateIV(key);
+        byte [] cipherData = PasswordCipher.encrypt(data, key, iv);
+
+        return PasswordUtils.byteToString(cipherData);
     }
 
     private String decryptBoolean(String password){
         String cipheredPasswordCheck = getStringFromPreferences(APP_PASSWORD_KEY);
-        byte [] keyAndIv = generateKeyFromPassword(password);
+        byte [] key = generateKeyFromPassword(password);
+        byte [] iv = generateIV(key);
         byte [] data = PasswordUtils.stringToBytes(cipheredPasswordCheck);
-        byte [] decryptedByte = PasswordCipher.decrypt(data, keyAndIv, keyAndIv);
+        byte [] decryptedByte = PasswordCipher.decrypt(data, key, iv);
 
         return PasswordUtils.byteToString(decryptedByte);
     }
 
+    private byte [] generateIV(byte [] key){
+        return Arrays.copyOfRange(key, 0, 16);
+    }
+
     public byte [] getAppKey(){
-        return PasswordUtils.stringToBytes(
-                getStringFromPreferences(APP_PASSWORD_KEY));
+        return mKey.clone();
+    }
+
+    public byte [] getAppIv(){
+        return generateIV(mKey);
     }
 
     public boolean isPasswordValid(){

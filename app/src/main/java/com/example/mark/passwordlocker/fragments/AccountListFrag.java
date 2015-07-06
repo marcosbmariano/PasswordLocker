@@ -51,7 +51,7 @@ public class AccountListFrag extends BaseFragment implements
     public void onStart() {
         super.onStart();
         updateAccounts();
-        mDatabaseKey = new DatabaseKey(getActivity());
+        mDatabaseKey = DatabaseKey.getInstance();
         notifyDataChanged();
     }
 
@@ -92,7 +92,7 @@ public class AccountListFrag extends BaseFragment implements
 
         args.putString(
                 DisplayPassDialog.BUNDLE_PASSWORD,
-                mRecords.get(position).getAccountPassword(mDatabaseKey));
+                mRecords.get(position).getAccountPassword());
 
         dialog.setArguments(args);
         dialog.show(getActivity().getSupportFragmentManager(), null);

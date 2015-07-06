@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +19,7 @@ import com.example.mark.passwordlocker.fragments.NewUserPassFrag;
 import com.example.mark.passwordlocker.fragments.AppPassEnterFrag;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 
 
@@ -38,6 +40,7 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
     }
 
     private void setupSingletons(){
+        DatabaseKey.setContext(this);
         ApplicationPassword.setContext(this);
         ApplicationPreferences.setContext(this);
         DatabaseHelper.setupContext(this);
@@ -53,6 +56,7 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
     protected void onResume() {
         super.onResume();
         //every time the app resume, ask the user for the password to open the app again
+        mApplicationPassword.lockPassword();
         setFirstFragment();
     }
 

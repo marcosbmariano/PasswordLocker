@@ -2,10 +2,13 @@ package com.example.mark.passwordmanager.cipher;
 
 import android.util.Log;
 
+import com.example.mark.passwordmanager.PasswordUtils;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -15,7 +18,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -26,10 +31,14 @@ public class PasswordCipher {
     private static final String ENCRYPT_ALGORITHM = "AES";
     private static final String ENCRYPT_ALGORITHM_W_PADDING = "AES/CBC/PKCS5Padding";
     private static final String RDN_ALGORITHM = "SHA1PRNG";
+    private static final int SALT_SIZE = 24;
+    private static final int IV_SIZE = 16;
+    private static final int PBKDF2_ITERATIONS = 1000;
+    private static final int PBKDF2_KEY_LENGTH = 256;
 
     //TODO SALT!!!!!!!!!
 
-    public static byte[] generateKey(){
+    public static byte[] generateRandomKey(){
         SecretKey secretKey = null;
 
         try{
@@ -46,19 +55,60 @@ public class PasswordCipher {
         return secretKey.getEncoded();
     }
 
-    public static byte [] generateIv(){
-        Random rand = new Random();
-        byte [] result = new byte[16];
+    public static byte [] generateRandomIv(){
+        return generateSecureRandomNumber(IV_SIZE);
+    }
+
+    public static byte [] generateRandomSalt(){
+        return generateSecureRandomNumber(SALT_SIZE);
+    }
+
+    private static byte [] generateSecureRandomNumber(int size){
+        SecureRandom rand = new SecureRandom();
+        byte [] result = new byte[size];
         rand.nextBytes(result);
         return result;
     }
 
+
+    public static byte [] generateKeyFromPassword(String password){
+
+        byte [] result = new byte [0];
+
+        char [] passwordChar = password.toCharArray();
+        byte [] salt = PasswordUtils.stringToBytes(password);
+
+        PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, PBKDF2_ITERATIONS, PBKDF2_KEY_LENGTH);
+        SecretKeyFactory skf;
+        try {
+            skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            result = skf.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static byte [] encryptWithSalt(byte [] data, byte [] salt, byte [] key,  byte [] iv){
+        byte [] saltedData = addSaltToData(data, salt);
+        return decryptEncript(Cipher.ENCRYPT_MODE, saltedData, key, iv);
+    }
+
     public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv){
-        return decryptEncript( data,key, Cipher.ENCRYPT_MODE, iv );
+        return decryptEncript( Cipher.ENCRYPT_MODE, data, key, iv);
+    }
+
+    public static byte[] decryptWithSalt(String data, byte [] salt,  byte [] key,  byte [] iv){
+        byte [] saltedData = PasswordUtils.stringToBytes(data);
+        byte [] temp = decryptEncript(Cipher.DECRYPT_MODE, saltedData, key, iv);
+        return subtractSaltFromData( temp, salt);
     }
 
     public static byte[] decrypt(byte [] data,  byte [] key,  byte [] iv){
-        return decryptEncript( data ,key, Cipher.DECRYPT_MODE, iv);
+        return decryptEncript( Cipher.DECRYPT_MODE, data, key, iv );
     }
 
     private static byte [] addSaltToData(byte [] data, byte [] salt ){
@@ -80,7 +130,7 @@ public class PasswordCipher {
     }
 
 
-    static byte [] decryptEncript( byte [] data,byte [] key, int cipherMode, byte [] iv){
+    static byte [] decryptEncript( int cipherMode, byte [] data, byte [] key, byte [] iv){
         SecretKeySpec sKeySpec = new SecretKeySpec(key, ENCRYPT_ALGORITHM);
         Cipher cipher;
         byte [] result = new byte [0]; //this is initialized, so if a exception occur, the return will not be null

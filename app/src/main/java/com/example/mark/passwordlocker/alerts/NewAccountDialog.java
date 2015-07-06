@@ -103,9 +103,9 @@ public class NewAccountDialog extends DialogFragment
     }
 
     private void saveNewAccount(RawData account, RawData password){
-        DatabaseKey key = new DatabaseKey(getActivity());
+        DatabaseKey.setContext(getActivity());
         AccountRecord newAccount = new AccountRecord(account, password);
-        newAccount.save(key);
+        newAccount.save();
     }
 
     private void generatePassword(){

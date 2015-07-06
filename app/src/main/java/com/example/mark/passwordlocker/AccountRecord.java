@@ -1,8 +1,6 @@
 package com.example.mark.passwordlocker;
 
 
-import android.util.Log;
-
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
@@ -10,7 +8,6 @@ import com.example.mark.passwordmanager.cipher.PasswordCipher;
 import com.marcos.autodatabases.annotations.Column;
 import com.marcos.autodatabases.annotations.Table;
 import com.marcos.autodatabases.models.Model;
-import com.marcos.autodatabases.sql.Delete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,20 +16,33 @@ import java.util.List;
  * Created by mark on 3/11/15.
  */
 
-//TODO reviewed!!!
 
+//TODO must be tested
 
 @Table(name = "account_record")
 public class AccountRecord extends Model {
 
     private Account mAccount;
     private static List<DatabaseListener> mListeners = new ArrayList<>();
+    private static DatabaseKey mDatabaseKey;
 
-    @Column(name = "cipherPassword")
-    private String cipherPassword;
+    @Column(name = "ciphedPassword")
+    private String mCipherPassword;
 
-    @Column(name= "cipherAccount")
-    private String cipherAccount;
+    @Column(name= "ciphedAccount")
+    private String mCipherAccount;
+
+    @Column(name = "ciphedSalt")
+    protected String mCiphedSalt;
+
+    @Column(name = "chipedIv")
+    private String mCiphedIv;
+
+    private String mTempAccount;
+    private byte [] mTempIv;
+    private byte [] mTempSalt;
+
+
 
     public AccountRecord(){
     //this is necessary for the database automation
@@ -40,7 +50,16 @@ public class AccountRecord extends Model {
 
     public AccountRecord(RawData account, RawData password){
         mAccount = new Account(account, password);
+
     }
+
+    private DatabaseKey getDatabaseKey(){
+        if ( null == mDatabaseKey){
+            mDatabaseKey = DatabaseKey.getInstance();
+        }
+        return mDatabaseKey;
+    }
+
 
     public static List<AccountRecord> getAllAccounts(){
         List<Model> models = Model.getModels(AccountRecord.class);
@@ -52,9 +71,22 @@ public class AccountRecord extends Model {
         return accounts;
     }
 
-    public void save(DatabaseKey key){
-        cipherAccount = encrypt( mAccount.getAccount(), key);
-        cipherPassword = encrypt( mAccount.getPassword(), key);
+    public void save(){
+
+        byte [] iv = PasswordCipher.generateRandomIv();
+        byte [] salt = PasswordCipher.generateRandomSalt();
+
+        // encrypt the account using a randomly created iv and salt
+        mCipherAccount = encrypt( mAccount.getAccount(), salt, getDatabaseKey().getKey(), iv);
+        mCipherPassword = encrypt( mAccount.getPassword(), salt, getDatabaseKey().getKey() , iv);
+
+        //encrypt the salt and iv used using the application password,
+        // key and iv through databaseKey
+        mCiphedSalt = encrypt(salt, getDatabaseKey().getSalt(),
+                getDatabaseKey().getKey(), getDatabaseKey().getIv());
+        mCiphedIv = encrypt(iv, getDatabaseKey().getSalt(),
+                getDatabaseKey().getKey(), getDatabaseKey().getIv());
+
         super.save();
         notifyListeners();
     }
@@ -76,29 +108,55 @@ public class AccountRecord extends Model {
         }
     }
 
-    private String encrypt(byte [] data, DatabaseKey key){
+    private String encrypt(byte [] data, byte [] salt, byte [] key, byte [] iv){
         return PasswordUtils.byteToString(
-                PasswordCipher.encrypt(data, key.getKey(),key.getIv() ));
+                PasswordCipher.encryptWithSalt(data, salt, key, iv));
     }
 
-    public String getAccountPassword(DatabaseKey key){
-        return getDecryptedValue( cipherPassword, key);
+    public String getAccountPassword(){
+        return getDecryptedValueAsString(mCipherPassword,
+                getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
     }
 
-    public String getAccount(DatabaseKey key){
-        return getDecryptedValue(cipherAccount, key);
+    public String getAccount(DatabaseKey databaseKey){
+        if ( null == mTempAccount){
+            mTempAccount = getDecryptedValueAsString(mCipherAccount,
+                    getAccountSalt(), databaseKey.getKey(), getAccountIv());
+        }
+        return mTempAccount;
     }
 
-    private String getDecryptedValue( String value, DatabaseKey key){
+    private String getDecryptedValueAsString(String data, byte[] salt, byte[] key, byte[] iv){
+        return PasswordUtils.byteToString(
+                getDecryptedValue(data,salt,key,iv));
+    }
+
+    private byte [] getDecryptedValue(String data, byte[] salt, byte[] key, byte[] iv){
         byte [] result  = {' '};
 
-        if (null != value) {
-            result = PasswordCipher.decrypt(
-                        PasswordUtils.stringToBytes(value),
-                        key.getKey(),
-                        key.getIv());
+        if (null != data) {
+            result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
         }
-        return PasswordUtils.byteToString(result);
+        return result;
+    }
+
+    private byte [] getAccountIv(){
+        if ( null == mTempIv){
+            mTempIv = geDecryptedtMetadata(mCiphedIv);
+        }
+        return mTempIv;
+    }
+
+    private byte [] getAccountSalt(){
+        if ( null == mTempSalt){
+            mTempSalt = geDecryptedtMetadata(mCiphedSalt);
+        }
+        return mTempSalt;
+    }
+
+    private byte [] geDecryptedtMetadata(String ciphedValue){
+        return getDecryptedValue(ciphedValue,
+                getDatabaseKey().getSalt(), getDatabaseKey().getKey(), getDatabaseKey().getIv());
     }
 
     public static void addListener(DatabaseListener listener){
@@ -106,7 +164,7 @@ public class AccountRecord extends Model {
     }
 
     public interface DatabaseListener{
-        public void notifyDataChanged();
+        void notifyDataChanged();
     }
 
 }
