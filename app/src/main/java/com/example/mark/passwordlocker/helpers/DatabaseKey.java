@@ -10,11 +10,6 @@ import com.example.mark.passwordmanager.cipher.PasswordCipher;
  */
 public final class DatabaseKey extends SharedPrefsActor {
     private final String PREFERENCES_NAME = "database_pref";
-    private final String KEY_NAME = "database_key";
-    private final String IV_NAME = "database_iv";
-    private byte [] mKey;
-    private byte [] mIv;
-    private byte [] mSalt;
     private static Context mContext;
     private static ApplicationPassword mApplicationPassword;
     private static DatabaseKey mDatabaseKeyInstance;
@@ -41,23 +36,12 @@ public final class DatabaseKey extends SharedPrefsActor {
     }
 
 
-    private String encryptMetadata(byte[] data){
-
-        if ( !isDatabaseAcessible()){
-            throw new SecurityException("Application is locked!");
-        }
-
-        return PasswordUtils.byteToString(
-                PasswordCipher.encrypt(data, mApplicationPassword.getAppKey(),
-                        mApplicationPassword.getAppKey()));
-    }
-
-    private boolean isDatabaseAcessible(){
-        return !mApplicationPassword.isApplicationLocked();
+    private boolean isApplicationLocked(){
+        return mApplicationPassword.isApplicationLocked();
     }
 
     public byte [] getKey(){
-        if ( mApplicationPassword.isApplicationLocked() ){
+        if ( isApplicationLocked() ){
             throw new IllegalStateException("The key cannot be used if the Application is locked!!");
         }
         return mApplicationPassword.getAppKey();
@@ -65,7 +49,7 @@ public final class DatabaseKey extends SharedPrefsActor {
 
     public byte [] getIv(){
         if ( mApplicationPassword.isApplicationLocked() ){
-            throw new IllegalStateException("The key cannot be used if the Application is locked!!");
+            throw new IllegalStateException("The Iv cannot be used if the Application is locked!!");
         }
         return mApplicationPassword.getAppIv();
 
@@ -73,32 +57,9 @@ public final class DatabaseKey extends SharedPrefsActor {
 
     public byte [] getSalt(){
         if ( mApplicationPassword.isApplicationLocked() ){
-            throw new IllegalStateException("The key cannot be used if the Application is locked!!");
+            throw new IllegalStateException("The Salt cannot be used if the Application is locked!!");
         }
         return mApplicationPassword.getAppKey();
-    }
-
-    private byte [] getDecryptedData(String dataName){
-        byte [] result = null;
-
-        if (!hasDataOnSharedPref(dataName) || mApplicationPassword.isPasswordValid() ){
-
-            String encryptedKeyString = getStringFromPreferences(dataName);
-
-            result = PasswordCipher.decrypt(
-                        PasswordUtils.stringToBytes( encryptedKeyString ),
-                        mApplicationPassword.getAppKey(), mApplicationPassword.getAppKey());
-        }
-        if ( null == result){
-            result = getFakeKey();
-        }
-
-        return result;
-    }
-
-    private byte [] getFakeKey(){
-        return new byte [] { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                ' ', ' ', ' ', ' ', ' ', ' ', ' ',};
     }
 
     @Override
@@ -109,14 +70,6 @@ public final class DatabaseKey extends SharedPrefsActor {
     @Override
     protected String getPreferencesName() {
         return PREFERENCES_NAME;
-    }
-
-    protected String getKeyName() {
-        return KEY_NAME;
-    }
-
-    protected String getIvName() {
-        return IV_NAME;
     }
 
 }

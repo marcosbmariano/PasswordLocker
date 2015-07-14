@@ -13,8 +13,8 @@ public class SQLColumnsGeneratorTest extends AndroidTestCase {
 
     public void test1(){
         String expected = "( Id INTEGER PRIMARY KEY AUTOINCREMENT, lastName TEXT," +
-                " boolean INTEGER, byte INTEGER, char TEXT, double REAL, float REAL, long INTEGER," +
-                " short INTEGER, Name TEXT NOT NULL UNIQUE, Number INTEGER )";
+                " Name TEXT NOT NULL UNIQUE, boolean INTEGER, double REAL, long INTEGER," +
+                " byte INTEGER, char TEXT, float REAL, short INTEGER, Number INTEGER )";
         String result = SQLColumnsGenerator.getColumnsStatement(User.class);
         assertTrue(expected.equals(result));
     }

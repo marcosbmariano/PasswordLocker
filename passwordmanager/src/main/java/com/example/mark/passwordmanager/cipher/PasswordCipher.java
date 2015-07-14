@@ -1,7 +1,5 @@
 package com.example.mark.passwordmanager.cipher;
 
-import android.util.Log;
-
 import com.example.mark.passwordmanager.PasswordUtils;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -10,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -94,21 +91,21 @@ public class PasswordCipher {
 
     public static byte [] encryptWithSalt(byte [] data, byte [] salt, byte [] key,  byte [] iv){
         byte [] saltedData = addSaltToData(data, salt);
-        return decryptEncript(Cipher.ENCRYPT_MODE, saltedData, key, iv);
+        return decryptEncrypt(Cipher.ENCRYPT_MODE, saltedData, key, iv);
     }
 
     public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv){
-        return decryptEncript( Cipher.ENCRYPT_MODE, data, key, iv);
+        return decryptEncrypt(Cipher.ENCRYPT_MODE, data, key, iv);
     }
 
     public static byte[] decryptWithSalt(String data, byte [] salt,  byte [] key,  byte [] iv){
         byte [] saltedData = PasswordUtils.stringToBytes(data);
-        byte [] temp = decryptEncript(Cipher.DECRYPT_MODE, saltedData, key, iv);
+        byte [] temp = decryptEncrypt(Cipher.DECRYPT_MODE, saltedData, key, iv);
         return subtractSaltFromData( temp, salt);
     }
 
     public static byte[] decrypt(byte [] data,  byte [] key,  byte [] iv){
-        return decryptEncript( Cipher.DECRYPT_MODE, data, key, iv );
+        return decryptEncrypt(Cipher.DECRYPT_MODE, data, key, iv);
     }
 
     private static byte [] addSaltToData(byte [] data, byte [] salt ){
@@ -130,7 +127,7 @@ public class PasswordCipher {
     }
 
 
-    static byte [] decryptEncript( int cipherMode, byte [] data, byte [] key, byte [] iv){
+    static byte [] decryptEncrypt(int cipherMode, byte[] data, byte[] key, byte[] iv){
         SecretKeySpec sKeySpec = new SecretKeySpec(key, ENCRYPT_ALGORITHM);
         Cipher cipher;
         byte [] result = new byte [0]; //this is initialized, so if a exception occur, the return will not be null
