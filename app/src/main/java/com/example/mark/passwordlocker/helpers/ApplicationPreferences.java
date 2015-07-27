@@ -3,16 +3,24 @@ package com.example.mark.passwordlocker.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.mark.passwordlocker.R;
 
 /**
  * Created by mark on 3/18/15.
  */
-public class ApplicationPreferences {
+public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
+
+    private final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
+    private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
     private static Context mContext;
     private static ApplicationPreferences mIntance;
     private static SharedPreferences mApllicationsPreferences;
+    private PreferencesSecondsToLockListener mLockListener;
+    private PreferencesNotificationDisplayListener mDisplayNotificationListener;
+
 
     private ApplicationPreferences(){
         if (null == mContext){
@@ -47,10 +55,72 @@ public class ApplicationPreferences {
     }
 
     public int getGeneratedPasswordLength(){
-        String key = mContext.getResources().getString(R.string.pref_password_length);
+        String key = getResourceString(R.string.pref_password_length);
         return Integer.valueOf(getSharedPreferences().getString(key,"0"));
     }
 
+    public boolean isNotificationDisplayable(){
+        String key = getResourceString(R.string.pref_show_notification_key);
+        return Boolean.valueOf(getSharedPreferences().getBoolean(key, false));
+    }
+
+    public int getClipBoardSeconds(){
+        String key = mContext.getResources().
+                getString(R.string.preferences_clipboard_seconds_key);
+        return Integer.valueOf(getSharedPreferences().getString(key, "30"));
+    }
+
+    public int getSecondsToLockApplication(){
+        return Integer.valueOf(getSharedPreferences().getString(TIME_TO_LOCK_KEY, "30"));
+    }
+
+    private String getResourceString( int rStringId){
+        return mContext.getResources().
+                getString(rStringId);
+    }
+
+    public boolean isToUnlockApplicationOnScreenOn(){
+        return getSecondsToLockApplication() == -2;
+    }
 
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Toast.makeText(mContext, "This changed " + key, Toast.LENGTH_LONG).show();
+        switch (key){
+            case TIME_TO_LOCK_KEY:
+                Log.e("Inside preferences", "update time to lock key");
+                updateLockPreferencesListener();
+                break;
+            case SHORT_CUT_NOTIFICATION_KEY:
+                Log.e("Inside preferences", "update shortcut notification");
+                updateNotificationDisplayListener();
+                break;
+            default:
+        }
+    }
+
+    public void addPreferencesAppLockChangeListener(PreferencesSecondsToLockListener listener){
+        mLockListener = listener;
+    }
+    private void updateLockPreferencesListener(){
+        mLockListener.updateSeconds(getSecondsToLockApplication());
+    }
+
+    public void addPreferencesNotificationDisplayListener(
+            PreferencesNotificationDisplayListener listener){
+        mDisplayNotificationListener = listener;
+    }
+
+    public void updateNotificationDisplayListener(){
+        mDisplayNotificationListener.updateIsToShowNotification(isNotificationDisplayable());
+    }
+
+    public interface PreferencesNotificationDisplayListener{
+        void updateIsToShowNotification(boolean showNotification);
+    }
+
+    public interface PreferencesSecondsToLockListener{
+        void updateSeconds(int seconds);
+    }
 }

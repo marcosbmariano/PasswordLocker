@@ -18,15 +18,16 @@ import com.example.mark.passwordlocker.R;
  */
 public class DeleteAccountAlert extends DialogFragment {
     public static final String ACCOUNT_ID = "account_id";
-
+    public static final String ACCOUNT = "account";
+    private Bundle mArgs;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+        mArgs = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage("Delete this account?")
+        builder.setMessage("Delete " + getAccount() + "?")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -46,8 +47,11 @@ public class DeleteAccountAlert extends DialogFragment {
     }
 
     private long getAccountId(){
-        Bundle args = getArguments();
-        return args.getLong(ACCOUNT_ID);
+        return mArgs.getLong(ACCOUNT_ID);
+    }
+
+    private String getAccount(){
+        return mArgs.getString(ACCOUNT);
     }
 
 

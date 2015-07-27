@@ -22,15 +22,15 @@ import java.util.List;
 @Table(name = "account_record")
 public class AccountRecord extends Model {
 
-    private Account mAccount;
+    private AccountSensitiveData mAccount;
     private static List<DatabaseListener> mListeners = new ArrayList<>();
     private static DatabaseKey mDatabaseKey;
 
     @Column(name = "ciphedPassword")
-    private String mCipherPassword;
+    private String mCiphedPassword;
 
     @Column(name= "ciphedAccount")
-    private String mCipherAccount;
+    private String mCiphedAccount;
 
     @Column(name = "ciphedSalt")
     protected String mCiphedSalt;
@@ -49,15 +49,8 @@ public class AccountRecord extends Model {
     }
 
     public AccountRecord(RawData account, RawData password){
-        mAccount = new Account(account, password);
+        mAccount = new AccountSensitiveData(account, password);
 
-    }
-
-    private DatabaseKey getDatabaseKey(){
-        if ( null == mDatabaseKey){
-            mDatabaseKey = DatabaseKey.getInstance();
-        }
-        return mDatabaseKey;
     }
 
 
@@ -77,8 +70,8 @@ public class AccountRecord extends Model {
         byte [] salt = PasswordCipher.generateRandomSalt();
 
         // encrypt the account using a randomly created iv and salt
-        mCipherAccount = encrypt( mAccount.getAccount(), salt, getDatabaseKey().getKey(), iv);
-        mCipherPassword = encrypt( mAccount.getPassword(), salt, getDatabaseKey().getKey() , iv);
+        mCiphedAccount = encrypt( mAccount.getAccount(), salt, getDatabaseKey().getKey(), iv);
+        mCiphedPassword = encrypt( mAccount.getPassword(), salt, getDatabaseKey().getKey() , iv);
 
         //encrypt the salt and iv used using the application password,
         // key and iv through databaseKey
@@ -89,6 +82,13 @@ public class AccountRecord extends Model {
 
         super.save();
         notifyListeners();
+    }
+
+    private DatabaseKey getDatabaseKey(){
+        if ( null == mDatabaseKey){
+            mDatabaseKey = DatabaseKey.getInstance();
+        }
+        return mDatabaseKey;
     }
 
     public void deleteAccount(){
@@ -114,14 +114,14 @@ public class AccountRecord extends Model {
     }
 
     public String getAccountPassword(){
-        return getDecryptedValueAsString(mCipherPassword,
+        return getDecryptedValueAsString(mCiphedPassword,
                 getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
     }
 
-    public String getAccount(DatabaseKey databaseKey){
+    public String getAccount(){
         if ( null == mTempAccount){
-            mTempAccount = getDecryptedValueAsString(mCipherAccount,
-                    getAccountSalt(), databaseKey.getKey(), getAccountIv());
+            mTempAccount = getDecryptedValueAsString(mCiphedAccount,
+                    getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
         }
         return mTempAccount;
     }
@@ -153,6 +153,12 @@ public class AccountRecord extends Model {
         }
         return mTempSalt;
     }
+
+//    private String getCiphedPassword(()){
+//        if ( null == mCiphedPassword){
+//            mCiphedPassword
+//        }
+//    }
 
     private byte [] geDecryptedtMetadata(String ciphedValue){
         return getDecryptedValue(ciphedValue,

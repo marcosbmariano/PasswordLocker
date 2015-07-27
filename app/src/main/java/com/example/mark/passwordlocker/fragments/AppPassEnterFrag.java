@@ -84,7 +84,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
 
     private void changeFragment(){
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.MainFragContainer, new AccountListFrag())
+                .replace(R.id.MainFragContainer, new RecyclerViewFragment())
                 .commit();
     }
 

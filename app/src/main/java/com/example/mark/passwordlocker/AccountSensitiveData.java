@@ -5,13 +5,13 @@ import com.example.mark.passwordmanager.RawData;
 /**
  * Created by mark on 3/17/15.
  */
-public class Account {
+public class AccountSensitiveData {
     private final RawData mPassword;
     private final RawData mAccount;
     //private final RawData mSalt;
     //private final RawData mIv;
 
-    public Account(RawData account, RawData password){//}, RawData salt, RawData iv){
+    public AccountSensitiveData(RawData account, RawData password){//}, RawData salt, RawData iv){
         if (account.isEmpty() || password.isEmpty()){
             throw new IllegalArgumentException("Account and password cannot be empty");
         }

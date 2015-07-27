@@ -28,6 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mark.passwordlocker.activities.PLMainActivity" />
         </activity>
+        <service android:name=".services.MyService"/>
     </application>
 
 </manifest>

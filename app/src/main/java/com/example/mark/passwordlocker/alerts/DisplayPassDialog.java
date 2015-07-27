@@ -12,13 +12,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.activities.PLMainActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -98,7 +95,7 @@ public class DisplayPassDialog extends DialogFragment {
             //get the minutes set in the preferences
             private int getMinutes(){
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-                String key = getResources().getString(R.string.preferences_clipboard_minutes_key);
+                String key = getResources().getString(R.string.preferences_clipboard_seconds_key);
                 return Integer.valueOf(pref.getString(key,"0"));
             }
 

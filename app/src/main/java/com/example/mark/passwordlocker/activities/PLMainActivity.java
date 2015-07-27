@@ -2,31 +2,42 @@ package com.example.mark.passwordlocker.activities;
 
 
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.example.mark.passwordlocker.AccountRecord;
 import com.example.mark.passwordlocker.R;
+import com.example.mark.passwordlocker.adapters.AccountsAdapter;
 import com.example.mark.passwordlocker.alerts.NewAccountDialog;
 import com.example.mark.passwordlocker.fragments.NewUserPassFrag;
 import com.example.mark.passwordlocker.fragments.AppPassEnterFrag;
+import com.example.mark.passwordlocker.fragments.RecyclerViewFragment;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
+import com.example.mark.passwordlocker.notifications.NotificationIconManager;
+import com.example.mark.passwordlocker.services.MyService;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 
 
-public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
+public class PLMainActivity extends ActionBarActivity  implements AccountsAdapter.AccountsAdapterUpdate,
+        MyService.ServiceCallBack{ //TODO reviewed!!!
 
     private DatabaseHelper mDataHelper = null;
     private ApplicationPassword mApplicationPassword;
+    private MyService mService;
+    private ServiceConnection mServiceConnection;
+    private boolean  mIsActivityVisible = false;
+    //private NotificationIconManager mNotificationIconManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +47,11 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
         setupSingletons();
         setFirstFragment();
         setupDatabase();
-
+        launchService();
+        mIsActivityVisible = true;
+        Log.e("Main activity", "on Create");
     }
+
 
     private void setupSingletons(){
         DatabaseKey.setContext(this);
@@ -55,15 +69,54 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
     @Override
     protected void onResume() {
         super.onResume();
-        //every time the app resume, ask the user for the password to open the app again
-        mApplicationPassword.lockPassword();
         setFirstFragment();
+        launchNotificationIconManager();
+        mIsActivityVisible = true;
     }
+
+
+    @Override
+    protected void onPause() {
+        mIsActivityVisible = false;
+        super.onPause();
+    }
+
+
+    private void launchService(){
+        Intent i = new Intent(this, MyService.class);
+        bindService(i, getServiceConnection(), Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection getServiceConnection(){
+        if ( null == mServiceConnection){
+            mServiceConnection = new ServiceConnection() {
+
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    MyService.MyBinder binder = (MyService.MyBinder) service;
+                    mService = binder.getService();
+                    mService.addListener(PLMainActivity.this);
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                }
+            };
+        }
+
+        return mServiceConnection;
+    }
+
 
     private void setFirstFragment(){
 
         if (isApplicationPasswordDefined()){
-            swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
+
+            if (mApplicationPassword.isApplicationLocked()){
+                swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
+            }else{
+                swapFragment(R.id.MainFragContainer, new RecyclerViewFragment());
+            }
 
         }else{
             hideActionBar();
@@ -117,5 +170,25 @@ public class PLMainActivity extends ActionBarActivity  { //TODO reviewed!!!
        return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void callOnBackPressed() {
+        onBackPressed();
+    }
+
+    private void launchNotificationIconManager(){
+        NotificationIconManager.setContext(this);
+    }
+
+    @Override
+    public void updateActivity() {
+        Log.e("MainActivity", "updateActivity");
+        setFirstFragment();
+    }
+
+    @Override
+    public boolean isActivityVisible() {
+        return mIsActivityVisible;
+    }
 
 }
