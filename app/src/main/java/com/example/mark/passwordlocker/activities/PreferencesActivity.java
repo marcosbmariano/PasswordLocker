@@ -5,11 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.services.MyService;
 
 public class PreferencesActivity extends ActionBarActivity implements MyService.ServiceCallBack{
@@ -18,7 +17,7 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsActivityVisible = true;
-        MyService.addListener(this);
+        MyService.addObserver(this);
         setContentView(R.layout.preferences_layout);
         getFragmentManager().beginTransaction()
                 .replace(R.id.preference_container, new Prefs1Fragment())
@@ -39,7 +38,7 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
     @Override
     protected void onResume() {
         mIsActivityVisible = true;
-        if(ApplicationPassword.getInstance().isApplicationLocked()){
+        if(ApplicationState.getInstance().isApplicationLocked()){
             onNavigateUp();
         }
 

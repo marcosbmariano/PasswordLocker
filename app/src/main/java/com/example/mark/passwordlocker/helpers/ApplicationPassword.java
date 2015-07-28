@@ -6,28 +6,23 @@ import android.util.Log;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by mark on 3/12/15.
  */
 
-public final class ApplicationPassword extends SharedPrefsActor implements
-        Counter.CounterCallBack, ApplicationPreferences.PreferencesSecondsToLockListener { //TODO reviewed
+public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewed
     private final String PREFERENCES_NAME = "app_pref";
     private final String APP_PASSWORD_KEY = "app_password";
     private final String APP_PASSWORD_HINT = "password_hint";
     private static Context mContext;
-    private static int THRESHOLD_TO_LOCK = -1;
     private static ApplicationPassword mInstance;
     private static ApplicationPreferences mPreferences;
-    private static boolean mIsAppLocked;
+    private static boolean mIsPasswordLocked;
     private static byte [] mKey;
-    private static List<ApplicationPasswordListener> mListeners;
     private int mSecondsToLock = 0;
-    private Counter mCounter;
+
 
     private ApplicationPassword(){
         if ( null == mContext){
@@ -48,32 +43,9 @@ public final class ApplicationPassword extends SharedPrefsActor implements
         return mInstance;
     }
 
-    public void addListener(ApplicationPasswordListener listener){
-        if ( null == mListeners){
-            mListeners = new ArrayList<>();
-        }
-        mListeners.add(listener);
-    }
-
-    private void updateListeners(){
-        Log.e("Application Password", "updating Listeners!!");
-        if (null != mListeners){
-            for ( ApplicationPasswordListener listener : mListeners){
-                if ( isApplicationLocked()){
-                    listener.passwordIsLocked();
-                    Log.e("Application Password", "passwordIsLocked!!");
-                }else{
-                    listener.passwordIsUnlocked();
-                    Log.e("Application Password", "passwordIsUnlocked!!");
-                }
-            }
-        }
-    }
-
     private ApplicationPreferences getAppPreferences(){
         if (null == mPreferences){
             mPreferences = ApplicationPreferences.getInstance();
-            mPreferences.addPreferencesAppLockChangeListener(this);
         }
 
         return mPreferences;
@@ -86,27 +58,25 @@ public final class ApplicationPassword extends SharedPrefsActor implements
         return mSecondsToLock;
     }
 
-    //todo move to applicationState
-    //this method is called if the user change the seconds preferences
-    @Override
-    public void updateSeconds(int seconds) {
-        mSecondsToLock = seconds;
-        updateCounter();
+    public boolean isKeyValid(){
+        return null != mKey;
     }
+
+    public boolean isPasswordLocked(){
+        return mIsPasswordLocked;
+    }
+
     //todo move to applicationState
-    private void updateCounter(){
-        if( isToLockPassword()){
-            setCounterToLockeApplication();
+    public void unlockPassword( ){
+        if ( null != mKey )  {
+            mIsPasswordLocked = false;           ;
+            Log.e("Application Password", "Unlock Password!! from unlocked");
         }
     }
 
-
-    //todo move to applicationState
-    //this method is called by a counter after mSecondsTolock seconds
-    @Override
-    public void calledByCounter(int seconds ) {
-        if ( isToLockPassword() && getSecondsToLockApp() == seconds ){
-            lockPassword();
+    public void lockPassword(){
+        mIsPasswordLocked = true;
+        if ( getSecondsToLockApp() == -2){
             deleteKey();
         }
     }
@@ -116,39 +86,6 @@ public final class ApplicationPassword extends SharedPrefsActor implements
         Log.e("Application Password", "Key was deleted!!");
     }
 
-    //todo move to applicationState
-    public void unlockPassword( ){
-        if ( null != mKey )  {
-            mIsAppLocked = false;
-            setCounterToLockeApplication();
-            updateListeners();
-            Log.e("Application Password", "Unlock Password!! from unlocked");
-        }
-    }
-
-
-    public void lockPassword(){
-        mIsAppLocked = true;
-        if ( getSecondsToLockApp() == -2){
-            deleteKey();
-        }
-
-        updateListeners();// TODO ??
-    }
-
-    //todo move to applicationState
-    private void setCounterToLockeApplication(){
-        int seconds = getSecondsToLockApp();
-        if ( seconds >= 30 ){
-            mCounter = new Counter(this);
-            mCounter.startCounter(seconds);
-        }
-    }
-
-    //todo move to applicationState
-    public boolean isApplicationLocked(){
-        return mIsAppLocked;
-    }
 
     public void saveApplicationPassword(String password){
         saveDataToSharedPref(APP_PASSWORD_KEY, encryptBoolean(password) );
@@ -229,14 +166,6 @@ public final class ApplicationPassword extends SharedPrefsActor implements
     @Override
     protected String getPreferencesName() {
         return PREFERENCES_NAME;
-    }
-
-
-    public interface ApplicationPasswordListener {
-        void passwordIsLocked();
-
-        void passwordIsUnlocked();
-
     }
 
 }

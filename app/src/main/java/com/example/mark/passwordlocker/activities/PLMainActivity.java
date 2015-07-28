@@ -23,6 +23,7 @@ import com.example.mark.passwordlocker.fragments.AppPassEnterFrag;
 import com.example.mark.passwordlocker.fragments.RecyclerViewFragment;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordlocker.notifications.NotificationIconManager;
 import com.example.mark.passwordlocker.services.MyService;
@@ -34,10 +35,13 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
 
     private DatabaseHelper mDataHelper = null;
     private ApplicationPassword mApplicationPassword;
+    private ApplicationState mApplicationState;
     private MyService mService;
     private ServiceConnection mServiceConnection;
     private boolean  mIsActivityVisible = false;
-    //private NotificationIconManager mNotificationIconManager;
+    private boolean isServiceBound;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         ApplicationPassword.setContext(this);
         ApplicationPreferences.setContext(this);
         DatabaseHelper.setupContext(this);
+        mApplicationState = ApplicationState.getInstance();
     }
 
     private void setupDatabase(){
@@ -78,9 +83,21 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     @Override
     protected void onPause() {
         mIsActivityVisible = false;
+        Log.e("inside mainActivity", "on Pause" );
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        desconectFromService();
+        super.onStop();
+    }
+
+    private void desconectFromService(){
+        if ( isServiceBound){
+            unbindService(mServiceConnection);
+        }
+    }
 
     private void launchService(){
         Intent i = new Intent(this, MyService.class);
@@ -95,15 +112,16 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     MyService.MyBinder binder = (MyService.MyBinder) service;
                     mService = binder.getService();
-                    mService.addListener(PLMainActivity.this);
+                    mService.addObserver(PLMainActivity.this);
+                    isServiceBound = true;
                 }
-
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
+                    isServiceBound = false;
+                    mService.deleteObsever(PLMainActivity.this);
                 }
             };
         }
-
         return mServiceConnection;
     }
 
@@ -112,7 +130,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
 
         if (isApplicationPasswordDefined()){
 
-            if (mApplicationPassword.isApplicationLocked()){
+            if (mApplicationState.isApplicationLocked()){
                 swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
             }else{
                 swapFragment(R.id.MainFragContainer, new RecyclerViewFragment());
@@ -170,7 +188,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
        return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void callOnBackPressed() {
         onBackPressed();
@@ -182,7 +199,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
 
     @Override
     public void updateActivity() {
-        Log.e("MainActivity", "updateActivity");
         setFirstFragment();
     }
 

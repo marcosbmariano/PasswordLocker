@@ -10,8 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.mark.passwordlocker.broadcastReceiver.ScreenLockBroadReceiver;
-import com.example.mark.passwordlocker.helpers.ApplicationPassword;
-import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +18,10 @@ import java.util.List;
 /**
  * Created by mark on 7/20/15.
  */
-public class MyService extends Service implements ApplicationPassword.ApplicationPasswordListener {
+public class MyService extends Service implements ApplicationState.ApplicationStateObserver {
     private BroadcastReceiver mReceiver;
-    private ApplicationPassword mAppPassword;
     private final IBinder mBinder = new MyBinder();
-    private static List<ServiceCallBack> mServiceListener;
-    private static ApplicationPreferences mAppPreferences;
+    private static List<ServiceCallBack> mServiceObserver;
 
     @Nullable
     @Override
@@ -40,35 +37,39 @@ public class MyService extends Service implements ApplicationPassword.Applicatio
         filter.addAction(Intent.ACTION_ANSWER);
         mReceiver = new ScreenLockBroadReceiver();
         registerReceiver(mReceiver, filter);
-        mAppPassword = ApplicationPassword.getInstance();
-        mAppPassword.addListener(this);
+        ApplicationState.addObserver(this);
+        mServiceObserver = new ArrayList<>();
 
         Log.e("OnCreate", "Service is created!!");
         //http://stackoverflow.com/questions/19899438/how-to-get-broadcast-for-screen-lock-in-android
     }
 
-    public static void addListener(ServiceCallBack listener){
-        if (null == mServiceListener){
-            mServiceListener = new ArrayList<>();
+    public static void addObserver(ServiceCallBack observer){
+        if ( !mServiceObserver.contains(observer)){
+            mServiceObserver.add(observer);
+            Log.e("MyService", "a listener was added!!");
         }
-        mServiceListener.add(listener);
-        Log.e("MyService", "a listener was added!!");
     }
 
+    public static void deleteObsever(ServiceCallBack observer){
+        if ( null != mServiceObserver && mServiceObserver.contains(observer)){
+            mServiceObserver.remove(observer);
+        }
+    }
 
 
     @Override
     public void onDestroy() {
         Log.e("OnDestroy", "it is destroyed!!");
         unregisterReceiver(mReceiver);
+        ApplicationState.deleteObserver(this);
         super.onDestroy();
     }
 
-
     @Override
-    public void passwordIsLocked() {
+    public void applicationIsLocked() {
         Log.e("MyService", "passwordIsLocked()!!!!!!");
-        for ( ServiceCallBack listener : mServiceListener){
+        for ( ServiceCallBack listener : mServiceObserver){
             if ( listener.isActivityVisible()){
                 Log.e("MyService", "call to update !");
                 listener.updateActivity();
@@ -77,23 +78,14 @@ public class MyService extends Service implements ApplicationPassword.Applicatio
     }
 
     @Override
-    public void passwordIsUnlocked() {
+    public void applicationIsUnlocked() {
         Log.e("MyService", "PasswordIsUnlocked()!!!!!!");
-
-            for ( ServiceCallBack listener : mServiceListener){
-                if ( listener.isActivityVisible()){
-                    Log.e("MyService", "call to update !");
-                    listener.updateActivity();
-                }
+        for ( ServiceCallBack listener : mServiceObserver){
+            if ( listener.isActivityVisible()){
+                Log.e("MyService", "call to update !");
+                listener.updateActivity();
             }
-
-    }
-
-    private ApplicationPreferences getApplicationPreferences(){
-        if ( null == mAppPreferences){
-            mAppPreferences = ApplicationPreferences.getInstance();
         }
-        return mAppPreferences;
     }
 
 

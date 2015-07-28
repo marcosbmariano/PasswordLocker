@@ -8,57 +8,48 @@ import java.util.List;
 /**
  * Created by mark on 7/23/15.
  */
-public class ApplicationState implements ApplicationPreferences.PreferencesSecondsToLockListener{
+public class ApplicationState implements ApplicationPreferences.PreferencesSecondsToLockListener,
+        Counter.CounterCallBack{
     private static int CODE_TO_LOCK = -1;
     private static ApplicationPassword mApplicationPassword;
     private static ApplicationPreferences mPreferences;
-    private static boolean mIsAppLocked;
-    private static byte [] mKey;
+    private static ApplicationState mInstance;
     private static List<ApplicationStateObserver> mObservers;
     private int mSecondsToLock = 0;
     private Counter mCounter;
 
 
-
-
-
-    public void addListener(ApplicationStateObserver listener){
-        if ( null == mObservers){
-            mObservers = new ArrayList<>();
-        }
-        mObservers.add(listener);
+    private ApplicationState(){
+        mApplicationPassword = ApplicationPassword.getInstance();
+        mPreferences = ApplicationPreferences.getInstance();
+        mPreferences.addPreferencesAppLockChangeListener(this);
+        mObservers = new ArrayList<>();
     }
 
+    public static ApplicationState getInstance(){
+        if ( null == mInstance ){
+            mInstance = new ApplicationState();
+        }
+        return mInstance;
+    }
 
-    private void updateListeners(){
-        Log.e("Application Password", "updating Listeners!!");
-        if (null != mObservers){
-            for ( ApplicationStateObserver observer : mObservers){
-                if ( isApplicationLocked()){
-                    observer.applicationIsLocked();
-                    Log.e("Application Password", "passwordIsLocked!!");
-                }else{
-                    observer.applicationIsUnlocked();
-                    Log.e("Application Password", "passwordIsUnlocked!!");
-                }
-            }
+    public static void addObserver(ApplicationStateObserver observer){
+        if ( !mObservers.contains(observer)){
+            mObservers.add(observer);
         }
     }
 
+    public static void deleteObserver(ApplicationStateObserver observer){
+        if (null != mObservers && mObservers.contains(observer)){
+            mObservers.remove(observer);
+        }
+    }
 
     private ApplicationPreferences getAppPreferences(){
         if (null == mPreferences){
             mPreferences = ApplicationPreferences.getInstance();
-            mPreferences.addPreferencesAppLockChangeListener(this);
         }
         return mPreferences;
-    }
-
-    private ApplicationPassword getApplicationPassword(){ //TODO should I keep?
-        if ( null == mApplicationPassword){
-            mApplicationPassword = ApplicationPassword.getInstance();
-        }
-        return mApplicationPassword;
     }
 
     private int getSecondsToLockApp(){
@@ -74,48 +65,52 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         updateCounter();
     }
 
-
     private void updateCounter(){
-        if( isToLockPassword()){
+        if( isToLockApplication()){
             setCounterToLockeApplication();
         }
     }
 
-    private boolean isToLockPassword(){
+    private boolean isToLockApplication(){
         return (getSecondsToLockApp() >= CODE_TO_LOCK);
     }
 
 
     @Override
     public void calledByCounter(int seconds ) {
-        if ( isToLockPassword() && getSecondsToLockApp() == seconds ){
-            lockPassword();
-
+        if ( isToLockApplication() && getSecondsToLockApp() == seconds ){
+            lockApplication();
         }
     }
 
-    public void lockPassword(){
-        mIsAppLocked = true;
+    public void lockApplication(){
         mApplicationPassword.lockPassword();
-
-        updateListeners();
+        updateObservers();
     }
 
-
-
-    public void unlockPassword( ){
-        if ( null != mKey )  {
-            mIsAppLocked = false;
+    public void unlockApplication( ){
+        if ( mApplicationPassword.isKeyValid() )  {
+            mApplicationPassword.unlockPassword();
             setCounterToLockeApplication();
-            updateListeners();
-            Log.e("Application Password", "Unlock Password!! from unlocked");
+            updateObservers();
+            Log.e("ApplicationState", "Unlock Password!! from unlocked");
         }
-
     }
 
-
-
-
+    private void updateObservers(){
+        Log.e("ApplicationState", "updating Listeners!!");
+        if (null != mObservers){
+            for ( ApplicationStateObserver observer : mObservers){
+                if ( isApplicationLocked()){
+                    Log.e("ApplicationState", "passwordIsLocked!!");
+                    observer.applicationIsLocked();
+                }else{
+                    Log.e("ApplicationState", "passwordIsUnlocked!!");
+                    observer.applicationIsUnlocked();
+                }
+            }
+        }
+    }
 
     private void setCounterToLockeApplication(){
         int seconds = getSecondsToLockApp();
@@ -125,11 +120,9 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         }
     }
 
-
     public boolean isApplicationLocked(){
-        return mIsAppLocked;
+        return mApplicationPassword.isPasswordLocked();
     }
-
 
 
     public interface ApplicationStateObserver {
