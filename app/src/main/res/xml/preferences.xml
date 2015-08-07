@@ -25,10 +25,20 @@
         <ListPreference
             android:key="@string/pref_time_to_lock_key"
             android:title="Seconds to lock Application"
-            android:summary="How many seconds keep the application acessible without passoword"
+            android:summary="How many seconds to keep the application acessible without passoword"
             android:defaultValue="60"
             android:entries="@array/app_unlocked_minutes_entries"
             android:entryValues="@array/app_unlocked_seconds_values"
+
+            />
+
+        <ListPreference
+            android:key="@string/pref_time_to_hide_Key"
+            android:title="Seconds to hide password"
+            android:summary="How many seconds to keep the passoword visible after displayed"
+            android:defaultValue="60"
+            android:entries="@array/password_visible_time_entries"
+            android:entryValues="@array/password_visible_seconds_values"
 
             />
 
@@ -42,10 +52,6 @@
         </CheckBoxPreference>
 
     </PreferenceCategory>
-
-
-
-
 
 
 </PreferenceScreen>

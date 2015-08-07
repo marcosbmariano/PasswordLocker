@@ -22,7 +22,6 @@ class SQLSelectStatement extends SQLCommandBase {
         BETWEEN_SELECT_AND_FROM = column;
     }
 
-
     @Override
     void finalizeStatement() {
         appendToStatement(BETWEEN_SELECT_AND_FROM);

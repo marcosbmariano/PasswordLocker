@@ -1,9 +1,6 @@
 package com.marcos.autodatabases.sql;
 
-import android.util.Log;
-
 import com.marcos.autodatabases.models.Model;
-import com.marcos.autodatabases.utils.DatabaseHelper;
 import com.marcos.autodatabases.utils.ModelUtils;
 import com.marcos.autodatabases.utils.SQLConstants;
 

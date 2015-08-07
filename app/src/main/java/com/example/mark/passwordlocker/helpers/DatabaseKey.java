@@ -2,8 +2,6 @@ package com.example.mark.passwordlocker.helpers;
 
 import android.content.Context;
 
-import com.example.mark.passwordmanager.PasswordUtils;
-import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
 /**
  * Created by mark on 3/12/15.

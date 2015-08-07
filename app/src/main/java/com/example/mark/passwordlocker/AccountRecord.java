@@ -1,6 +1,8 @@
 package com.example.mark.passwordlocker;
 
 
+import android.util.Log;
+
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
@@ -9,6 +11,7 @@ import com.marcos.autodatabases.annotations.Column;
 import com.marcos.autodatabases.annotations.Table;
 import com.marcos.autodatabases.models.Model;
 
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +53,7 @@ public class AccountRecord extends Model {
 
     public AccountRecord(RawData account, RawData password){
         mAccount = new AccountSensitiveData(account, password);
-
     }
-
 
     public static List<AccountRecord> getAllAccounts(){
         List<Model> models = Model.getModels(AccountRecord.class);
@@ -96,8 +97,7 @@ public class AccountRecord extends Model {
         notifyListeners();
     }
 
-    public static void deleteAccount(long id){ //TODO test this
-        //Delete.from(AccountRecord.class).whereId(id).execute();
+    public static void deleteAccount(long id){
         delete(AccountRecord.class, id);
         notifyListeners();
     }
@@ -109,8 +109,15 @@ public class AccountRecord extends Model {
     }
 
     private String encrypt(byte [] data, byte [] salt, byte [] key, byte [] iv){
-        return PasswordUtils.byteToString(
-                PasswordCipher.encryptWithSalt(data, salt, key, iv));
+        String result = null;
+        try {
+            PasswordUtils.byteToString(
+                   PasswordCipher.encryptWithSalt(data, salt, key, iv));
+        } catch (InvalidKeyException e) {
+            Log.e("Inside encrypt", " " + e.toString());
+            return null;
+        }
+        return result;
     }
 
     public String getAccountPassword(){
@@ -135,7 +142,11 @@ public class AccountRecord extends Model {
         byte [] result  = {' '};
 
         if (null != data) {
-            result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
+            try {
+                result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
+            } catch (InvalidKeyException e) {
+                Log.e("In getDrecyptedValue", "Invalid key " + e.toString());
+            }
         }
         return result;
     }
@@ -153,12 +164,6 @@ public class AccountRecord extends Model {
         }
         return mTempSalt;
     }
-
-//    private String getCiphedPassword(()){
-//        if ( null == mCiphedPassword){
-//            mCiphedPassword
-//        }
-//    }
 
     private byte [] geDecryptedtMetadata(String ciphedValue){
         return getDecryptedValue(ciphedValue,

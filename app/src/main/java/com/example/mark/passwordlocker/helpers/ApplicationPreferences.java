@@ -3,9 +3,6 @@ package com.example.mark.passwordlocker.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.example.mark.passwordlocker.R;
 
 /**
@@ -18,7 +15,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
     private static Context mContext;
     private static ApplicationPreferences mIntance;
     private static SharedPreferences mApllicationsPreferences;
-    private PreferencesSecondsToLockListener mLockListener;
+    private PreferencesSecondsToLockObserver mLockListener;
     private PreferencesNotificationDisplayListener mDisplayNotificationListener;
 
 
@@ -67,11 +64,16 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
     public int getClipBoardSeconds(){
         String key = mContext.getResources().
                 getString(R.string.preferences_clipboard_seconds_key);
-        return Integer.valueOf(getSharedPreferences().getString(key, "30"));
+        return Integer.valueOf(getSharedPreferences().getString(key, "60"));
     }
 
     public int getSecondsToLockApplication(){
-        return Integer.valueOf(getSharedPreferences().getString(TIME_TO_LOCK_KEY, "30"));
+        return Integer.valueOf(getSharedPreferences().getString(TIME_TO_LOCK_KEY, "60"));
+    }
+
+    public int getSecondsToHidePassword(){
+        String key = getResourceString(R.string.pref_time_to_hide_Key);
+        return Integer.valueOf(getSharedPreferences().getString(key, "60"));
     }
 
     private String getResourceString( int rStringId){
@@ -86,21 +88,18 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Toast.makeText(mContext, "This changed " + key, Toast.LENGTH_LONG).show();
         switch (key){
             case TIME_TO_LOCK_KEY:
-                Log.e("Inside preferences", "update time to lock key");
                 updateLockPreferencesListener();
                 break;
             case SHORT_CUT_NOTIFICATION_KEY:
-                Log.e("Inside preferences", "update shortcut notification");
                 updateNotificationDisplayListener();
                 break;
             default:
         }
     }
 
-    public void addPreferencesAppLockChangeListener(PreferencesSecondsToLockListener listener){
+    public void addPreferencesAppLockChangeListener(PreferencesSecondsToLockObserver listener){
         mLockListener = listener;
     }
     private void updateLockPreferencesListener(){
@@ -120,7 +119,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
         void updateIsToShowNotification(boolean showNotification);
     }
 
-    public interface PreferencesSecondsToLockListener{
+    public interface PreferencesSecondsToLockObserver {
         void updateSeconds(int seconds);
     }
 }

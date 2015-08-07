@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.activities.PLMainActivity;
 
 /**
  * Created by mark on 1/14/15.
@@ -23,7 +22,6 @@ public class DisplayGeneratedPass extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -34,7 +32,6 @@ public class DisplayGeneratedPass extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
 
                     }
                 });

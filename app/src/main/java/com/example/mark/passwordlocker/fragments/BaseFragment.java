@@ -5,8 +5,6 @@ package com.example.mark.passwordlocker.fragments;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.Toast;
-
 
 /**
  * Created by mark on 1/21/15.
@@ -24,9 +22,7 @@ public class BaseFragment extends Fragment {
             }else{
                 actionBar.show();
             }
-
-
         }
-
     }
+
 }

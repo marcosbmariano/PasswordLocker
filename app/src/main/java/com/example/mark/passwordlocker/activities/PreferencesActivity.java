@@ -3,9 +3,7 @@ package com.example.mark.passwordlocker.activities;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
@@ -26,7 +24,6 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
 
     @Override
     public void updateActivity() {
-        Log.e("PreferencesActivity", "updateActivity");
         onNavigateUp();
     }
 
@@ -36,13 +33,16 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
     }
 
     @Override
+    public void serviceDestroyed() {
+
+    }
+
+    @Override
     protected void onResume() {
         mIsActivityVisible = true;
         if(ApplicationState.getInstance().isApplicationLocked()){
             onNavigateUp();
         }
-
-
         super.onResume();
 
     }

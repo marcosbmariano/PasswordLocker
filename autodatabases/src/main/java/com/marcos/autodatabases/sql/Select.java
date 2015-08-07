@@ -2,6 +2,7 @@ package com.marcos.autodatabases.sql;
 
 import android.database.Cursor;
 import android.util.Log;
+
 import com.marcos.autodatabases.modelUtils.ModelsInfo;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;

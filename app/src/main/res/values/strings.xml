@@ -38,6 +38,7 @@
     <string name="pref_password_length">PREF_PASSWORD_LENGTH</string>
     <string name="pref_show_notification_key">SHOW_NOTIFICATION</string>
     <string name="pref_time_to_lock_key">SECONDS_TO_LOCK</string>
+    <string name="pref_time_to_hide_Key">SECONDS_TO_HIDE_PASSORD</string>
 
 
 

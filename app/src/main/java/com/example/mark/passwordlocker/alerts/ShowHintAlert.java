@@ -4,15 +4,10 @@ import android.app.AlertDialog;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-
-
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.activities.PLMainActivity;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 
 /**

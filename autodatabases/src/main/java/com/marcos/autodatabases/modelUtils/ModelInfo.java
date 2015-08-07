@@ -3,7 +3,6 @@ package com.marcos.autodatabases.modelUtils;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.SQLConstants;
 import com.marcos.autodatabases.utils.SQLiteUtils;
-
 import java.util.HashMap;
 import java.util.List;
 

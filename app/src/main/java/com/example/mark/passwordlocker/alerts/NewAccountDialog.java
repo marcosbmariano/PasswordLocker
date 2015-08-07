@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.mark.passwordlocker.AccountRecord;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.fragments.PassCreationFrag;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.RawData;
 import com.example.mark.passwordmanager.generator.PasswordGenerator;
@@ -24,7 +24,6 @@ import com.example.mark.passwordmanager.generator.PasswordGenerator;
  */
 
 
-//TODO class Reviewd!!!!!!!
 
 public class NewAccountDialog extends DialogFragment
         implements View.OnClickListener, PasswordGenerator.PasswordGeneratorListener{
@@ -34,6 +33,7 @@ public class NewAccountDialog extends DialogFragment
     private Button mBtnGeneratePassword;
     private Button mBtnCancel;
     private PassCreationFrag mPassCreationFrag;
+    private ApplicationState mApplicationState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -42,8 +42,15 @@ public class NewAccountDialog extends DialogFragment
         View view = inflater.inflate(R.layout.new_pass_account, container);
         setupWidgets(view);
         setupFragment();
+        mApplicationState = ApplicationState.getInstance();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mApplicationState.suspendLock();
     }
 
     private void setupWidgets(View v){
@@ -64,6 +71,17 @@ public class NewAccountDialog extends DialogFragment
                 .commit();
     }
 
+    @Override
+    public void onStop() {
+        mApplicationState.resumeLock();
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
 
     @Override
     public void onClick(View v) {

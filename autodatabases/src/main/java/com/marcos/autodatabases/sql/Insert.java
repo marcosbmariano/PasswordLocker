@@ -5,15 +5,13 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+
 import com.marcos.autodatabases.annotations.Column;
 import com.marcos.autodatabases.modelUtils.ModelsInfo;
 import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -37,7 +35,7 @@ public class Insert {
 
             } catch (SQLiteConstraintException e){
                 result = -1;
-                Log.e("DATABASE TRANSACTION", " Insert model " +
+                Log.d("DATABASE TRANSACTION", " Insert model " +
                         e.getMessage()); //do not remove
             }
         db.close();

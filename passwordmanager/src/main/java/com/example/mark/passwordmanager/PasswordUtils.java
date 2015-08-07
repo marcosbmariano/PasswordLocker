@@ -1,6 +1,6 @@
 package com.example.mark.passwordmanager;
 
-import android.util.Log;
+
 import android.widget.EditText;
 
 /**

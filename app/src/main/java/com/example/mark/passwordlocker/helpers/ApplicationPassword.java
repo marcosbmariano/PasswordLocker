@@ -6,13 +6,14 @@ import android.util.Log;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
+import java.security.InvalidKeyException;
 import java.util.Arrays;
 
 /**
  * Created by mark on 3/12/15.
  */
 
-public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewed
+public final class ApplicationPassword extends SharedPrefsActor {
     private final String PREFERENCES_NAME = "app_pref";
     private final String APP_PASSWORD_KEY = "app_password";
     private final String APP_PASSWORD_HINT = "password_hint";
@@ -69,8 +70,7 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
     //todo move to applicationState
     public void unlockPassword( ){
         if ( null != mKey )  {
-            mIsPasswordLocked = false;           ;
-            Log.e("Application Password", "Unlock Password!! from unlocked");
+            mIsPasswordLocked = false;
         }
     }
 
@@ -83,12 +83,15 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
 
     private void deleteKey(){
         mKey = null;
-        Log.e("Application Password", "Key was deleted!!");
     }
 
 
     public void saveApplicationPassword(String password){
-        saveDataToSharedPref(APP_PASSWORD_KEY, encryptBoolean(password) );
+        if ( !isPasswordDefined())
+        {
+            saveDataToSharedPref(APP_PASSWORD_KEY, encryptBoolean(password) );
+        }
+
     }
 
     public void deleteApplicationPassword(){
@@ -110,8 +113,9 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
         return hasDataOnSharedPref(APP_PASSWORD_KEY);
     }
 
-    public boolean checkPassword(String password){
+    public boolean isPasswordValid(String password){
         if ( Boolean.valueOf( decryptBoolean(password) )){
+            Log.e(" isPAsswordValid()", " " + decryptBoolean(password) + " " +  password);
             unlockPassword();
             return true;
         }else{
@@ -119,21 +123,32 @@ public final class ApplicationPassword extends SharedPrefsActor { //TODO reviewe
             return false;
         }
     }
-    private String encryptBoolean(String password){
+    String encryptBoolean(String password){
         byte [] data = PasswordUtils.stringToBytes( String.valueOf(Boolean.TRUE) );
         byte [] key = generateKeyFromPassword(password);
         byte [] iv = generateIV(key);
-        byte [] cipherData = PasswordCipher.encrypt(data, key, iv);
+        byte [] cipherData;
+        try {
+            cipherData = PasswordCipher.encrypt(data, key, iv);
+        } catch (InvalidKeyException e) {
+            Log.e("Inside encryptBoolean","Invalid Key " + e.toString());
+            return null;
+        }
 
         return PasswordUtils.byteToString(cipherData);
     }
 
-    private String decryptBoolean(String password){
+    String decryptBoolean(String password){
         String cipheredPasswordCheck = getStringFromPreferences(APP_PASSWORD_KEY);
         byte [] key = generateKeyFromPassword(password);
         byte [] iv = generateIV(key);
         byte [] data = PasswordUtils.stringToBytes(cipheredPasswordCheck);
-        byte [] decryptedByte = PasswordCipher.decrypt(data, key, iv);
+        byte [] decryptedByte = new byte[0];
+        try {
+            decryptedByte = PasswordCipher.decrypt(data, key, iv);
+        } catch (InvalidKeyException e) {
+            Log.e("Inside decrypt", "Invalid Key " + e.toString());
+        }
 
         return PasswordUtils.byteToString(decryptedByte);
     }

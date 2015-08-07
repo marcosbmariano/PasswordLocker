@@ -8,12 +8,10 @@ import com.marcos.autodatabases.sql.Select;
 import com.marcos.autodatabases.sql.Update;
 import com.marcos.autodatabases.utils.ModelUtils;
 import com.marcos.autodatabases.utils.SQLConstants;
-
 import java.util.HashMap;
 import java.util.List;
 
 //todo catch android.database.sqlite.SQLiteException:
-
 
 /**
  * Created by marcos on 11/13/14.

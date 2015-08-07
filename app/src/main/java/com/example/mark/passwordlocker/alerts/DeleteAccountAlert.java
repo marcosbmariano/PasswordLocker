@@ -6,10 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.widget.TextView;
-
 import com.example.mark.passwordlocker.AccountRecord;
 import com.example.mark.passwordlocker.R;
 
@@ -31,16 +27,13 @@ public class DeleteAccountAlert extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.e("Ont Item Click", "Positive");
                         AccountRecord.deleteAccount(getAccountId());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.e("Ont Item Click", "Negative");
-
-                    }
+                                            }
                 });
 
         return builder.create();

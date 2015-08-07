@@ -2,8 +2,6 @@ package com.marcos.autodatabases.sql;
 
 
 
-import android.util.Log;
-
 import java.util.Iterator;
 import java.util.Map;
 

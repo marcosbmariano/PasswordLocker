@@ -14,6 +14,19 @@
     </string-array>
 
     <string-array
+        name="password_visible_seconds_values">
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+
+    <string-array name="password_visible_time_entries">
+        <item>30 seconds</item>
+        <item>One minutes</item>
+        <item>Two minutes</item>
+    </string-array>
+
+    <string-array
         name="app_unlocked_seconds_values">
         <item>30</item>
         <item>60</item>

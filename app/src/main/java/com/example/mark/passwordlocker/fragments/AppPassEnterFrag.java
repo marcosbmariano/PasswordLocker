@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.alerts.ShowHintAlert;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
@@ -77,7 +76,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
 
         if (!password.isEmpty()){
             ApplicationPassword apPassword = ApplicationPassword.getInstance();
-            result = apPassword.checkPassword(password);
+            result = apPassword.isPasswordValid(password);
         }
         return result;
     }

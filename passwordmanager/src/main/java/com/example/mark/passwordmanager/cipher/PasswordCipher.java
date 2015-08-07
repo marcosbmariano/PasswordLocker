@@ -89,22 +89,26 @@ public class PasswordCipher {
         return result;
     }
 
-    public static byte [] encryptWithSalt(byte [] data, byte [] salt, byte [] key,  byte [] iv){
+    public static byte [] encryptWithSalt(byte [] data, byte [] salt, byte [] key,  byte [] iv)
+            throws InvalidKeyException {
         byte [] saltedData = addSaltToData(data, salt);
         return decryptEncrypt(Cipher.ENCRYPT_MODE, saltedData, key, iv);
     }
 
-    public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv){
+    public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv)
+            throws InvalidKeyException {
         return decryptEncrypt(Cipher.ENCRYPT_MODE, data, key, iv);
     }
 
-    public static byte[] decryptWithSalt(String data, byte [] salt,  byte [] key,  byte [] iv){
+    public static byte[] decryptWithSalt(String data, byte [] salt,  byte [] key,  byte [] iv)
+            throws InvalidKeyException {
         byte [] saltedData = PasswordUtils.stringToBytes(data);
         byte [] temp = decryptEncrypt(Cipher.DECRYPT_MODE, saltedData, key, iv);
         return subtractSaltFromData( temp, salt);
     }
 
-    public static byte[] decrypt(byte [] data,  byte [] key,  byte [] iv){
+    public static byte[] decrypt(byte [] data,  byte [] key,  byte [] iv)
+            throws InvalidKeyException {
         return decryptEncrypt(Cipher.DECRYPT_MODE, data, key, iv);
     }
 
@@ -127,7 +131,8 @@ public class PasswordCipher {
     }
 
 
-    static byte [] decryptEncrypt(int cipherMode, byte[] data, byte[] key, byte[] iv){
+    static byte [] decryptEncrypt(int cipherMode, byte[] data, byte[] key, byte[] iv)
+            throws InvalidKeyException {
         SecretKeySpec sKeySpec = new SecretKeySpec(key, ENCRYPT_ALGORITHM);
         Cipher cipher;
         byte [] result = new byte [0]; //this is initialized, so if a exception occur, the return will not be null
@@ -142,8 +147,6 @@ public class PasswordCipher {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
             e.printStackTrace();
         } catch (BadPaddingException e) {
             e.printStackTrace();

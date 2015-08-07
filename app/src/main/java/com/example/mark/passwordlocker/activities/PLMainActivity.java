@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.example.mark.passwordlocker.AccountRecord;
@@ -31,16 +30,15 @@ import com.marcos.autodatabases.utils.DatabaseHelper;
 
 
 public class PLMainActivity extends ActionBarActivity  implements AccountsAdapter.AccountsAdapterUpdate,
-        MyService.ServiceCallBack{ //TODO reviewed!!!
+        MyService.ServiceCallBack{
 
     private DatabaseHelper mDataHelper = null;
     private ApplicationPassword mApplicationPassword;
     private ApplicationState mApplicationState;
     private MyService mService;
     private ServiceConnection mServiceConnection;
-    private boolean  mIsActivityVisible = false;
-    private boolean isServiceBound;
-
+    private boolean mIsActivityVisible = false;
+    private boolean mIsServiceBound;
 
 
     @Override
@@ -53,7 +51,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         setupDatabase();
         launchService();
         mIsActivityVisible = true;
-        Log.e("Main activity", "on Create");
     }
 
 
@@ -76,6 +73,9 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         super.onResume();
         setFirstFragment();
         launchNotificationIconManager();
+        if( !mIsServiceBound){
+            launchService();
+        }
         mIsActivityVisible = true;
     }
 
@@ -83,7 +83,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     @Override
     protected void onPause() {
         mIsActivityVisible = false;
-        Log.e("inside mainActivity", "on Pause" );
         super.onPause();
     }
 
@@ -93,9 +92,39 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         super.onStop();
     }
 
+    private void setFirstFragment(){
+        if (isApplicationPasswordDefined()){
+
+            if (mApplicationState.isApplicationLocked()){
+                swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
+            }else{
+                swapFragment(R.id.MainFragContainer, new RecyclerViewFragment());
+            }
+
+        }else{
+            hideActionBar();
+            swapFragment(R.id.MainFragContainer, new NewUserPassFrag());
+        }
+    }
+
+    boolean isApplicationPasswordDefined(){
+        if ( null == mApplicationPassword){
+            mApplicationPassword = ApplicationPassword.getInstance();
+        }
+        return mApplicationPassword.isPasswordDefined();
+    }
+
+    private void swapFragment(int container, Fragment fragment){
+        getSupportFragmentManager().beginTransaction()
+                .replace(container, fragment, fragment.getClass().getSimpleName())
+                .commit();
+    }
+
     private void desconectFromService(){
-        if ( isServiceBound){
+        stopService(new Intent(this, MyService.class));
+        if (mIsServiceBound){
             unbindService(mServiceConnection);
+            mIsServiceBound = false;
         }
     }
 
@@ -113,47 +142,16 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
                     MyService.MyBinder binder = (MyService.MyBinder) service;
                     mService = binder.getService();
                     mService.addObserver(PLMainActivity.this);
-                    isServiceBound = true;
+                    mIsServiceBound = true;
                 }
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    isServiceBound = false;
+                    mIsServiceBound = false;
                     mService.deleteObsever(PLMainActivity.this);
                 }
             };
         }
         return mServiceConnection;
-    }
-
-
-    private void setFirstFragment(){
-
-        if (isApplicationPasswordDefined()){
-
-            if (mApplicationState.isApplicationLocked()){
-                swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
-            }else{
-                swapFragment(R.id.MainFragContainer, new RecyclerViewFragment());
-            }
-
-        }else{
-            hideActionBar();
-            swapFragment(R.id.MainFragContainer, new NewUserPassFrag());
-        }
-    }
-
-
-    boolean isApplicationPasswordDefined(){
-        if ( null == mApplicationPassword){
-            mApplicationPassword = ApplicationPassword.getInstance();
-        }
-        return mApplicationPassword.isPasswordDefined();
-    }
-
-    private void swapFragment(int container, Fragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(container, fragment,fragment.getClass().getSimpleName())
-                .commit();
     }
 
     @Override
@@ -171,18 +169,16 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         switch (id){
             case R.id.action_add_account:
                 new NewAccountDialog().show(getSupportFragmentManager(), null);
-
                 return true;
+
             case R.id.action_settings:
                 Intent intent  = new Intent(this, PreferencesActivity.class);
                 startActivity(intent);
-
                 return true;
         }
        return super.onOptionsItemSelected(item);
@@ -205,6 +201,12 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     @Override
     public boolean isActivityVisible() {
         return mIsActivityVisible;
+    }
+
+    @Override
+    public void serviceDestroyed() {
+        mIsServiceBound = false;
+        launchService();
     }
 
 }

@@ -1,12 +1,8 @@
 package com.marcos.autodatabases.sql;
 
 import android.util.Log;
-
-import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.DatabaseHelper;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;

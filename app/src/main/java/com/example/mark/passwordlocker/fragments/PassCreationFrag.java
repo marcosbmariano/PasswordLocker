@@ -7,18 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.helpers.PasswordManager;
+import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
 import com.example.mark.passwordmanager.meter.PasswordMeter;
+import java.util.Arrays;
 
 /**
  * Created by mark on 1/13/15.
@@ -32,8 +31,6 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
     private boolean mPasswordValid = false;
     private TextView mTVStrengthLabel;
     private ImageView mImgVPassCheck;
-    private PasswordManager mPasswordManager;
-
 
 
     //TODO handle HINT
@@ -46,16 +43,11 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
         mDisplayHint = true;
     }
 
-    public boolean isHintDisplayed(){
-        return mDisplayHint;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.app_pass_creation_frag, container, false);
-        mPasswordManager = new PasswordManager();
 
         setupWidgets(v);
 
@@ -94,7 +86,7 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
         }
 
     }
-    //this method returns a
+
     public String getEncodedHint(){
         if (hasHint()){
             return mEdTHint.getText().toString();
@@ -136,7 +128,20 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
 
     public boolean isPasswordConfirmationValid(){
         mImgVPassCheck.setVisibility(View.VISIBLE);
-        return ( mPasswordManager.isEqualAndNotEmpty(mEdTPassword, mEdTPassConfirmation));
+        return ( isEqualAndNotEmpty(mEdTPassword, mEdTPassConfirmation));
+    }
+
+    private static boolean isEqualAndNotEmpty(EditText password, EditText confirmation){
+        boolean isConfirmed = false;
+        char [] pass = PasswordUtils.getChars(password);
+        char [] confirma = PasswordUtils.getChars(confirmation);
+
+        if ((Arrays.equals(pass, confirma) && (pass.length !=0) && (confirma.length != 0))){
+            isConfirmed = true;
+        }
+
+        return isConfirmed;
+
     }
 
     private void setPassStrengthLabel(EditText ed){
@@ -156,40 +161,33 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
         switch (strength) {
             case INVALID:
                 mPasswordValid = false;
-                Log.e("Inside SetStrength", "INVALID");
                 mTVStrengthLabel.setText(R.string.invalid);
                 mTVStrengthLabel.setTextColor(Color.RED);
                 break;
             case WEAK:
                 mPasswordValid = true;
-                Log.e("Inside SetStrength", "wEAK");
                 mTVStrengthLabel.setText(R.string.weak);
                 mTVStrengthLabel.setTextColor(Color.RED);
                 break;
             case MODERATED:
                 mPasswordValid = true;
-                Log.e("Inside SetStrength", "MODERATED");
                 mTVStrengthLabel.setText(R.string.poor);
                 mTVStrengthLabel.setTextColor(getResources().getColor(R.color.orange));
                 break;
             case GOOD:
                 mPasswordValid = true;
-                Log.e("Inside SetStrength", "GOOD");
                 mTVStrengthLabel.setText(R.string.good);
                 mTVStrengthLabel.setTextColor(Color.BLUE);
 
                 break;
             case STRONG:
                 mPasswordValid = true;
-                Log.e("Inside SetStrength", "STRONG");
                 mTVStrengthLabel.setText(R.string.strong);
                 mTVStrengthLabel.setTextColor(Color.GREEN);
                 break;
             default:
         }
     }
-
-
 
 
     class StrengthChecker implements TextWatcher {
@@ -204,7 +202,6 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
         public void afterTextChanged(Editable s) {
             setPasswordConfirmationLabel();
             setPassStrengthLabel(mEdTPassword);
-
         }
     }
 
@@ -222,7 +219,6 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
 
         }
     }
-
 
 
 

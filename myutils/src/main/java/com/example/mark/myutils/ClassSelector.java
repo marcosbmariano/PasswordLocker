@@ -1,9 +1,6 @@
 package com.example.mark.myutils;
 
 
-
-
-
 /**
  * Created by mark on 4/29/15.
  * In case the need of extend to user this class for another type of class, look the example

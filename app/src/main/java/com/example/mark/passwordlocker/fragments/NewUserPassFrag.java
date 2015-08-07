@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordmanager.RawData;
@@ -19,7 +18,6 @@ import com.example.mark.passwordmanager.RawData;
 public class NewUserPassFrag extends BaseFragment {
 
     private Button mBtnSave;
-
     private PassCreationFrag mFrag;
 
 
@@ -75,7 +73,5 @@ public class NewUserPassFrag extends BaseFragment {
                 .replace(R.id.MainFragContainer, new AppPassEnterFrag())
                 .commit();
     }
-
-
 
 }

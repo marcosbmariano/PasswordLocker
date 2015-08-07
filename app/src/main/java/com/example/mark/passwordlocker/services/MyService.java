@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.mark.passwordlocker.broadcastReceiver.ScreenLockBroadReceiver;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
@@ -39,15 +38,11 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
         registerReceiver(mReceiver, filter);
         ApplicationState.addObserver(this);
         mServiceObserver = new ArrayList<>();
-
-        Log.e("OnCreate", "Service is created!!");
-        //http://stackoverflow.com/questions/19899438/how-to-get-broadcast-for-screen-lock-in-android
     }
 
     public static void addObserver(ServiceCallBack observer){
         if ( !mServiceObserver.contains(observer)){
             mServiceObserver.add(observer);
-            Log.e("MyService", "a listener was added!!");
         }
     }
 
@@ -60,18 +55,24 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
 
     @Override
     public void onDestroy() {
-        Log.e("OnDestroy", "it is destroyed!!");
         unregisterReceiver(mReceiver);
         ApplicationState.deleteObserver(this);
+        warnActivityOfDestruction();
         super.onDestroy();
+    }
+
+    private void warnActivityOfDestruction(){
+        for ( ServiceCallBack listener : mServiceObserver){
+            if ( listener.isActivityVisible()){
+                listener.serviceDestroyed();
+            }
+        }
     }
 
     @Override
     public void applicationIsLocked() {
-        Log.e("MyService", "passwordIsLocked()!!!!!!");
         for ( ServiceCallBack listener : mServiceObserver){
             if ( listener.isActivityVisible()){
-                Log.e("MyService", "call to update !");
                 listener.updateActivity();
             }
         }
@@ -79,10 +80,8 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
 
     @Override
     public void applicationIsUnlocked() {
-        Log.e("MyService", "PasswordIsUnlocked()!!!!!!");
         for ( ServiceCallBack listener : mServiceObserver){
             if ( listener.isActivityVisible()){
-                Log.e("MyService", "call to update !");
                 listener.updateActivity();
             }
         }
@@ -98,5 +97,6 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
     public interface ServiceCallBack{
         void updateActivity();
         boolean isActivityVisible();
+        void serviceDestroyed();
     }
 }

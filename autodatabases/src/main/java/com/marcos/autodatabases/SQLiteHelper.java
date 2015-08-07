@@ -11,8 +11,6 @@ import java.util.List;
  * Created by marcos on 11/13/14.
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
-
-
     private final ModelsInfo mModelsInfo;
 
 

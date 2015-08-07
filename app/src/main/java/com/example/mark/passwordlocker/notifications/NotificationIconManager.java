@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.activities.PLMainActivity;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
@@ -44,11 +42,11 @@ public class NotificationIconManager implements
 
     private void ifDisplayableBuildNotification(){
         if (mAppPreferences.isNotificationDisplayable()){
-            displayIcon();
+            displayShorcut();
         }
     }
 
-    private void displayIcon(){
+    private void displayShorcut(){
         buildNotification();
         mNotificationManager.notify(mId, mNotification);
     }
@@ -70,8 +68,9 @@ public class NotificationIconManager implements
 
     private PendingIntent getPendingIntent(){
         Intent notificationIntent = new Intent(mContext, PLMainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT );
         return PendingIntent.getActivity(mContext, 0,
-                notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 
@@ -79,10 +78,8 @@ public class NotificationIconManager implements
     public void updateIsToShowNotification(boolean showNotification) {
             if ( !showNotification){
                 mNotificationManager.cancel(mId);
-                Log.e("NotificationManager", "Cancel notification");
             } else{
-                displayIcon();
-                Log.e("NotificationManager", "Display notification");
+                displayShorcut();
             }
     }
 }

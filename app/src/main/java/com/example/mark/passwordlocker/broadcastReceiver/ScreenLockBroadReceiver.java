@@ -3,12 +3,9 @@ package com.example.mark.passwordlocker.broadcastReceiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
-import com.example.mark.passwordlocker.services.MyService;
+
 
 /**
  * Created by mark on 7/20/15.
