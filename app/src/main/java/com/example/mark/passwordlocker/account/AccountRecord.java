@@ -1,8 +1,9 @@
-package com.example.mark.passwordlocker;
+package com.example.mark.passwordlocker.account;
 
 
 import android.util.Log;
 
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
@@ -15,6 +16,8 @@ import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+
 /**
  * Created by mark on 3/11/15.
  */
@@ -23,37 +26,46 @@ import java.util.List;
 //TODO must be tested
 
 @Table(name = "account_record")
-public class AccountRecord extends Model {
+public final class AccountRecord extends Model {
 
-    private AccountSensitiveData mAccount;
+    private AccountSensitiveData mAccountSensitiveData;
     private static List<DatabaseListener> mListeners = new ArrayList<>();
     private static DatabaseKey mDatabaseKey;
+    private static ApplicationState mAppState;
 
-    @Column(name = "ciphedPassword")
+    @Column(name = "ciphedPassword", notNull = true)
     private String mCiphedPassword;
 
-    @Column(name= "ciphedAccount")
+    @Column(name= "ciphedAccount", notNull = true)
     private String mCiphedAccount;
 
-    @Column(name = "ciphedSalt")
+    @Column(name = "ciphedSalt", notNull = true)
     protected String mCiphedSalt;
 
-    @Column(name = "chipedIv")
+    @Column(name = "chipedIv", notNull = true)
     private String mCiphedIv;
 
     private String mTempAccount;
     private byte [] mTempIv;
     private byte [] mTempSalt;
+    private boolean isOnDatabase;
 
 
 
     public AccountRecord(){
     //this is necessary for the database automation
+        isOnDatabase = true;
     }
 
-    public AccountRecord(RawData account, RawData password){
-        mAccount = new AccountSensitiveData(account, password);
+    public AccountRecord(AccountSensitiveData account){
+        mAccountSensitiveData = account;
     }
+
+    AccountRecord (String account, String password){
+        mAccountSensitiveData = new AccountSensitiveData(
+                new RawData(account), new RawData(password));
+    }
+
 
     public static List<AccountRecord> getAllAccounts(){
         List<Model> models = Model.getModels(AccountRecord.class);
@@ -71,18 +83,29 @@ public class AccountRecord extends Model {
         byte [] salt = PasswordCipher.generateRandomSalt();
 
         // encrypt the account using a randomly created iv and salt
-        mCiphedAccount = encrypt( mAccount.getAccount(), salt, getDatabaseKey().getKey(), iv);
-        mCiphedPassword = encrypt( mAccount.getPassword(), salt, getDatabaseKey().getKey() , iv);
+        mCiphedAccount = encrypt( mAccountSensitiveData.getAccount(), salt,
+                getDatabaseKey().getKey(), iv);
+        mCiphedPassword = encrypt( mAccountSensitiveData.getPassword(), salt,
+                getDatabaseKey().getKey() , iv);
 
         //encrypt the salt and iv used using the application password,
         // key and iv through databaseKey
-        mCiphedSalt = encrypt(salt, getDatabaseKey().getSalt(),
-                getDatabaseKey().getKey(), getDatabaseKey().getIv());
-        mCiphedIv = encrypt(iv, getDatabaseKey().getSalt(),
-                getDatabaseKey().getKey(), getDatabaseKey().getIv());
+        mCiphedSalt = encryptMetaData(salt);
+        mCiphedIv = encryptMetaData(iv);
 
         super.save();
+        isOnDatabase = true;
         notifyListeners();
+    }
+
+    boolean isAccountOnDatabase(){
+        return isOnDatabase;
+    }
+
+
+    String encryptMetaData( byte [] data){
+        return encrypt(data, getDatabaseKey().getSalt(),
+                getDatabaseKey().getKey(), getDatabaseKey().getIv());
     }
 
     private DatabaseKey getDatabaseKey(){
@@ -93,8 +116,10 @@ public class AccountRecord extends Model {
     }
 
     public void deleteAccount(){
-        delete();
-        notifyListeners();
+        if (isAccountOnDatabase()){
+            delete();
+            notifyListeners();
+        }
     }
 
     public static void deleteAccount(long id){
@@ -107,13 +132,17 @@ public class AccountRecord extends Model {
             list.notifyDataChanged();
         }
     }
+    //data, salt should not be null, must be checked before encrypt being called
+    String encrypt(byte [] data, byte [] salt, byte [] key, byte [] iv){
+        String result;
 
-    private String encrypt(byte [] data, byte [] salt, byte [] key, byte [] iv){
-        String result = null;
         try {
-            PasswordUtils.byteToString(
+            result = PasswordUtils.byteToString(
                    PasswordCipher.encryptWithSalt(data, salt, key, iv));
         } catch (InvalidKeyException e) {
+            Log.e("Inside encrypt", " " + e.toString());
+            return null;
+        } catch (BadPaddingException e) {
             Log.e("Inside encrypt", " " + e.toString());
             return null;
         }
@@ -121,51 +150,65 @@ public class AccountRecord extends Model {
     }
 
     public String getAccountPassword(){
-        return getDecryptedValueAsString(mCiphedPassword,
-                getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
+        if (!isApplicationLocked()) {
+            return getDecryptedValueAsString(mCiphedPassword,
+                    getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
+        }
+        return "";
     }
 
     public String getAccount(){
-        if ( null == mTempAccount){
-            mTempAccount = getDecryptedValueAsString(mCiphedAccount,
-                    getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
+        if ( !isApplicationLocked()){
+            if ( null == mTempAccount){
+                mTempAccount = getDecryptedValueAsString(mCiphedAccount,
+                        getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
+            }
+            return mTempAccount;
         }
-        return mTempAccount;
+        return "";
+    }
+    private boolean isApplicationLocked(){
+        return ApplicationState.getInstance().isApplicationLocked();
     }
 
-    private String getDecryptedValueAsString(String data, byte[] salt, byte[] key, byte[] iv){
+    String getDecryptedValueAsString(String data, byte[] salt, byte[] key, byte[] iv){
         return PasswordUtils.byteToString(
                 getDecryptedValue(data,salt,key,iv));
     }
 
-    private byte [] getDecryptedValue(String data, byte[] salt, byte[] key, byte[] iv){
-        byte [] result  = {' '};
+    byte [] getDecryptedValue(String data, byte[] salt, byte[] key, byte[] iv) {
+        byte[] result = null;
 
-        if (null != data) {
-            try {
-                result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
-            } catch (InvalidKeyException e) {
-                Log.e("In getDrecyptedValue", "Invalid key " + e.toString());
-            }
+        if (null == data) {
+            throw new NullPointerException();
         }
+        try {
+            result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
+        } catch (InvalidKeyException e) {
+            Log.e("AccountRecord","In getDrecyptedValue(), Invalid key " + e.toString());
+        } catch (BadPaddingException e) {
+            Log.e("AccountRecord","In getDrecyptedValue(), Invalid key " + e.toString());
+        }
+
         return result;
     }
 
-    private byte [] getAccountIv(){
+
+    byte [] getAccountIv(){
         if ( null == mTempIv){
             mTempIv = geDecryptedtMetadata(mCiphedIv);
         }
         return mTempIv;
     }
 
-    private byte [] getAccountSalt(){
+    byte [] getAccountSalt(){
         if ( null == mTempSalt){
             mTempSalt = geDecryptedtMetadata(mCiphedSalt);
         }
         return mTempSalt;
     }
 
-    private byte [] geDecryptedtMetadata(String ciphedValue){
+    byte [] geDecryptedtMetadata(String ciphedValue){
         return getDecryptedValue(ciphedValue,
                 getDatabaseKey().getSalt(), getDatabaseKey().getKey(), getDatabaseKey().getIv());
     }

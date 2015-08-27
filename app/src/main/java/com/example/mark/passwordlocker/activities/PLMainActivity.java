@@ -11,9 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.example.mark.passwordlocker.AccountRecord;
+import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.adapters.AccountsAdapter;
 import com.example.mark.passwordlocker.alerts.NewAccountDialog;
@@ -37,6 +38,8 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     private ApplicationState mApplicationState;
     private MyService mService;
     private ServiceConnection mServiceConnection;
+    private AppPassEnterFrag mAppPassEnterFrag;
+    private RecyclerViewFragment mRecyclerViewFragment;
     private boolean mIsActivityVisible = false;
     private boolean mIsServiceBound;
 
@@ -50,7 +53,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         setFirstFragment();
         setupDatabase();
         launchService();
-        mIsActivityVisible = true;
     }
 
 
@@ -92,19 +94,38 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         super.onStop();
     }
 
+    @Override
+    public void updateActivity() {
+        setFirstFragment();
+    }
+
     private void setFirstFragment(){
         if (isApplicationPasswordDefined()){
-
             if (mApplicationState.isApplicationLocked()){
-                swapFragment(R.id.MainFragContainer, new AppPassEnterFrag());
+
+                swapFragment(R.id.MainFragContainer, getAppPassEnterFrag());
             }else{
-                swapFragment(R.id.MainFragContainer, new RecyclerViewFragment());
+                swapFragment(R.id.MainFragContainer, getRecyclerViewFragment());
             }
 
         }else{
             hideActionBar();
             swapFragment(R.id.MainFragContainer, new NewUserPassFrag());
         }
+    }
+
+    private AppPassEnterFrag getAppPassEnterFrag(){
+        if ( null == mAppPassEnterFrag){
+            mAppPassEnterFrag = new AppPassEnterFrag();
+        }
+        return mAppPassEnterFrag;
+    }
+
+    private RecyclerViewFragment getRecyclerViewFragment(){
+        if ( null == mRecyclerViewFragment){
+            mRecyclerViewFragment = new RecyclerViewFragment();
+        }
+        return mRecyclerViewFragment;
     }
 
     boolean isApplicationPasswordDefined(){
@@ -177,7 +198,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
                 return true;
 
             case R.id.action_settings:
-                Intent intent  = new Intent(this, PreferencesActivity.class);
+                Intent intent  = new Intent(this, MyPreferenceActivity.class);
                 startActivity(intent);
                 return true;
         }
@@ -193,10 +214,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         NotificationIconManager.setContext(this);
     }
 
-    @Override
-    public void updateActivity() {
-        setFirstFragment();
-    }
+
 
     @Override
     public boolean isActivityVisible() {

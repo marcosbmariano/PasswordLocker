@@ -71,15 +71,15 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
 
     @Override
     public void applicationIsLocked() {
-        for ( ServiceCallBack listener : mServiceObserver){
-            if ( listener.isActivityVisible()){
-                listener.updateActivity();
-            }
-        }
+        updateObservers();
     }
 
     @Override
     public void applicationIsUnlocked() {
+        updateObservers();
+    }
+
+    private void updateObservers(){
         for ( ServiceCallBack listener : mServiceObserver){
             if ( listener.isActivityVisible()){
                 listener.updateActivity();

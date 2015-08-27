@@ -10,11 +10,12 @@ import com.example.mark.passwordlocker.R;
  */
 public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
 
+    private static final int CODE_TO_NOT_LOCK = -1; //or -2
     private final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
     private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
     private static Context mContext;
     private static ApplicationPreferences mIntance;
-    private static SharedPreferences mApllicationsPreferences;
+    private static SharedPreferences mApplicationsPreferences;
     private PreferencesSecondsToLockObserver mLockListener;
     private PreferencesNotificationDisplayListener mDisplayNotificationListener;
 
@@ -29,7 +30,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
     }
 
     private void setupPreferences(){
-        mApllicationsPreferences = getSharedPreferences();
+        mApplicationsPreferences = getSharedPreferences();
     }
 
     public static ApplicationPreferences getInstance(){
@@ -52,7 +53,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
     }
 
     public int getGeneratedPasswordLength(){
-        String key = getResourceString(R.string.pref_password_length);
+        String key = getResourceString(R.string.pref_password_length_key);
         return Integer.valueOf(getSharedPreferences().getString(key,"0"));
     }
 

@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.example.mark.passwordlocker.AccountRecord;
+import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
+import com.example.mark.passwordlocker.account.AccountSensitiveData;
 import com.example.mark.passwordlocker.fragments.PassCreationFrag;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
-import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.RawData;
 import com.example.mark.passwordmanager.generator.PasswordGenerator;
 
@@ -63,7 +63,6 @@ public class NewAccountDialog extends DialogFragment
         mBtnGeneratePassword.setOnClickListener(this);
     }
 
-
     private void setupFragment(){
         mPassCreationFrag = new PassCreationFrag();
         getChildFragmentManager().beginTransaction()
@@ -101,9 +100,8 @@ public class NewAccountDialog extends DialogFragment
         }
     }
 
+
     private void handleNewAccount(){
-        RawData account;
-        RawData password;
 
         if ( !mPassCreationFrag.isPasswordConfirmationValid() ) {
             Toast.makeText(getActivity(), "Password Invalid!", Toast.LENGTH_LONG).show();
@@ -112,17 +110,17 @@ public class NewAccountDialog extends DialogFragment
             Toast.makeText(getActivity(), "Account Invalid!", Toast.LENGTH_LONG).show();
 
         }else{
-            password = mPassCreationFrag.getRawPassword();
-            account = new RawData(mETAccountName.getText().toString());
+            AccountSensitiveData accountSensitiveData =
+                    new AccountSensitiveData(new RawData(mETAccountName.getText().toString())
+                            ,mPassCreationFrag.getRawPassword());
             dismiss();
-            saveNewAccount(account, password);
+            saveNewAccount(accountSensitiveData);
         }
 
     }
 
-    private void saveNewAccount(RawData account, RawData password){
-        DatabaseKey.setContext(getActivity());
-        AccountRecord newAccount = new AccountRecord(account, password);
+    private void saveNewAccount(AccountSensitiveData account){
+        AccountRecord newAccount = new AccountRecord(account);
         newAccount.save();
     }
 

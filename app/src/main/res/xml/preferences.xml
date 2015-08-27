@@ -9,12 +9,13 @@
             android:title="Clipboard minutes"
             android:summary="How many minutes the password"
             android:defaultValue="60"
+            android:id="@+id/LPClipBoardSeconds"
             android:entries="@array/clipboard_minutes_entries"
             android:entryValues="@array/clipboard_seconds_values"
             />
 
         <ListPreference
-            android:key="@string/pref_password_length"
+            android:key="@string/pref_password_length_key"
             android:title="Password length"
             android:summary="How many characters the generated password will have"
             android:defaultValue="10"
@@ -52,6 +53,8 @@
         </CheckBoxPreference>
 
     </PreferenceCategory>
+
+
 
 
 </PreferenceScreen>

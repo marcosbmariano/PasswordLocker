@@ -8,12 +8,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.example.mark.passwordlocker.AccountRecord;
+import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.alerts.DeleteAccountAlert;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
@@ -27,13 +28,13 @@ import java.util.List;
  */
 public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         implements AccountRecord.DatabaseListener {
-    private static List<AccountRecord> mAccountsRecord;
-    private static List<String> mAccountsList;
+    private List<AccountRecord> mAccountsRecord;
+    private List<String> mAccountsList;
     private FragmentActivity mContext;
     private static AccountsAdapterUpdate mActivity;
 
 
-    public AccountsAdapter( FragmentActivity context){
+    public AccountsAdapter(FragmentActivity context){
         mContext = context;
         mActivity = (AccountsAdapterUpdate)context;
         if ( null == context){
@@ -42,14 +43,9 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         AccountRecord.addListener(this);
         updatedAccounts();
         mAccountsList = getCurrentAccountsList();
+
     }
 
-    @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.account_item_recycler_view, parent, false);
-        return new VH(itemView, mContext);
-    }
 
     private List<String> getCurrentAccountsList(){
         List <String> result = new ArrayList<>();
@@ -58,6 +54,16 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         }
         return result;
     }
+
+
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.account_item_recycler_view, parent, false);
+        return new VH(itemView, mContext);
+    }
+
+
 
     private void updatedAccounts(){
         mAccountsRecord = AccountRecord.getAllAccounts();

@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import com.example.mark.passwordlocker.AccountRecord;
+import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
 
 /**

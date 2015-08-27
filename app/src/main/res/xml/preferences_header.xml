@@ -1,0 +1,15 @@
+<preference-headers
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--TODO if no in use, delete this -->
+    <header
+        android:fragment=
+            "com.example.mark.passwordlocker.activities.MyPreferenceActivity$Prefs1Fragment"
+        android:title="eh nois na fita"
+        android:summary="olha a macacada"
+        >
+
+    </header>
+
+
+
+</preference-headers>

@@ -13,6 +13,7 @@ import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 /**
  * Created by mark on 5/8/15.
  */
+
 public class PasswordDefinedTest extends ActivityInstrumentationTestCase2<PLMainActivity> {
     private PLMainActivity mPLMainActivity;
     private ApplicationPassword mApplicationPassword;
@@ -33,21 +34,21 @@ public class PasswordDefinedTest extends ActivityInstrumentationTestCase2<PLMain
     }
 
 
-    public void testActivity(){
-        assertNotNull(mPLMainActivity);
-    }
+//    public void testActivity(){
+//        assertNotNull(mPLMainActivity);
+//    }
+//
+//    public void testPasswordManager(){
+//        assertNotNull(mApplicationPassword);
+//    }
 
-    public void testPasswordManager(){
-        assertNotNull(mApplicationPassword);
-    }
 
-
-    public void testPassword(){
-        if ( mApplicationPassword.isPasswordDefined()){
-            assertTrue(mApplicationPassword.isPasswordDefined());
-            assertTrue(HINT.equals(mApplicationPassword.getHint()));
-            assertTrue( mApplicationPassword.isPasswordValid(PASSWORD));
-        }
+//    public void testPassword(){
+//        if ( mApplicationPassword.isPasswordDefined()){
+//            assertTrue(mApplicationPassword.isPasswordDefined());
+//            assertTrue(HINT.equals(mApplicationPassword.getHint()));
+//            assertTrue( mApplicationPassword.isPasswordValid(PASSWORD));
+//        }
 
 //
 //        Log.e("inside test", "is password valid "+
@@ -55,19 +56,19 @@ public class PasswordDefinedTest extends ActivityInstrumentationTestCase2<PLMain
         //assertFalse("is false?", mApplicationPassword.isPasswordValid("garbage"));
 //ￎﾐLHﾝ!￘ￏ￮ￌￃQﾘK
 
-    }
+   // }
 
-    public void testWrongPassword(){
-        if ( mApplicationPassword.isPasswordDefined()){
-            Log.e("inside test", "is password valid "+
-                    mApplicationPassword.isPasswordValid("garbage"));
+//    public void testWrongPassword(){
+//        if ( mApplicationPassword.isPasswordDefined()){
+//            Log.e("inside test", "is password valid "+
+//                    mApplicationPassword.isPasswordValid("garbage"));
+//
+//            assertFalse("is false?", mApplicationPassword.isPasswordValid("garbage"));
+//        }
 
-            assertFalse("is false?", mApplicationPassword.isPasswordValid("garbage"));
-        }
 
 
-
-    }
+   // }
 
 
 }

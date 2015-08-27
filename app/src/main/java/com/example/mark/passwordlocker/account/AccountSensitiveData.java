@@ -1,4 +1,4 @@
-package com.example.mark.passwordlocker;
+package com.example.mark.passwordlocker.account;
 
 import com.example.mark.passwordmanager.RawData;
 

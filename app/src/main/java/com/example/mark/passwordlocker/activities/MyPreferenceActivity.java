@@ -1,40 +1,50 @@
 package com.example.mark.passwordlocker.activities;
 
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.services.MyService;
 
-public class PreferencesActivity extends ActionBarActivity implements MyService.ServiceCallBack{
+import java.util.List;
+
+public class MyPreferenceActivity extends PreferenceActivity implements MyService.ServiceCallBack{
     private boolean mIsActivityVisible = false;
+    private Prefs1Fragment mFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsActivityVisible = true;
         MyService.addObserver(this);
         setContentView(R.layout.preferences_layout);
+
+        mFragment = getFragment();
         getFragmentManager().beginTransaction()
-                .replace(R.id.preference_container, new Prefs1Fragment())
+                .replace(R.id.preference_container, mFragment,
+                        Prefs1Fragment.class.getName())
                 .commit();
+
     }
+//
+//    @Override
+//    public void onBuildHeaders(List<Header> target) {
+//        loadHeadersFromResource(R.xml.preferences_header, target);
+//    }
+//
+//    @Override
+//    protected boolean isValidFragment(String fragmentName) {
+//        return Prefs1Fragment.class.getName().equals(fragmentName);
+//    }
 
-    @Override
-    public void updateActivity() {
-        onNavigateUp();
-    }
-
-    @Override
-    public boolean isActivityVisible() {
-        return mIsActivityVisible;
-    }
-
-    @Override
-    public void serviceDestroyed() {
-
+    public Prefs1Fragment getFragment(){
+        if ( null == mFragment){
+            mFragment = new Prefs1Fragment();
+        }
+        return mFragment;
     }
 
     @Override
@@ -76,7 +86,7 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
         public void onResume() {
             getPreferenceManager().getSharedPreferences()
                     .registerOnSharedPreferenceChangeListener(ApplicationPreferences.getInstance());
-
+            Log.e("inside fragment", "this is the tag: "+ getTag());
             super.onResume();
         }
 
@@ -89,11 +99,27 @@ public class PreferencesActivity extends ActionBarActivity implements MyService.
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_preferences, menu);
         return true;
+    }
+
+    @Override
+    public void updateActivity() {
+        onNavigateUp();
+    }
+
+    @Override
+    public boolean isActivityVisible() {
+        return mIsActivityVisible;
+    }
+
+    @Override
+    public void serviceDestroyed() {
+
     }
 
 }

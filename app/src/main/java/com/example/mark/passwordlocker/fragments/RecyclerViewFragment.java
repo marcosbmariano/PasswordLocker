@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,19 @@ public class RecyclerViewFragment extends BaseFragment {
         rvAccounts.setHasFixedSize(true);
         final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
         rvAccounts.setLayoutManager(layoutManager);
-        mAdapter = new AccountsAdapter( getActivity() );
-        rvAccounts.setAdapter(mAdapter);
+        rvAccounts.setAdapter(getAdapter());
+    }
+
+    private AccountsAdapter getAdapter(){
+        if ( null == mAdapter) {
+            mAdapter = new AccountsAdapter(getActivity());
+        }
+        return mAdapter;
+    }
+
+    @Override
+    public void onResume() {
+        Log.e("REcyclerFragment", " on resume");
+        super.onResume();
     }
 }

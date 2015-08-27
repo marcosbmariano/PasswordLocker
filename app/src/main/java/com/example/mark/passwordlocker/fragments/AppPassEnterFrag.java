@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.alerts.ShowHintAlert;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
+import com.example.mark.passwordlocker.helpers.ApplicationState;
 
 /**
  * Created by mark on 1/13/15.
@@ -75,16 +76,19 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         String password = mPassword.getText().toString();
 
         if (!password.isEmpty()){
-            ApplicationPassword apPassword = ApplicationPassword.getInstance();
-            result = apPassword.isPasswordValid(password);
+            ApplicationState appState = ApplicationState.getInstance();
+            result = appState.isPasswordValid(password);
         }
         return result;
     }
 
     private void changeFragment(){
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.MainFragContainer, new RecyclerViewFragment())
-                .commit();
+        if( !ApplicationState.getInstance().isApplicationLocked()){
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.MainFragContainer, new RecyclerViewFragment())
+                    .commit();
+        }
+
     }
 
     private void ifHasHintShowBtn(){

@@ -1,6 +1,7 @@
 package com.example.mark.passwordmanager.cipher;
 
 import com.example.mark.passwordmanager.PasswordUtils;
+import com.example.mark.passwordmanager.helpers.EmptyPasswordException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -68,7 +69,10 @@ public class PasswordCipher {
     }
 
 
-    public static byte [] generateKeyFromPassword(String password){
+    public static byte [] generateKeyFromPassword(String password) throws EmptyPasswordException {
+        if ( null == password || password.isEmpty()){
+            throw new EmptyPasswordException("Password cannot be null or empty!");
+        }
 
         byte [] result = new byte [0];
 
@@ -90,25 +94,25 @@ public class PasswordCipher {
     }
 
     public static byte [] encryptWithSalt(byte [] data, byte [] salt, byte [] key,  byte [] iv)
-            throws InvalidKeyException {
+            throws InvalidKeyException, BadPaddingException {
         byte [] saltedData = addSaltToData(data, salt);
         return decryptEncrypt(Cipher.ENCRYPT_MODE, saltedData, key, iv);
     }
 
     public static byte[] encrypt(byte [] data, byte [] key,  byte [] iv)
-            throws InvalidKeyException {
+            throws InvalidKeyException, BadPaddingException {
         return decryptEncrypt(Cipher.ENCRYPT_MODE, data, key, iv);
     }
 
     public static byte[] decryptWithSalt(String data, byte [] salt,  byte [] key,  byte [] iv)
-            throws InvalidKeyException {
+            throws InvalidKeyException, BadPaddingException {
         byte [] saltedData = PasswordUtils.stringToBytes(data);
         byte [] temp = decryptEncrypt(Cipher.DECRYPT_MODE, saltedData, key, iv);
         return subtractSaltFromData( temp, salt);
     }
 
     public static byte[] decrypt(byte [] data,  byte [] key,  byte [] iv)
-            throws InvalidKeyException {
+            throws InvalidKeyException, BadPaddingException {
         return decryptEncrypt(Cipher.DECRYPT_MODE, data, key, iv);
     }
 
@@ -132,7 +136,7 @@ public class PasswordCipher {
 
 
     static byte [] decryptEncrypt(int cipherMode, byte[] data, byte[] key, byte[] iv)
-            throws InvalidKeyException {
+            throws InvalidKeyException, BadPaddingException {
         SecretKeySpec sKeySpec = new SecretKeySpec(key, ENCRYPT_ALGORITHM);
         Cipher cipher;
         byte [] result = new byte [0]; //this is initialized, so if a exception occur, the return will not be null
@@ -148,9 +152,7 @@ public class PasswordCipher {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
             e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        }  catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();

@@ -1,0 +1,5 @@
+Most Android applications store data on a SQLlite database or XMLs.
+Clearing the app data could make the app unstable.
+On security apps, app data cannot be cleared most of the times.
+
+Most of the times, the app must roll-back to a fresh install when the app data is cleared

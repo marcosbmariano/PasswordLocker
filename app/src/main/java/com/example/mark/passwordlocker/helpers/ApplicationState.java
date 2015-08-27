@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class ApplicationState implements ApplicationPreferences.PreferencesSecondsToLockObserver,
         Counter.CounterCallBack{
-    private static int CODE_TO_LOCK = -1;
     private static ApplicationPassword mApplicationPassword;
     private static ApplicationPreferences mPreferences;
     private static ApplicationState mInstance;
@@ -63,9 +62,12 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         }
     }
 
-    private boolean isToLockApplication(){
-        Log.e("isToLockApplication", "" + ((getSecondsToLockApp() >= CODE_TO_LOCK) && !mIsLockSuspended));
-        return (getSecondsToLockApp() >= CODE_TO_LOCK) && !mIsLockSuspended;
+    boolean isToLockApplication(){
+        return secondsToLockMatchsCounterSeconds() && !mIsLockSuspended;
+    }
+
+    private boolean secondsToLockMatchsCounterSeconds(){
+        return mPreferences.getSecondsToLockApplication() == mCounter.getSeconds();
     }
 
     //this is called by the counter when the define time is expired
@@ -89,9 +91,15 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     public void lockApplication(){
         mApplicationPassword.lockPassword();
-        Log.e("lockApplication", "vai tomar no cu");
         updateObservers();
     }
+
+    public boolean isPasswordValid(String password){
+        boolean result = mApplicationPassword.isPasswordValid(password);
+        updateObservers();
+        return result;
+    }
+
 
     public void unlockApplication( ){
         if ( mApplicationPassword.isKeyValid() )  {
@@ -133,8 +141,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         }
         return mPreferences;
     }
-
-
 
     public boolean isApplicationLocked(){
         return mApplicationPassword.isPasswordLocked();
