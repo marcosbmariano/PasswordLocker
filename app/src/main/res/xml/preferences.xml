@@ -31,6 +31,7 @@
             android:entries="@array/app_unlocked_minutes_entries"
             android:entryValues="@array/app_unlocked_seconds_values"
 
+
             />
 
         <ListPreference
@@ -40,6 +41,7 @@
             android:defaultValue="60"
             android:entries="@array/password_visible_time_entries"
             android:entryValues="@array/password_visible_seconds_values"
+
 
             />
 

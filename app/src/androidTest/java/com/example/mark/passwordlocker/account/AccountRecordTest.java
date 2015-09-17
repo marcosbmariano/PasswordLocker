@@ -2,9 +2,7 @@ package com.example.mark.passwordlocker.account;
 
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
-import com.example.mark.passwordmanager.cipher.PasswordCipher;
 
 import junit.framework.TestCase;
 
@@ -23,7 +21,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AccountRecordTest extends TestCase {
     private List<AccountRecord> mRecordsList;
-    private AccountRecord mAccountRecord;
+    private AccountRecord mAccountRecordNotSaved;
     private final String GOOGLE = "google" ;
     private final String YAHOO = "yahoo";
     private final String FACEBOOK = "facebook";
@@ -40,7 +38,7 @@ public class AccountRecordTest extends TestCase {
         addAccount(LINKEDIN, PASSWORD);
 
         //the account record was not saved
-        mAccountRecord = new AccountRecord("Zynga", PASSWORD);
+        mAccountRecordNotSaved = new AccountRecord("Zynga", PASSWORD);
 
     }
     private void addAccount(String account, String password){
@@ -50,17 +48,17 @@ public class AccountRecordTest extends TestCase {
     }
 
     public void testGetId(){
-        long id = mAccountRecord.getId();
+        long id = mAccountRecordNotSaved.getId();
     }
 
 
     // nothing should happen if the AccountRecord is not savedYet
     public void testDeleteAccountNotYetSaved(){
-        mAccountRecord.deleteAccount();
+        mAccountRecordNotSaved.deleteAccount();
     }
 
     public void testDeleteAccount(){
-       // mAccountRecord.save();
+       // mAccountRecordNotSaved.save();
 
     }
 
@@ -142,7 +140,7 @@ public class AccountRecordTest extends TestCase {
     @Override
     protected void tearDown() throws Exception {
         mRecordsList = null;
-        mAccountRecord = null;
+        mAccountRecordNotSaved = null;
         super.tearDown();
     }
 }

@@ -42,9 +42,4 @@ public class RecyclerViewFragment extends BaseFragment {
         return mAdapter;
     }
 
-    @Override
-    public void onResume() {
-        Log.e("REcyclerFragment", " on resume");
-        super.onResume();
-    }
 }

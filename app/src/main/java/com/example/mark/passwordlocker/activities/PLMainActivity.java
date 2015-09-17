@@ -88,10 +88,11 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         super.onPause();
     }
 
+
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         desconectFromService();
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -162,7 +163,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     MyService.MyBinder binder = (MyService.MyBinder) service;
                     mService = binder.getService();
-                    mService.addObserver(PLMainActivity.this);
+                    MyService.addObserver(PLMainActivity.this);
                     mIsServiceBound = true;
                 }
                 @Override
@@ -213,7 +214,6 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     private void launchNotificationIconManager(){
         NotificationIconManager.setContext(this);
     }
-
 
 
     @Override

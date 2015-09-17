@@ -3,20 +3,26 @@ package com.example.mark.passwordlocker.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import com.example.mark.passwordlocker.R;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by mark on 3/18/15.
  */
 public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    private static final int CODE_TO_NOT_LOCK = -1; //or -2
+
     private final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
     private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
     private static Context mContext;
     private static ApplicationPreferences mIntance;
     private static SharedPreferences mApplicationsPreferences;
-    private PreferencesSecondsToLockObserver mLockListener;
+    private Set<PreferencesSecondsToLockObserver> mLockObservers;
     private PreferencesNotificationDisplayListener mDisplayNotificationListener;
 
 
@@ -89,22 +95,37 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
         switch (key){
             case TIME_TO_LOCK_KEY:
                 updateLockPreferencesListener();
                 break;
+
             case SHORT_CUT_NOTIFICATION_KEY:
                 updateNotificationDisplayListener();
                 break;
+
             default:
         }
     }
 
-    public void addPreferencesAppLockChangeListener(PreferencesSecondsToLockObserver listener){
-        mLockListener = listener;
+    public void addPreferencesAppLockObserver(
+            PreferencesSecondsToLockObserver observer){
+        if(null == mLockObservers){
+            mLockObservers = new HashSet<>();
+        }
+        mLockObservers.add(observer);
+
     }
     private void updateLockPreferencesListener(){
-        mLockListener.updateSeconds(getSecondsToLockApplication());
+        if ( null == mLockObservers){
+            throw new IllegalStateException("PreferencesSecondsToLockObserver is null");
+        }
+        Iterator<PreferencesSecondsToLockObserver> observers = mLockObservers.iterator();
+        while( observers.hasNext()){
+            observers.next().updateSeconds(getSecondsToLockApplication());
+        }
+
     }
 
     public void addPreferencesNotificationDisplayListener(

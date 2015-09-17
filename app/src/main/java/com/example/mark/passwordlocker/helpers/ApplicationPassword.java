@@ -59,19 +59,7 @@ public final class ApplicationPassword extends SharedPrefsActor {
         return mPreferences;
     }
 
-    //only a valid key is loaded into mKey (checked by isPasswordValid())
-    //if the key is deleted it will become invalid
-    boolean isKeyValid(){
-        return (null != mKey);
-    }
 
-    void deleteKey(){
-        mKey = null;
-    }
-
-    boolean isPasswordLocked(){
-        return mIsPasswordLocked;
-    }
 
     public void saveApplicationPassword(String password){
         if ( !isPasswordDefined()){
@@ -112,6 +100,7 @@ public final class ApplicationPassword extends SharedPrefsActor {
             return false;
         }
     }
+
     void unlockPasswordAndLoadKey(String password){
         loadKey(password);
         mIsPasswordLocked = false;
@@ -129,21 +118,29 @@ public final class ApplicationPassword extends SharedPrefsActor {
         }
     }
 
-
-
-    //only the last option on the preferences settings (Seconds to lock the application) will not
+    //only the last option (-2) on the preferences settings (Seconds to lock the application) will not
     //require that the key must be deleted
     public void lockPassword(){
+        Log.e("Lock Password ", "LOCK PASSWORD");
         mIsPasswordLocked = true;
-        if ( getSecondsToLockApp() != -2){
+        if ( getAppPreferences().getSecondsToLockApplication() > -2){
             deleteKey();
         }
     }
 
-    // returns a current seconds from the app preferences
-    private int getSecondsToLockApp(){
+    void deleteKey(){
+        Log.e("delete key", "delete key");
+        mKey = null;
+    }
 
-        return getAppPreferences().getSecondsToLockApplication();
+    //only a valid key is loaded into mKey (checked by isPasswordValid())
+    //if the key is deleted it will become invalid
+    boolean isKeyValid(){
+        return (null != mKey);
+    }
+
+    boolean isPasswordLocked(){
+        return mIsPasswordLocked;
     }
 
 
@@ -167,7 +164,7 @@ public final class ApplicationPassword extends SharedPrefsActor {
     }
 
     String decryptBoolean(String password){
-        if ( password.isEmpty() || password == null){
+        if (  password == null || password.isEmpty() ){
             return Boolean.FALSE.toString();
         }
         String encryptedData = getStringFromPreferences(APP_PASSWORD_KEY);

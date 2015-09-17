@@ -31,7 +31,6 @@ public final class AccountRecord extends Model {
     private AccountSensitiveData mAccountSensitiveData;
     private static List<DatabaseListener> mListeners = new ArrayList<>();
     private static DatabaseKey mDatabaseKey;
-    private static ApplicationState mAppState;
 
     @Column(name = "ciphedPassword", notNull = true)
     private String mCiphedPassword;
@@ -102,7 +101,7 @@ public final class AccountRecord extends Model {
         return isOnDatabase;
     }
 
-
+    //this is used to encrypt the salt and Iv that are unique for each account
     String encryptMetaData( byte [] data){
         return encrypt(data, getDatabaseKey().getSalt(),
                 getDatabaseKey().getKey(), getDatabaseKey().getIv());
@@ -132,7 +131,7 @@ public final class AccountRecord extends Model {
             list.notifyDataChanged();
         }
     }
-    //data, salt should not be null, must be checked before encrypt being called
+    //none of the arguments should not be null, must be checked before encrypt being called
     String encrypt(byte [] data, byte [] salt, byte [] key, byte [] iv){
         String result;
 

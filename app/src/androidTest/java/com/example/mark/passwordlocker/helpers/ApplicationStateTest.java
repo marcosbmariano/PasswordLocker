@@ -1,37 +1,40 @@
 package com.example.mark.passwordlocker.helpers;
 
-import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
+import android.test.suitebuilder.annotation.LargeTest;
 
+import com.example.mark.passwordlocker.PLMainActivityIntrumentationTest;
 import com.example.mark.passwordlocker.activities.PLMainActivity;
+
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
 /**
  * Created by mark on 8/11/15.
  */
-public class ApplicationStateTest extends ActivityInstrumentationTestCase2<PLMainActivity> {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@LargeTest
+public class ApplicationStateTest extends PLMainActivityIntrumentationTest {
     private PLMainActivity mActivity;
     private ApplicationState mAppState;
     private ApplicationPassword mAppPassword;
     private ObserverTest mObTest;
     private ApplicationPreferences mAppPreferences;
 
-    public ApplicationStateTest(){
-        super(PLMainActivity.class);
-    }
+
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mActivity = getActivity();
-        mAppState = ApplicationState.getInstance();
+        mActivity = getMainActivity();
         mAppPassword = ApplicationPassword.getInstance();
         mObTest = new ObserverTest();
         ApplicationState.addObserver(mObTest);
         mAppPreferences = ApplicationPreferences.getInstance();
+        mAppState = ApplicationState.getInstance();
 
     }
 
-    public void testPreconditions(){
+    public void testAAPreconditions(){
         assertNotNull("mActivity",mActivity);
         assertNotNull("mAppState",mAppState);
         assertNotNull("mAppState",mAppState);
@@ -46,24 +49,17 @@ public class ApplicationStateTest extends ActivityInstrumentationTestCase2<PLMai
         assertTrue("It is supposed to be locked", mAppState.isApplicationLocked());
     }
 
-
     public void testObserver(){
+        if ( null == mAppState ){
+            mAppState = ApplicationState.getInstance();
+        }
         mAppState.lockApplication();
         assertTrue(mObTest.isLocked);
         assertTrue(mAppState.isPasswordValid(ApplicationPasswordTest.PASSWORD));
         assertFalse(mObTest.isLocked);
     }
 
-    public void testSuspendLockAndIsToLock(){
 
-        //mAppState.suspendLock();
-        //assertFalse(mAppState.isToLockApplication());
-    }
-
-    public void testIsToLock(){
-
-    }
-    
     class ObserverTest implements ApplicationState.ApplicationStateObserver {
         public boolean isLocked;
 

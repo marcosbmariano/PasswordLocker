@@ -14,7 +14,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     private static ApplicationPreferences mPreferences;
     private static ApplicationState mInstance;
     private static List<ApplicationStateObserver> mObservers;
-    private int mSecondsToLock = 0;
     private Counter mCounter;
     private boolean mIsLockSuspended = false;
 
@@ -22,7 +21,7 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     private ApplicationState(){
         mApplicationPassword = ApplicationPassword.getInstance();
         mPreferences = ApplicationPreferences.getInstance();
-        mPreferences.addPreferencesAppLockChangeListener(this);
+        mPreferences.addPreferencesAppLockObserver(this);
         mObservers = new ArrayList<>();
     }
 
@@ -33,50 +32,53 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         return mInstance;
     }
 
-    private int getSecondsToLockApp(){
-        if ( mSecondsToLock == 0){
-            mSecondsToLock = getAppPreferences().getSecondsToLockApplication();
-        }
-        return mSecondsToLock;
-    }
+
 
     //this method is called by the ApplicationPreferences class when there is a change in
-    // the seconds to lock the application
+    //the seconds to lock the application
     @Override
     public void updateSeconds(int seconds) {
-        mSecondsToLock = seconds;
         updateCounter();
     }
 
-    private void updateCounter(){
-        if( isToLockApplication()){
-            setCounterToLockeApplication();
-        }
+    private void updateCounter(){ //remove?
+        setCounterToLockApplication();
     }
 
-    private void setCounterToLockeApplication(){
-        int seconds = getSecondsToLockApp();
-        if ( seconds >= 30 ){
-            mCounter = new Counter(this, seconds);
+    private int getSecondsToLockApp(){
+        return getAppPreferences().getSecondsToLockApplication();
+
+    }
+
+    void setCounterToLockApplication(){
+        Log.e("SetCounterToLock", " this is the new seconds " + getSecondsToLockApp());
+        if ( getSecondsToLockApp() >= 30 ){
+            mCounter = new Counter(this, getSecondsToLockApp());
             mCounter.startCounter();
+            Log.e("SetCounterToLock", " this is counter seconds " + mCounter.getSeconds());
         }
     }
 
     boolean isToLockApplication(){
-        return secondsToLockMatchsCounterSeconds() && !mIsLockSuspended;
+        return getSecondsToLockApp() > -2 && !mIsLockSuspended;
     }
 
-    private boolean secondsToLockMatchsCounterSeconds(){
-        return mPreferences.getSecondsToLockApplication() == mCounter.getSeconds();
+    boolean secondsToLockMatchCounterSeconds(){
+        return getSecondsToLockApp() == getCounterSeconds();
+    }
+
+    int getCounterSeconds(){
+        if( null == mCounter ){
+            return Integer.MIN_VALUE;
+        }
+        return mCounter.getSeconds();
     }
 
     //this is called by the counter when the define time is expired
     @Override
     public void calledByCounter(Counter counter ) {
-        Log.e("CalledByCounter", "CalledByCounter");
-        if ( isToLockApplication() && getSecondsToLockApp() == counter.getSeconds() ){
+        if ( isToLockApplication() && secondsToLockMatchCounterSeconds() ){
             lockApplication();
-            Log.e("CalledByCounter", "lockApplication");
         }
     }
 
@@ -86,7 +88,7 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     public void resumeLock(){
         mIsLockSuspended = false;
-        setCounterToLockeApplication();
+        setCounterToLockApplication();
     }
 
     public void lockApplication(){
@@ -96,6 +98,7 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     public boolean isPasswordValid(String password){
         boolean result = mApplicationPassword.isPasswordValid(password);
+        setCounterToLockApplication();
         updateObservers();
         return result;
     }
@@ -103,8 +106,9 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     public void unlockApplication( ){
         if ( mApplicationPassword.isKeyValid() )  {
+            Log.e("unlockApplication", "Key is valid");
             mApplicationPassword.unlockPassword();
-            setCounterToLockeApplication();
+            setCounterToLockApplication();
             updateObservers();
         }
     }
@@ -121,6 +125,10 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
                 }
             }
         }
+    }
+
+    public boolean isApplicationLocked(){
+        return mApplicationPassword.isPasswordLocked();
     }
 
     public static void addObserver(ApplicationStateObserver observer){
@@ -142,9 +150,7 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         return mPreferences;
     }
 
-    public boolean isApplicationLocked(){
-        return mApplicationPassword.isPasswordLocked();
-    }
+
 
 
     public interface ApplicationStateObserver {

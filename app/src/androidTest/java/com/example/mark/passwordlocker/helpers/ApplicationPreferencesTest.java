@@ -5,7 +5,9 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 
+import com.example.mark.passwordlocker.MyPreferencesActivityInstrumentationTest;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.activities.MyPreferenceActivity;
 
@@ -13,7 +15,7 @@ import com.example.mark.passwordlocker.activities.MyPreferenceActivity;
  * Created by mark on 8/11/15.
  */
 public class ApplicationPreferencesTest extends
-        ActivityInstrumentationTestCase2<MyPreferenceActivity> {
+        MyPreferencesActivityInstrumentationTest {
 
     private MyPreferenceActivity mActivity;
     private ApplicationPreferences mAppPreferences;
@@ -24,14 +26,12 @@ public class ApplicationPreferencesTest extends
     private PreferenceFragment mFragment;
 
 
-    public ApplicationPreferencesTest(){
-        super(MyPreferenceActivity.class);
-    }
+
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mActivity = getActivity();
+        mActivity = getMyPreferenceActivity();
         mAppPreferences = ApplicationPreferences.getInstance();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity);
         mFragment = mActivity.getFragment();
@@ -41,21 +41,14 @@ public class ApplicationPreferencesTest extends
 
     }
 
-
-
-
-    public void testActivityNotNull(){
+    public void testPreconditions(){
         assertNotNull(mActivity);
-    }
-
-    public void testPrefNotNull(){
         assertNotNull(mAppPreferences);
-    }
-
-    public void testSharedPrefNotNull(){
         assertNotNull(mSharedPreferences);
     }
 
+
+    @UiThreadTest
     public void testClipBoardSeconds(){
         String secondsValue;
         int seconds;
@@ -71,7 +64,7 @@ public class ApplicationPreferencesTest extends
         }
 
     }
-
+    @UiThreadTest
     public void testPasswordLength(){
         String lenghtValue;
         int lenght;
@@ -88,20 +81,6 @@ public class ApplicationPreferencesTest extends
 
     }
 
-    public void testSecondsToLock(){
-        String secondsValue;
-        int seconds;
-        assertNotNull(mSecondsToLock);
-
-        CharSequence [] entryValues = mSecondsToLock.getEntryValues();
-
-        for(CharSequence value : entryValues){
-            secondsValue = value.toString();
-            mSecondsToLock.setValue(secondsValue);
-            seconds = mAppPreferences.getSecondsToLockApplication();
-            assertEquals(seconds, Integer.valueOf(secondsValue).intValue());
-        }
-    }
 
     private ListPreference getListPreference(int resource){
         return (ListPreference)mFragment

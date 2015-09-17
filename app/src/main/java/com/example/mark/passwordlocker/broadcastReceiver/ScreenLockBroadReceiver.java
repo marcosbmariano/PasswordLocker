@@ -3,6 +3,8 @@ package com.example.mark.passwordlocker.broadcastReceiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 
@@ -20,10 +22,12 @@ public class ScreenLockBroadReceiver extends BroadcastReceiver {
 
         if ( intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
             mApplicationState.lockApplication();
+            Log.e("inside BroadReceiver", "lockApp");
 
         }else if ( intent.getAction().equals(Intent.ACTION_SCREEN_ON)  ){
             if (ApplicationPreferences.getInstance().isToUnlockApplicationOnScreenOn()) {
                 mApplicationState.unlockApplication();
+                Log.e("inside BroadReceiver", "unlockApp");
             }
         }
 

@@ -10,7 +10,7 @@ public class AccountSensitiveData {
     private final RawData mAccount;
 
 
-    public AccountSensitiveData(RawData account, RawData password){
+    public AccountSensitiveData(RawData account, RawData password){ //should the argument be changed to String?
         if (account.isEmpty() || password.isEmpty()){
             throw new IllegalArgumentException("Account and password cannot be empty");
         }

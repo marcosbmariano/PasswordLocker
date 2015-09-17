@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.mark.passwordlocker.broadcastReceiver.ScreenLockBroadReceiver;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
@@ -31,13 +32,14 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
     @Override
     public void onCreate() {
         super.onCreate();
+        mReceiver = new ScreenLockBroadReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_ANSWER);
-        mReceiver = new ScreenLockBroadReceiver();
         registerReceiver(mReceiver, filter);
         ApplicationState.addObserver(this);
         mServiceObserver = new ArrayList<>();
+        Log.e("MyService", "Service is created");
     }
 
     public static void addObserver(ServiceCallBack observer){
@@ -57,6 +59,7 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
     public void onDestroy() {
         unregisterReceiver(mReceiver);
         ApplicationState.deleteObserver(this);
+        Log.e("MyReceiver", "ON Destroy");
         warnActivityOfDestruction();
         super.onDestroy();
     }
@@ -86,7 +89,6 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
             }
         }
     }
-
 
     public class MyBinder extends Binder {
          public MyService getService(){

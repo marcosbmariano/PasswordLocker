@@ -12,7 +12,8 @@ import com.example.mark.passwordlocker.services.MyService;
 
 import java.util.List;
 
-public class MyPreferenceActivity extends PreferenceActivity implements MyService.ServiceCallBack{
+public class MyPreferenceActivity extends PreferenceActivity
+        implements MyService.ServiceCallBack, ApplicationState.ApplicationStateObserver{
     private boolean mIsActivityVisible = false;
     private Prefs1Fragment mFragment;
     @Override
@@ -27,6 +28,8 @@ public class MyPreferenceActivity extends PreferenceActivity implements MyServic
                 .replace(R.id.preference_container, mFragment,
                         Prefs1Fragment.class.getName())
                 .commit();
+
+        ApplicationState.addObserver(this);
 
     }
 //
@@ -63,6 +66,14 @@ public class MyPreferenceActivity extends PreferenceActivity implements MyServic
         super.onPause();
     }
 
+    @Override
+    public void applicationIsLocked() {
+        onNavigateUp();
+    }
+
+    @Override
+    public void applicationIsUnlocked() { /* Do nothing */  }
+
     /**
      * This fragment shows the preferences for the first header.
      */
@@ -86,7 +97,6 @@ public class MyPreferenceActivity extends PreferenceActivity implements MyServic
         public void onResume() {
             getPreferenceManager().getSharedPreferences()
                     .registerOnSharedPreferenceChangeListener(ApplicationPreferences.getInstance());
-            Log.e("inside fragment", "this is the tag: "+ getTag());
             super.onResume();
         }
 
@@ -118,8 +128,6 @@ public class MyPreferenceActivity extends PreferenceActivity implements MyServic
     }
 
     @Override
-    public void serviceDestroyed() {
-
-    }
+    public void serviceDestroyed() { /*Do nothing*/ }
 
 }

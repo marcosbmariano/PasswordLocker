@@ -125,6 +125,7 @@ public class Model implements Cloneable{
     protected void save() {
         saveOrUpdate();
     }
+
     private final void saveOrUpdate(){
         if (0 == mId) {
             mId = addNewModel();

@@ -36,7 +36,7 @@ public final class DatabaseKey extends SharedPrefsActor {
     }
 
 
-    private boolean isApplicationLocked(){
+    boolean isApplicationLocked(){
         return mApplicationState.isApplicationLocked();
     }
 

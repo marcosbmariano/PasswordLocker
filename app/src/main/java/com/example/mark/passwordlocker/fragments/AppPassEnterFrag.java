@@ -74,6 +74,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
     private boolean isPasswordValid(){
         boolean result = false;
         String password = mPassword.getText().toString();
+        mPassword.setText("");
 
         if (!password.isEmpty()){
             ApplicationState appState = ApplicationState.getInstance();
