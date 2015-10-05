@@ -16,10 +16,7 @@ import com.example.mark.passwordmanager.RawData;
  * Created by mark on 1/21/15.
  */
 public class NewUserPassFrag extends BaseFragment {
-
-    private Button mBtnSave;
     private PassCreationFrag mFrag;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,8 +31,8 @@ public class NewUserPassFrag extends BaseFragment {
 
     private void setupWidgets(View v){
 
-        mBtnSave = (Button)v.findViewById(R.id.btn_new_user_save);
-        mBtnSave.setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.btn_new_user_save).setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mFrag.isPasswordConfirmationValid()){

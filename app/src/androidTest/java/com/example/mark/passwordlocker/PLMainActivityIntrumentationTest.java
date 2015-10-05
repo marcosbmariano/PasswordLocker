@@ -2,7 +2,7 @@ package com.example.mark.passwordlocker;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.example.mark.passwordlocker.activities.MyPreferenceActivity;
+
 import com.example.mark.passwordlocker.activities.PLMainActivity;
 
 /**

@@ -29,9 +29,6 @@ public class NewAccountDialog extends DialogFragment
         implements View.OnClickListener, PasswordGenerator.PasswordGeneratorListener{
 
     private EditText mETAccountName;
-    private Button mBtnSavePassword;
-    private Button mBtnGeneratePassword;
-    private Button mBtnCancel;
     private PassCreationFrag mPassCreationFrag;
     private ApplicationState mApplicationState;
 
@@ -54,13 +51,10 @@ public class NewAccountDialog extends DialogFragment
     }
 
     private void setupWidgets(View v){
-        mBtnCancel = (Button)v.findViewById(R.id.btn_new_pass_cancel);
-        mBtnCancel.setOnClickListener(this);
         mETAccountName = (EditText)v.findViewById(R.id.et_new_account_account);
-        mBtnSavePassword = (Button)v.findViewById(R.id.btn_new_pass_acc_save);
-        mBtnSavePassword.setOnClickListener(this);
-        mBtnGeneratePassword = (Button)v.findViewById(R.id.btn_new_pass_acc_generate);
-        mBtnGeneratePassword.setOnClickListener(this);
+        v.findViewById(R.id.btn_new_pass_cancel).setOnClickListener(this);
+        v.findViewById(R.id.btn_new_pass_acc_save).setOnClickListener(this);
+        v.findViewById(R.id.btn_new_pass_acc_generate).setOnClickListener(this);
     }
 
     private void setupFragment(){
@@ -110,7 +104,7 @@ public class NewAccountDialog extends DialogFragment
             Toast.makeText(getActivity(), "Account Invalid!", Toast.LENGTH_LONG).show();
 
         }else{
-            AccountSensitiveData accountSensitiveData =
+            AccountSensitiveData accountSensitiveData = //TODO modify this
                     new AccountSensitiveData(new RawData(mETAccountName.getText().toString())
                             ,mPassCreationFrag.getRawPassword());
             dismiss();

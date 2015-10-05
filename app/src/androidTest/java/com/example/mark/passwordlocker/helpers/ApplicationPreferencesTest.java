@@ -21,7 +21,7 @@ public class ApplicationPreferencesTest extends
     private ApplicationPreferences mAppPreferences;
     private ListPreference mClipBoardSeconds;
     private ListPreference mPasswordLength;
-    private ListPreference mSecondsToLock;
+    //private ListPreference mSecondsToLock;
     private SharedPreferences mSharedPreferences;
     private PreferenceFragment mFragment;
 
@@ -37,7 +37,7 @@ public class ApplicationPreferencesTest extends
         mFragment = mActivity.getFragment();
         mClipBoardSeconds = getListPreference(R.string.preferences_clipboard_seconds_key);
         mPasswordLength = getListPreference(R.string.pref_password_length_key);
-        mSecondsToLock = getListPreference(R.string.pref_time_to_lock_key);
+        //mSecondsToLock = getListPreference(R.string.pref_time_to_lock_key);
 
     }
 

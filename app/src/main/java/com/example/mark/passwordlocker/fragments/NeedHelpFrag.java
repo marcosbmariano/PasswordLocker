@@ -19,7 +19,10 @@ public class NeedHelpFrag extends Fragment implements View.OnClickListener{
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+
 
         mTextView = (TextView) inflater.inflate(R.layout.need_help_layout, container, false);
         mTextView.setOnClickListener(this);

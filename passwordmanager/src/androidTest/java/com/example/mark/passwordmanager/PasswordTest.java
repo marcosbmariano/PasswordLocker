@@ -58,10 +58,6 @@ public class PasswordTest extends AndroidTestCase
         mGenerator.generatePassword(passwordLength);
     }
 
-
-
-
-
     //these methos are to test a password strength
     public void testInvalidWithSpace1(){
         mPassword = new RawData("maria da silva".toCharArray());
@@ -128,55 +124,55 @@ public class PasswordTest extends AndroidTestCase
         stCompared = WEAK;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testModerated1(){
         mPassword = new RawData("AAAbbb111$$$".toCharArray());
         stCompared = MODERATED;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testModerated2(){
         mPassword = new RawData("AdCb11$$".toCharArray());
         stCompared = MODERATED;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testModerated3(){
         mPassword = new RawData("ABcd12&#".toCharArray());
         stCompared = MODERATED;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testModerated4(){
         mPassword = new RawData("$2uF3xO1".toCharArray());
         stCompared = MODERATED;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testGood1(){
         mPassword = new RawData("a1$F*8kQ".toCharArray());
         stCompared = GOOD;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testStrong1(){
         mPassword = new RawData("a1$F*8kQ5@".toCharArray());
         stCompared = STRONG;
         mMeter.checkPasswordStrength(mPassword);
     }
-
+    @FlakyTest
     public void testStrong2(){
         mPassword = new RawData("a1$F*8kQ5@s2".toCharArray());
         stCompared = STRONG;
         mMeter.checkPasswordStrength(mPassword);
     }
+    @FlakyTest
+    public void testStrong3(){
+        mPassword = new RawData("bQg2?vQ2J~".toCharArray());
+        stCompared = STRONG;
+        mMeter.checkPasswordStrength(mPassword);
+    }
 
-//    public void testStrong3(){
-//        mPassword = new PasswordRaw("bQg2?vQ2J~".toCharArray());
-//        stCompared = STRONG;
-//        mMeter.checkPasswordStrength(mPassword);
-//    }
-//
 
 
 }

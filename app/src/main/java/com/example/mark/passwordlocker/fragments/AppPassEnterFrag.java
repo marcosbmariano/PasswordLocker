@@ -26,6 +26,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+
         View v = inflater.inflate(R.layout.app_enter_pass_frag, container, false);
 
         setupWidgtes(v);

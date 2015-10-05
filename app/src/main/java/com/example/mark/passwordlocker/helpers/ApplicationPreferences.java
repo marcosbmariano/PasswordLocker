@@ -3,7 +3,6 @@ package com.example.mark.passwordlocker.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.example.mark.passwordlocker.R;
 
@@ -17,13 +16,13 @@ import java.util.Set;
 public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 
-    private final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
-    private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
+    private static final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
+    //private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
     private static Context mContext;
-    private static ApplicationPreferences mIntance;
-    private static SharedPreferences mApplicationsPreferences;
-    private Set<PreferencesSecondsToLockObserver> mLockObservers;
-    private PreferencesNotificationDisplayListener mDisplayNotificationListener;
+    private static ApplicationPreferences mInstance;
+    //private static SharedPreferences mApplicationsPreferences;
+    private static Set<PreferencesSecondsToLockObserver> mLockObservers;
+    private static PreferencesNotificationDisplayListener mDisplayNotificationListener;
 
 
     private ApplicationPreferences(){
@@ -32,18 +31,18 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
                     "ApplicationPreferences must have a valid context reference, use setContext.");
         }
         setPreferencesDefaultValues();
-        setupPreferences();
+        //setupPreferences();
     }
 
-    private void setupPreferences(){
-        mApplicationsPreferences = getSharedPreferences();
-    }
+    //private void setupPreferences(){
+   //     mApplicationsPreferences = getSharedPreferences();
+   // }
 
     public static ApplicationPreferences getInstance(){
-        if ( null == mIntance){
-            mIntance = new ApplicationPreferences();
+        if ( null == mInstance){
+            mInstance = new ApplicationPreferences();
         }
-        return mIntance;
+        return mInstance;
     }
 
     public static void setContext(Context context){
@@ -95,6 +94,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
 
         switch (key){
             case TIME_TO_LOCK_KEY:
@@ -128,7 +128,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     }
 
-    public void addPreferencesNotificationDisplayListener(
+    public static void addPreferencesNotificationDisplayListener(
             PreferencesNotificationDisplayListener listener){
         mDisplayNotificationListener = listener;
     }

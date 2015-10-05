@@ -16,7 +16,7 @@ import org.junit.runners.MethodSorters;
 public class ApplicationStateTest extends PLMainActivityIntrumentationTest {
     private PLMainActivity mActivity;
     private ApplicationState mAppState;
-    private ApplicationPassword mAppPassword;
+    //private ApplicationPassword mAppPassword;
     private ObserverTest mObTest;
     private ApplicationPreferences mAppPreferences;
 
@@ -26,7 +26,7 @@ public class ApplicationStateTest extends PLMainActivityIntrumentationTest {
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = getMainActivity();
-        mAppPassword = ApplicationPassword.getInstance();
+        //mAppPassword = ApplicationPassword.getInstance();
         mObTest = new ObserverTest();
         ApplicationState.addObserver(mObTest);
         mAppPreferences = ApplicationPreferences.getInstance();

@@ -13,7 +13,7 @@ class CharList {
     //TODo implement ITERATOR!!!
     private final int CASE_TYPES = 4;
     final int [] mArray;
-    private final int mLength;
+    //private final int mLength;
     private int mCurrentIndex;
     private int mSize;
 
@@ -21,10 +21,11 @@ class CharList {
 
 
     CharList(int length){
+        //int length;
         mRandom = new Random();
-        mLength = length;
-        mArray = fillTypeArray(mLength);
-        mSize = mLength;
+        //length = length;
+        mArray = fillTypeArray(length);
+        mSize = length;
     }
 
 

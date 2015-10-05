@@ -15,6 +15,8 @@ public class ApplicationPasswordTest extends PLMainActivityIntrumentationTest {
     public static final String PASSWORD = "password";
 
 
+    //TODO test a gigantic password
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();

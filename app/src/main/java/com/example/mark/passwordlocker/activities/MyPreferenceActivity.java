@@ -16,6 +16,7 @@ public class MyPreferenceActivity extends PreferenceActivity
         implements MyService.ServiceCallBack, ApplicationState.ApplicationStateObserver{
     private boolean mIsActivityVisible = false;
     private Prefs1Fragment mFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

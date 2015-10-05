@@ -27,7 +27,7 @@ import java.util.List;
  * Created by mark on 7/14/15.
  */
 public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
-        implements AccountRecord.DatabaseListener {
+        implements AccountRecord.DatabaseObserver {
     private List<AccountRecord> mAccountsRecord;
     private List<String> mAccountsList;
     private FragmentActivity mContext;
@@ -40,7 +40,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         if ( null == context){
             throw new IllegalArgumentException("Context must not be null!");
         }
-        AccountRecord.addListener(this);
+        AccountRecord.addObservers(this);
         updatedAccounts();
         mAccountsList = getCurrentAccountsList();
 
@@ -185,9 +185,15 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             ClipboardManager manager = (ClipboardManager) mActivity.
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip( ClipData.newPlainText("", password));
+            setCounterToClearClipboard();
+            Log.e("inside clearClipboard", manager.getPrimaryClip().toString());
+        }
+
+        Counter setCounterToClearClipboard(){
             Counter counter = new Counter(this, mAppPreferences.getClipBoardSeconds());
             counter.setTag(CLEAR_CLIPBOARD_TAG);
             counter.startCounter();
+            return counter;
         }
 
         @Override
@@ -195,7 +201,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             String tag = counter.getTag();
             switch (tag){
                 case CLEAR_CLIPBOARD_TAG:
-                    cleanClipBoard();
+                    clearClipBoard();
                     break;
                 case PASSWORD_VISIBLE_TAG:
                     hidePassword();
@@ -213,10 +219,12 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             });
         }
 
-        private void cleanClipBoard(){
+        private void clearClipBoard(){
+
             ClipboardManager manager = (ClipboardManager) mActivity.
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip(ClipData.newPlainText(" "," "));
+            ClipData data =  manager.getPrimaryClip();
         }
     }
 

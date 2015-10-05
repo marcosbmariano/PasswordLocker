@@ -19,7 +19,7 @@ import java.util.Arrays;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EncryptMetadataTest extends TestCase {
     private AccountRecord mAccountRecord;
-    private final String dummyData = "asfdfghe3857292743";
+    //private final String dummyData = "asfdfghe3857292743";
     private String mEncryptedData;
     private byte [] mData, mKey, mIv, mSalt;
 
@@ -27,7 +27,7 @@ public class EncryptMetadataTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         mAccountRecord = new AccountRecord("Google", "1234456");
-        mData = PasswordUtils.stringToBytes(dummyData);
+        mData = PasswordUtils.stringToBytes("asfdfghe3857292743");
         mKey = PasswordCipher.generateRandomKey();
         mIv = PasswordCipher.generateRandomIv();
         mSalt = PasswordCipher.generateRandomSalt();
@@ -61,8 +61,10 @@ public class EncryptMetadataTest extends TestCase {
         try {
             mAccountRecord.encrypt(mData, mSalt, mKey, mIv);
             fail("Null argument is supposed to thrown an exception");
-        }catch (IllegalArgumentException e){
+        }catch (NullPointerException e){
             //Do nothing
+        }catch (IllegalArgumentException e){
+            //do nothing
         }
     }
 
@@ -94,7 +96,7 @@ public class EncryptMetadataTest extends TestCase {
         try {
             mAccountRecord.getDecryptedValue(mEncryptedData, mSalt, mKey, mIv);
             fail("DecryptionWith null key should thrown exception");
-        } catch (IllegalArgumentException e){
+        } catch (NullPointerException e){
             //do nothing
         }
     }

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
+import com.example.mark.passwordlocker.account.AccountSensitiveData;
 import com.example.mark.passwordlocker.adapters.AccountsAdapter;
 import com.example.mark.passwordlocker.alerts.NewAccountDialog;
 import com.example.mark.passwordlocker.fragments.NewUserPassFrag;
@@ -27,6 +28,7 @@ import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordlocker.notifications.NotificationIconManager;
 import com.example.mark.passwordlocker.services.MyService;
+import com.example.mark.passwordmanager.RawData;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 
 
@@ -42,6 +44,8 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     private RecyclerViewFragment mRecyclerViewFragment;
     private boolean mIsActivityVisible = false;
     private boolean mIsServiceBound;
+
+
 
 
     @Override

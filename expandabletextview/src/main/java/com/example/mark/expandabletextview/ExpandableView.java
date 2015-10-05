@@ -19,15 +19,11 @@ public class ExpandableView extends RelativeLayout implements View.OnClickListen
     private ImageView mIcon;
     private TextView mLabel;
     private TextView mText;
-    private Context mContext;
     private boolean mHideText;
-
-
 
 
     public ExpandableView(Context context, AttributeSet attr) {
         super(context, attr);
-        mContext = context;
         mHideText = true;
 
         LayoutInflater inflater = (LayoutInflater)context.
@@ -37,7 +33,7 @@ public class ExpandableView extends RelativeLayout implements View.OnClickListen
                 R.layout.expandabletextview,this);
 
         setupViews(v);
-        setAttributes(mContext,attr);
+        setAttributes(context,attr);
         toggleText();
 
 

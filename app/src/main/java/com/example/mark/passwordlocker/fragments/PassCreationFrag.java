@@ -45,7 +45,8 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.app_pass_creation_frag, container, false);
 

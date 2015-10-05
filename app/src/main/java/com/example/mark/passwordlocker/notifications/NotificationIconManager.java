@@ -16,16 +16,16 @@ import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 public class NotificationIconManager implements
         ApplicationPreferences.PreferencesNotificationDisplayListener{
     private static Context mContext;
-    private ApplicationPreferences mAppPreferences;
-    private int mId;
-    private NotificationManager mNotificationManager;
-    private Notification mNotification;
-    private static NotificationIconManager mInstance;
+    private static ApplicationPreferences mAppPreferences;
+    private int mId = 76597607;
+    private static NotificationManager mNotificationManager;
+    private static Notification mNotification;
+
 
 
     public static void setContext( Context context){
         mContext = context;
-        mInstance = new NotificationIconManager();
+        new NotificationIconManager();
     }
 
     private NotificationIconManager(){
@@ -33,12 +33,13 @@ public class NotificationIconManager implements
             throw new NullPointerException(
                     "NotificationIconShortcut must have a valid Context reference, use setContext.");
         }
-        mId = 76597607;
+
         mNotificationManager = getmNotificationManager();
         mAppPreferences = ApplicationPreferences.getInstance();
         mAppPreferences.addPreferencesNotificationDisplayListener(this);
         ifDisplayableBuildNotification();
     }
+
 
     private void ifDisplayableBuildNotification(){
         if (mAppPreferences.isNotificationDisplayable()){

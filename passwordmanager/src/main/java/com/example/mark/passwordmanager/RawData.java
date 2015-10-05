@@ -8,16 +8,15 @@ public final class RawData {
     private final byte [] mRawData;
 
     public RawData(char[] data){
-
-        try{
-            mRawData = PasswordUtils.charToBytes(data);
-        } catch (NullPointerException e){
-            throw new NullPointerException(
-                    "The Password argument cannot be null! I must be a char [].");
-        }
+        this(PasswordUtils.charToBytes(data));
     }
     public RawData(byte[] data){
-        mRawData = data.clone();
+        try{
+            mRawData = data.clone();
+        } catch (NullPointerException e){
+            throw new NullPointerException(
+                    "The Password argument cannot be null! ");
+        }
     }
 
     public RawData(String data){

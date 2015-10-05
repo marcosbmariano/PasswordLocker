@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by mark on 7/17/15.
  */
-public class Counter {
+public class Counter { //TODO Runnable or AsyncTask?
     private CounterCallBack mObserver;
     private String mTag;
     private int mSeconds;

@@ -23,7 +23,7 @@ import javax.crypto.BadPaddingException;
  */
 
 public final class ApplicationPassword extends SharedPrefsActor {
-    private final String PREFERENCES_NAME = "app_pref";
+    //private final String PREFERENCES_NAME = "app_pref";
     private final String APP_PASSWORD_KEY = "app_password";
     private final String APP_PASSWORD_HINT = "password_hint";
     private static Context mContext;
@@ -233,6 +233,7 @@ public final class ApplicationPassword extends SharedPrefsActor {
 
     @Override
     protected String getPreferencesName() {
+        final String PREFERENCES_NAME = "app_pref";
         return PREFERENCES_NAME;
     }
 
