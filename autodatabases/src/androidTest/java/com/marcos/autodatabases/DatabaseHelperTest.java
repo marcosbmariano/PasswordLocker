@@ -14,9 +14,9 @@ import com.marcos.autodatabases.utils.DatabaseHelper;
  */
 public class DatabaseHelperTest extends AndroidTestCase {
 
-    DatabaseHelper helper;
+    private DatabaseHelper helper;
 
-    String defaultDatabaseName = "my_database.db";
+    private final String defaultDatabaseName = "my_database.db";
 
     @Override
     protected void setUp() throws Exception {
@@ -42,7 +42,7 @@ public class DatabaseHelperTest extends AndroidTestCase {
         helper = DatabaseHelper.getInstance();
         helper.addModel(Costumer.class, User.class, Address.class, BoxedTypes.class, Account.class);
         helper.createDatabase();
-        assertEquals(helper.getDatabaseName().toString(), defaultDatabaseName, helper.getDatabaseName());
+        assertEquals(helper.getDatabaseName(), defaultDatabaseName, helper.getDatabaseName());
     }
 
 

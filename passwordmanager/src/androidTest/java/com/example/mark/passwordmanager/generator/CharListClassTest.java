@@ -3,27 +3,11 @@ package com.example.mark.passwordmanager.generator;
 import android.test.AndroidTestCase;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Created by mark on 3/4/15.
  */
 public class CharListClassTest extends AndroidTestCase{
-    CharList mCharList;
+    private CharList mCharList;
 
 
     public void testObjectInstantiation1(){
@@ -51,7 +35,7 @@ public class CharListClassTest extends AndroidTestCase{
         assertTrue(mCharList.isArrayEmpty());
     }
 
-    public void testPopType(){
+    public void testPopType(){ //todo check this method
         int emptyType = 0;
         int type = 0;
         int index = -1;

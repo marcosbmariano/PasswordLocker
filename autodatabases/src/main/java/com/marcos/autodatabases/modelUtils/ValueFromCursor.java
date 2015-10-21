@@ -11,8 +11,8 @@ import java.lang.reflect.Field;
  * Created by mark on 4/30/15.
  */
 public class ValueFromCursor extends ClassSelector<Object> {
-    private Cursor mCursor;
-    private Column mColumn;
+    private final Cursor mCursor;
+    private final Column mColumn;
 
     private ValueFromCursor(Cursor cv,  Column col){
         mCursor = cv;

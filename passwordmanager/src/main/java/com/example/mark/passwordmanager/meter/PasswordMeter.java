@@ -14,12 +14,11 @@ import com.example.mark.passwordmanager.RawData;
 
 
 public final class PasswordMeter {
-    public static enum PasswordStrength { INVALID, MODERATED, GOOD, WEAK, STRONG }
-    private PasswordMeterListener listener;
-    private final int TOO_SHORT = -1;
+    public enum PasswordStrength { INVALID, MODERATED, GOOD, WEAK, STRONG }
+    private final PasswordMeterListener listener;
 
 
-    private int pMinimumLength = 7; //TODO lower and upper bound for the length of the password?
+    //TODO lower and upper bound for the length of the password?
 
 
     public PasswordMeter(PasswordMeterListener listener){
@@ -27,8 +26,9 @@ public final class PasswordMeter {
     }
 
     public void checkPasswordStrength(RawData password){
+        int minimumLength = 7;
 
-        if (password.length() > pMinimumLength){
+        if (password.length() > minimumLength){
             new PasswordMeterTask().execute(password);
         }else {
             listener.setStrength(PasswordStrength.WEAK);
@@ -37,10 +37,9 @@ public final class PasswordMeter {
 
 
         //TODO change the name to valueOf
-    PasswordStrength calculate(RawData password){
-
-        PasswordStrength result = null;
-        final char [] pass = password.getDataCharArray();
+    private PasswordStrength calculate(RawData password){
+        final int TOO_SHORT = -1;
+        PasswordStrength result;
 
         if (isPasswordInvalid(password)){
            return PasswordStrength.INVALID;
@@ -88,7 +87,7 @@ public final class PasswordMeter {
     }
 
     private int calculatePasswordLengthStrength(RawData password){
-        int result = 0;
+        int result;
         final int length = password.length();
 
         if (length <= 7){
@@ -99,7 +98,7 @@ public final class PasswordMeter {
         return (int)(result * 1.5);
     }
 
-    class PasswordMeterTask extends AsyncTask<RawData, Void, PasswordStrength> {
+    private class PasswordMeterTask extends AsyncTask<RawData, Void, PasswordStrength> {
 
         @Override
         protected PasswordStrength doInBackground(RawData... params) {

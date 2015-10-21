@@ -1,8 +1,6 @@
 package com.example.mark.passwordlocker;
 
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
@@ -21,8 +19,6 @@ import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static android.support.test.espresso.assertion.ViewAssertions.*;
 import static android.support.test.espresso.action.ViewActions.*;
-import static android.support.test.espresso.contrib.RecyclerViewActions.*;
-
 
 /**
  * Created by mark on 9/21/15.

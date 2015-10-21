@@ -18,15 +18,12 @@ import com.example.mark.passwordlocker.R;
  */
 public class NeedHelpTutorialDialog extends DialogFragment{
 
-    private TextView mTextView;
-    private ScrollView mScrollView;
-
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        mScrollView = (ScrollView)inflater.inflate(R.layout.need_help_tutorial, null);
+        ScrollView mScrollView = (ScrollView)inflater.inflate(R.layout.need_help_tutorial, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

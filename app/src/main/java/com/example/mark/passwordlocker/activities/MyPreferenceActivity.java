@@ -3,14 +3,13 @@ package com.example.mark.passwordlocker.activities;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.services.MyService;
 
-import java.util.List;
+
 
 public class MyPreferenceActivity extends PreferenceActivity
         implements MyService.ServiceCallBack, ApplicationState.ApplicationStateObserver{

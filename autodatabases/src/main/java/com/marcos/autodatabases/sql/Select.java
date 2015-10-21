@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class Select {
 
-    private SQLSelectStatement mSQLSelect;
+    private final SQLSelectStatement mSQLSelect;
 
     private Select() {
         mSQLSelect = new SQLSelectStatement();
@@ -62,7 +62,7 @@ public class Select {
         Class<? extends Model> aClass =
                 ModelsInfo.getInstance().getClassFromTable( mSQLSelect.getTableName());
 
-        List<Model> items = new ArrayList<Model>();
+        List<Model> items = new ArrayList<>();
 
         while (cv.moveToNext()) {
             items.add(ModelUtils.buildModel(aClass, cv));

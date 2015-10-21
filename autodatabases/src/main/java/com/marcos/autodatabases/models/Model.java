@@ -126,7 +126,7 @@ public class Model implements Cloneable{
         saveOrUpdate();
     }
 
-    private final void saveOrUpdate(){
+    private void saveOrUpdate(){
         if (0 == mId) {
             mId = addNewModel();
         } else {
@@ -134,14 +134,14 @@ public class Model implements Cloneable{
         }
     }
 
-    private final void update() {
+    private void update() {
         Update.from(getTableName())
                 .getValuesFromModel(this)
                 .whereId(getId())
                 .execute();
     }
 
-    private final long addNewModel() {
+    private long addNewModel() {
         return Insert.model(this);
     }
 
@@ -154,7 +154,7 @@ public class Model implements Cloneable{
         }
     }
 
-    private final String getRelationalTableName(Model model){
+    private String getRelationalTableName(Model model){
         String parentTable = "";
         String childTable = "";
         if (hasRelationWith(model)) {

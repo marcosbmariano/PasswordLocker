@@ -8,13 +8,11 @@ import java.util.regex.Pattern;
 /**
  * Created by mark on 2/26/15.
  */
-public class NumbersMeter extends PatternMeter {
-    final private Pattern pattern = Pattern.compile("[\\d]");
-
+class NumbersMeter extends PatternMeter {
 
     private NumbersMeter(RawData password){
-        this.password = password;
-        setPattern(pattern);
+        setPassword(password);
+        setPattern(Pattern.compile("[\\d]"));
     }
 
     static int valueOf(RawData password){

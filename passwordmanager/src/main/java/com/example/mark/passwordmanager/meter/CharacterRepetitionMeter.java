@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by mark on 2/26/15.
  */
-public class CharacterRepetitionMeter {
+class CharacterRepetitionMeter {
 
     private CharacterRepetitionMeter(){
         throw new UnsupportedOperationException("CharacterRepetitionMeter cannot be instantiated!");
@@ -19,14 +19,15 @@ public class CharacterRepetitionMeter {
 
 
     private static int checkForRepetition(char [] password){
-        int result = 0;
-        Set<Character> characters = new HashSet(password.length);
+        int result;
+        Set<Character> characters = new HashSet<>(password.length);
 
         for (char c : password){
             characters.add(c);
         }
         result = password.length - characters.size();
 
-        return (result *= 1.5);
+        //noinspection UnusedAssignment
+        return (result *= 1.5); //implicit conversion
     }
 }

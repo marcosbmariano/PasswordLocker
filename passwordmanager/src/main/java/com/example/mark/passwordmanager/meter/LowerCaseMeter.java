@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
  */
 class LowerCaseMeter extends PatternMeter {
 
-    LowerCaseMeter(RawData password){
-        this.password = password;
+    private LowerCaseMeter(RawData password){
+        setPassword(password);
         setPattern( Pattern.compile("[a-z]"));
     }
 

@@ -30,7 +30,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         implements AccountRecord.DatabaseObserver {
     private List<AccountRecord> mAccountsRecord;
     private List<String> mAccountsList;
-    private FragmentActivity mContext;
+    private final FragmentActivity mContext;
     private static AccountsAdapterUpdate mActivity;
 
 
@@ -135,12 +135,12 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
                 @Override
                 public void onClick(View v) {
                     password.setText(getAccountRecord().getAccountPassword());
-                    toglePasswordVisibility();
+                    togglePasswordVisibility();
                 }
             });
         }
 
-        private void toglePasswordVisibility(){
+        private void togglePasswordVisibility(){
             if ( passwordVisible){
                 setPasswordInvisible();
             } else{
@@ -189,11 +189,10 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             Log.e("inside clearClipboard", manager.getPrimaryClip().toString());
         }
 
-        Counter setCounterToClearClipboard(){
+        private void setCounterToClearClipboard(){
             Counter counter = new Counter(this, mAppPreferences.getClipBoardSeconds());
             counter.setTag(CLEAR_CLIPBOARD_TAG);
             counter.startCounter();
-            return counter;
         }
 
         @Override
@@ -219,12 +218,12 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             });
         }
 
-        private void clearClipBoard(){
+        private void clearClipBoard(){ //TODO test this
 
             ClipboardManager manager = (ClipboardManager) mActivity.
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip(ClipData.newPlainText(" "," "));
-            ClipData data =  manager.getPrimaryClip();
+            //ClipData data =  manager.getPrimaryClip();
         }
     }
 

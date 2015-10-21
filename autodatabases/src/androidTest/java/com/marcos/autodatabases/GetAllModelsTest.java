@@ -11,9 +11,9 @@ import java.util.List;
  * Created by mark on 3/13/15.
  */
 public class GetAllModelsTest extends AndroidTestCase{
-    Account account;
-    List<Account> accounts;
-    int loop = 10;
+    private Account account;
+    private List<Account> accounts;
+    private final int loop = 10;
 
 
 

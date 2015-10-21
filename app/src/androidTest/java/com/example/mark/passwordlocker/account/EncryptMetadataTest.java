@@ -59,6 +59,7 @@ public class EncryptMetadataTest extends TestCase {
     public void testEncryptionNullKey(){
         mKey = null;
         try {
+            //noinspection ConstantConditions
             mAccountRecord.encrypt(mData, mSalt, mKey, mIv);
             fail("Null argument is supposed to thrown an exception");
         }catch (NullPointerException e){
@@ -94,6 +95,7 @@ public class EncryptMetadataTest extends TestCase {
     public void testDecryptionNullKey(){
         mKey = null;
         try {
+            //noinspection ConstantConditions
             mAccountRecord.getDecryptedValue(mEncryptedData, mSalt, mKey, mIv);
             fail("DecryptionWith null key should thrown exception");
         } catch (NullPointerException e){

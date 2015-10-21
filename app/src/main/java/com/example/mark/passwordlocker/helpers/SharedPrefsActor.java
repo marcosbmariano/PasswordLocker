@@ -6,7 +6,8 @@ import android.content.SharedPreferences;
 /**
  * Created by mark on 3/12/15.
  */
-public abstract class SharedPrefsActor { // TODO ensure that a called to the context is safe
+abstract class SharedPrefsActor { // TODO ensure that a called to the context is safe, check this class
+    //TODO it seems weird
 
     abstract protected Context getContext();
     abstract protected String getPreferencesName();
@@ -18,11 +19,11 @@ public abstract class SharedPrefsActor { // TODO ensure that a called to the con
         editor.commit();
     }
 
-    protected void deleteDataFromSharedPref(String key){
-        SharedPreferences.Editor editor = getSharedPref().edit();
-        editor.remove(key);
-        editor.commit();
-    }
+//    protected void deleteDataFromSharedPref(String key){
+//        SharedPreferences.Editor editor = getSharedPref().edit();
+//        editor.remove(key);
+//        editor.commit();
+//    }
 
     protected boolean hasDataOnSharedPref(String dataName){
         SharedPreferences pref = getSharedPref();

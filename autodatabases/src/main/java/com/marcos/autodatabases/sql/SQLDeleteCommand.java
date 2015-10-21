@@ -6,7 +6,7 @@ package com.marcos.autodatabases.sql;
 class SQLDeleteCommand extends SQLCommandBase {
     private final static String FROM = "FROM ";
     private final static String DELETE = "DELETE ";
-    private SQLWhereHelper mWhereHelper;
+    private final SQLWhereHelper mWhereHelper;
 
     SQLDeleteCommand(){
         mWhereHelper = new SQLWhereHelper();

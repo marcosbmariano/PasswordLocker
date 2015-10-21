@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPassword;
@@ -65,7 +64,7 @@ public class NewUserPassFrag extends BaseFragment {
                 .commit();
     }
 
-    public void updateFragment(){
+    private void updateFragment(){
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.MainFragContainer, new AppPassEnterFrag())
                 .commit();

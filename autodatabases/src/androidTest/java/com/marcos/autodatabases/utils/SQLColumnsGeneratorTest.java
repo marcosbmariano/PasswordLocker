@@ -1,7 +1,6 @@
 package com.marcos.autodatabases.utils;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 
 import com.marcos.autodatabases.models.User;

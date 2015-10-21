@@ -12,9 +12,9 @@ import java.util.Map;
  * Created by mark on 4/24/15.
  */
 abstract class SQLCommandBase {
-    private StringBuilder mSQLStatement;
+    private final StringBuilder mSQLStatement;
     private String mTableName;
-    private Map<String, Object> mModelColumnsAndValues;
+    private final Map<String, Object> mModelColumnsAndValues;
     private boolean mIsStatementFinalized = false;
 
 

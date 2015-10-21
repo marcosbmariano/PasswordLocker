@@ -233,8 +233,8 @@ public final class ApplicationPassword extends SharedPrefsActor {
 
     @Override
     protected String getPreferencesName() {
-        final String PREFERENCES_NAME = "app_pref";
-        return PREFERENCES_NAME;
+        //final String PREFERENCES_NAME = "app_pref";
+        return "app_pref";//PREFERENCES_NAME;
     }
 
 }

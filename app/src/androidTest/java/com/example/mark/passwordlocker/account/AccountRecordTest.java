@@ -1,7 +1,6 @@
 package com.example.mark.passwordlocker.account;
 
 import android.test.FlakyTest;
-import android.test.UiThreadTest;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.example.mark.passwordlocker.PLMainActivityIntrumentationTest;
@@ -279,12 +278,13 @@ public class AccountRecordTest extends PLMainActivityIntrumentationTest {
         try{
             mAccountRecordNotSaved
                     .getDecryptedValueAsString(encryptedData, salt, invalidKey, iv);
-            fail("should throw NullPointereExceprion");
+            fail("should throw NullPointerExceprion");
         } catch (NullPointerException e){
             //do Nothing
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void testEncryptDecryptInvalidInfo(){
         unlockApplication();
         mAccountRecordNotSaved.save();
@@ -313,7 +313,7 @@ public class AccountRecordTest extends PLMainActivityIntrumentationTest {
     private void tryData(byte[] data, byte[] salt, byte[] key, byte[] iv){
         try{
             mAccountRecordNotSaved.encrypt(data, salt, key, iv );
-            fail("should throw NullPointereExceprion");
+            fail("should throw NullPointerExceprion");
         } catch (NullPointerException e){
             //do Nothing
         }

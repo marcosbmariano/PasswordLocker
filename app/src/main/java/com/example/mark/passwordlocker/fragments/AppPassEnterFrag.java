@@ -19,7 +19,6 @@ import com.example.mark.passwordlocker.helpers.ApplicationState;
 public class AppPassEnterFrag extends BaseFragment implements View.OnClickListener{ //TODO reviewed
 
     private EditText mPassword;
-    private Button mBtnEnter;
     private Button mBtnShowHint;
 
     @Override
@@ -39,8 +38,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         mBtnShowHint.setVisibility(View.GONE);
         mBtnShowHint.setOnClickListener(this);
         mPassword = (EditText)v.findViewById(R.id.et_app_enter_pass_pass);
-        mBtnEnter = (Button)v.findViewById(R.id.bt_app_enter_pass_enter);
-        mBtnEnter.setOnClickListener(this);
+        v.findViewById(R.id.bt_app_enter_pass_enter).setOnClickListener(this);
     }
 
 

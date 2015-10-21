@@ -11,11 +11,11 @@ import java.lang.reflect.Field;
  * Created by mark on 5/7/15.
  */
 public class SetContentValue extends ClassSelector<Void> {
-    private ContentValues mContentValues;
-    private Field mField;
-    private Column mColumn;
-    private Model mModel;
-    private static SetContentValue mSetContenValues;
+    private final ContentValues mContentValues;
+    private final Field mField;
+    private final Column mColumn;
+    private final Model mModel;
+    private static SetContentValue mSetContenValues; //TODO why static?
 
     private SetContentValue(ContentValues cv, Field field, Column col, Model model){
         mContentValues = cv;

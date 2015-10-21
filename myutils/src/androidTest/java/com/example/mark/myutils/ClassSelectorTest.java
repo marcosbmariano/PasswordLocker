@@ -2,9 +2,6 @@ package com.example.mark.myutils;
 
 import android.test.AndroidTestCase;
 
-import java.lang.reflect.Array;
-import java.util.SimpleTimeZone;
-
 
 /**
  * Created by mark on 4/29/15.
@@ -48,8 +45,10 @@ public class ClassSelectorTest extends AndroidTestCase {
 
     public void testBoolean(){
         boolean x = true;
+        //noinspection ConstantConditions
         assertEquals(BOOLEAN, mSelector.getResult(x));
         Boolean test = Boolean.FALSE;
+        //noinspection ConstantConditions
         assertEquals(BOXED_BOOLEAN, mSelector.getResult(test));
     }
 
@@ -81,6 +80,7 @@ public class ClassSelectorTest extends AndroidTestCase {
 
     public void testDefault(){
         Object test = null;
+        //noinspection ConstantConditions
         assertEquals(DEFAULT, mSelector.getResult(test));
         //it does not expect an array, so it defaults
         String [] x = {"", ""};
@@ -92,25 +92,25 @@ public class ClassSelectorTest extends AndroidTestCase {
         assertEquals(ANOTHER_CLASS, mSelector.getResult(x));
     }
 
-    String BYTE = "byte";
-    String BOXED_BYTE ="boxedByte";
-    String INTEGER = "integer";
-    String BOXED_INTEGER = "boxedInteger";
-    String SHORT = "SHORT";
-    String BOXED_SHORT ="boxedShort";
-    String LONG = "long";
-    String BOXED_LONG = "boxedLong";
-    String FLOAT = "float";
-    String BOXED_FLOAT = "boxedFLoat";
-    String DOUBLE = "double";
-    String BOXED_DOUBLE = "boxedDouble";
-    String BOOLEAN = "boolean";
-    String BOXED_BOOLEAN = "boxedBoolean";
-    String CHAR = "char";
-    String BOXED_CHAR = "boxedChar";
-    String STRING = "string";
-    String DEFAULT = "default";
-    String ANOTHER_CLASS = "anotherClass";
+    private final String BYTE = "byte";
+    private final String BOXED_BYTE ="boxedByte";
+    private final String INTEGER = "integer";
+    private final String BOXED_INTEGER = "boxedInteger";
+    private final String SHORT = "SHORT";
+    private final String BOXED_SHORT ="boxedShort";
+    private final String LONG = "long";
+    private final String BOXED_LONG = "boxedLong";
+    private final String FLOAT = "float";
+    private final String BOXED_FLOAT = "boxedFLoat";
+    private final String DOUBLE = "double";
+    private final String BOXED_DOUBLE = "boxedDouble";
+    private final String BOOLEAN = "boolean";
+    private final String BOXED_BOOLEAN = "boxedBoolean";
+    private final String CHAR = "char";
+    private final String BOXED_CHAR = "boxedChar";
+    private final String STRING = "string";
+    private final String DEFAULT = "default";
+    private final String ANOTHER_CLASS = "anotherClass";
 
     class ClassSelectorForTest extends ClassSelector<String>{
 
@@ -220,7 +220,7 @@ public class ClassSelectorTest extends AndroidTestCase {
         }
     }
 
-    class AnotherClass{
+    private class AnotherClass{
 
     }
 }

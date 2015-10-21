@@ -14,7 +14,7 @@ public final class DatabaseKey extends SharedPrefsActor {
     private static DatabaseKey mDatabaseKeyInstance;
 
 
-    public DatabaseKey(){
+    private DatabaseKey(){
         if ( null == mContext){
             throw new NullPointerException(
                     "DatabaseKey must have a valid Context reference before being used!");

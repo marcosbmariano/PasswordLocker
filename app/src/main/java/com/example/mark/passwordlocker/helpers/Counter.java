@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
  * Created by mark on 7/17/15.
  */
 public class Counter { //TODO Runnable or AsyncTask?
-    private CounterCallBack mObserver;
+    private final CounterCallBack mObserver;
     private String mTag;
-    private int mSeconds;
+    private final int mSeconds;
 
     public Counter( CounterCallBack observer, final int seconds){
         mSeconds = seconds;

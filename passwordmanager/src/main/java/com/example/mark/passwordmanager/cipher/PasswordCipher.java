@@ -50,6 +50,7 @@ public class PasswordCipher {
             e.printStackTrace();
         }
 
+
         return secretKey.getEncoded();
     }
 
@@ -71,7 +72,7 @@ public class PasswordCipher {
 
     public static byte [] generateKeyFromPassword(String password) throws EmptyPasswordException {
         if ( null == password || password.isEmpty()){
-            throw new EmptyPasswordException("Password cannot be null or empty!");
+            throw new EmptyPasswordException();
         }
 
         byte [] result = new byte [0];

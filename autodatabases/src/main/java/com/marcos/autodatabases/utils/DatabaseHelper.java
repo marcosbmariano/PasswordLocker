@@ -89,7 +89,7 @@ public class DatabaseHelper {
         }
     }
 
-    public SQLiteDatabase getReadable() { //TODO package local?
+    private SQLiteDatabase getReadable() { //TODO package local?
         return mHelper.getReadableDatabase();
     }
 

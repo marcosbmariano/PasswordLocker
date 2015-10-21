@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 
 import com.example.mark.passwordlocker.MyPreferencesActivityInstrumentationTest;

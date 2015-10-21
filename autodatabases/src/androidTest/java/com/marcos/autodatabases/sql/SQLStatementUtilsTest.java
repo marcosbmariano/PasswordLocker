@@ -1,7 +1,7 @@
 package com.marcos.autodatabases.sql;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
+
 
 /**
  * Created by mark on 4/24/15.
@@ -27,6 +27,7 @@ public class SQLStatementUtilsTest extends AndroidTestCase {
     public void testSetupValueForStatementBoolean(){
         boolean test = true;
         String expected = "1";
+        //noinspection ConstantConditions
         String result = SQLStatementUtils.setupValueForStatement(test);
         assertTrue(expected.equals(result));
     }
@@ -48,6 +49,7 @@ public class SQLStatementUtilsTest extends AndroidTestCase {
     public void testSetupValueForStatementNullObject(){
         String test = null;
         String expected = "null";
+        //noinspection ConstantConditions
         String result = SQLStatementUtils.setupValueForStatement(test);
         assertTrue(expected.equals(result));
     }

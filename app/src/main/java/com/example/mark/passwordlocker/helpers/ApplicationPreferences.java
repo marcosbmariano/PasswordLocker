@@ -64,7 +64,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     public boolean isNotificationDisplayable(){
         String key = getResourceString(R.string.pref_show_notification_key);
-        return Boolean.valueOf(getSharedPreferences().getBoolean(key, false));
+        return getSharedPreferences().getBoolean(key, false);
     }
 
     public int getClipBoardSeconds(){
@@ -133,7 +133,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
         mDisplayNotificationListener = listener;
     }
 
-    public void updateNotificationDisplayListener(){
+    private void updateNotificationDisplayListener(){
         mDisplayNotificationListener.updateIsToShowNotification(isNotificationDisplayable());
     }
 
@@ -141,7 +141,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
         void updateIsToShowNotification(boolean showNotification);
     }
 
-    public interface PreferencesSecondsToLockObserver {
+    public interface PreferencesSecondsToLockObserver { //todo check this
         void updateSeconds(int seconds);
     }
 }

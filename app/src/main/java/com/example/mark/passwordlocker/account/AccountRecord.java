@@ -31,20 +31,20 @@ import javax.crypto.BadPaddingException;
 public final class AccountRecord extends Model {
 
     private AccountSensitiveData mAccountSensitiveData;
-    private static HashSet<DatabaseObserver> mObservers = new HashSet<>();
+    private static final HashSet<DatabaseObserver> mObservers = new HashSet<>();
     private static DatabaseKey mDatabaseKey;
 
     @Column(name = "ciphedPassword", notNull = true)
-    private String mCiphedPassword;
+    private String mCipherPassword;
 
     @Column(name= "ciphedAccount", notNull = true)
-    private String mCiphedAccount;
+    private String mCipherAccount;
 
     @Column(name = "ciphedSalt", notNull = true)
-    private String mCiphedSalt;
+    private String mCipherSalt;
 
     @Column(name = "chipedIv", notNull = true)
-    private String mCiphedIv;
+    private String mCipherIv;
 
     private String mTempAccount;
     private byte [] mTempIv;
@@ -79,7 +79,7 @@ public final class AccountRecord extends Model {
     }
 
 
-    //TODO implement DelleteAllAcounts, even if its locked, so user can delete all of
+    //TODO implement DeleteAllAcounts, even if its locked, so user can delete all of
     //its accounts remotely
     public static void deleteAllAccounts(){ //TODO implement this on Model class
         List<AccountRecord> accountsList = getAllAccounts();
@@ -89,36 +89,9 @@ public final class AccountRecord extends Model {
         }
     }
 
-//    public void save(){
-//
-//        byte [] iv = PasswordCipher.generateRandomIv();
-//        byte [] salt = PasswordCipher.generateRandomSalt();
-//
-//        // encrypt the account using a randomly created iv and salt
-//        mCiphedAccount = encrypt( mAccountSensitiveData.getAccount(), salt,
-//                getDatabaseKey().getKey(), iv);
-//        mCiphedPassword = encrypt( mAccountSensitiveData.getPassword(), salt,
-//                getDatabaseKey().getKey() , iv);
-//
-//        //encrypt the salt and iv used using the application password,
-//        // key and iv through databaseKey
-//        mCiphedSalt = encryptMetaData(salt);
-//        mCiphedIv = encryptMetaData(iv);
-//
-//        super.save();
-//        isOnDatabase = true;
-//        notifyObservers();
-//    }
-
     boolean isAccountOnDatabase(){
         return isOnDatabase;
     }
-
-//    //this is used to encrypt the salt and Iv that are unique for each account
-//    String encryptMetaData( byte [] data){
-//        return encrypt(data, getDatabaseKey().getSalt(),
-//                getDatabaseKey().getKey(), getDatabaseKey().getIv());
-//    }
 
     private DatabaseKey getDatabaseKey(){
         if ( null == mDatabaseKey){
@@ -139,10 +112,10 @@ public final class AccountRecord extends Model {
 
     private void cleanRecord(){
         mAccountSensitiveData = null;
-        mCiphedPassword = null;
-        mCiphedAccount = null;
-        mCiphedSalt = null;
-        mCiphedIv = null;
+        mCipherPassword = null;
+        mCipherAccount = null;
+        mCipherSalt = null;
+        mCipherIv = null;
         mTempAccount = null;
         mTempIv = null;
         mTempSalt = null;
@@ -154,20 +127,17 @@ public final class AccountRecord extends Model {
         notifyObservers();
     }
 
-
-
     private static void notifyObservers(){
         for ( DatabaseObserver list : mObservers){
             list.notifyDataChanged();
         }
     }
 
-
     public String getAccountPassword(){
         thrownExceptionIfLocked();
 
         if (isAccountOnDatabase() ) {
-            return getDecryptedValueAsString(mCiphedPassword,
+            return getDecryptedValueAsString(mCipherPassword,
                     getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
         }
         return "";
@@ -178,7 +148,7 @@ public final class AccountRecord extends Model {
 
         if ( isAccountOnDatabase() ){
             if ( null == mTempAccount){
-                mTempAccount = getDecryptedValueAsString(mCiphedAccount,
+                mTempAccount = getDecryptedValueAsString(mCipherAccount,
                         getAccountSalt(), getDatabaseKey().getKey(), getAccountIv());
             }
             return mTempAccount;
@@ -203,15 +173,15 @@ public final class AccountRecord extends Model {
         byte [] salt = PasswordCipher.generateRandomSalt();
 
         // encrypt the account using a randomly created iv and salt
-        mCiphedAccount = encrypt( mAccountSensitiveData.getAccount(), salt,
+        mCipherAccount = encrypt( mAccountSensitiveData.getAccount(), salt,
                 getDatabaseKey().getKey(), iv);
-        mCiphedPassword = encrypt( mAccountSensitiveData.getPassword(), salt,
+        mCipherPassword = encrypt( mAccountSensitiveData.getPassword(), salt,
                 getDatabaseKey().getKey() , iv);
 
         //encrypt the salt and iv used using the application password,
         // key and iv through databaseKey
-        mCiphedSalt = encryptMetaData(salt);
-        mCiphedIv = encryptMetaData(iv);
+        mCipherSalt = encryptMetaData(salt);
+        mCipherIv = encryptMetaData(iv);
 
         super.save();
         isOnDatabase = true;
@@ -256,9 +226,9 @@ public final class AccountRecord extends Model {
         try {
             result = PasswordCipher.decryptWithSalt(data, salt, key, iv);
         } catch (InvalidKeyException e) {
-            Log.e("AccountRecord","In getDrecyptedValue(), Invalid key " + e.toString());
+            Log.e("AccountRecord","In getDecryptedValue(), Invalid key " + e.toString());
         } catch (BadPaddingException e) {
-            Log.e("AccountRecord","In getDrecyptedValue(), Invalid key " + e.toString());
+            Log.e("AccountRecord","In getDecryptedValue(), Invalid key " + e.toString());
         }
 
         return result;
@@ -290,7 +260,7 @@ public final class AccountRecord extends Model {
         throwExceptionIfNotOnDatabase();
 
         if ( null == mTempIv){
-            mTempIv = geDecryptedtMetadata(mCiphedIv);
+            mTempIv = getDecryptedMetadata(mCipherIv);
         }
         return mTempIv;
     }
@@ -300,7 +270,7 @@ public final class AccountRecord extends Model {
         throwExceptionIfNotOnDatabase();
 
         if ( null == mTempSalt){
-            mTempSalt = geDecryptedtMetadata(mCiphedSalt);
+            mTempSalt = getDecryptedMetadata(mCipherSalt);
         }
         return mTempSalt;
     }
@@ -312,8 +282,8 @@ public final class AccountRecord extends Model {
         }
     }
 
-    byte [] geDecryptedtMetadata(String ciphedValue){
-        return getDecryptedValue(ciphedValue,
+    byte [] getDecryptedMetadata(String cipherValue){
+        return getDecryptedValue(cipherValue,
                 getDatabaseKey().getSalt(), getDatabaseKey().getKey(), getDatabaseKey().getIv());
     }
 

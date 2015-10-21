@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class Delete {
 
-    private SQLDeleteCommand mSQLDeleteCommand;
+    private final SQLDeleteCommand mSQLDeleteCommand;
 
     private Delete() {
         mSQLDeleteCommand = new SQLDeleteCommand();

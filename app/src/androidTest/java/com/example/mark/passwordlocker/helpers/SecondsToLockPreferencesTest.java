@@ -28,7 +28,7 @@ public class SecondsToLockPreferencesTest extends MyPreferencesActivityInstrumen
     private PreferenceFragment mFragment;
     private SharedPreferences mSharedPreferences;
     private ApplicationPreferences mAppPreferences;
-    CharSequence [] mEntryValues;
+    private CharSequence [] mEntryValues;
 
 
 
@@ -42,7 +42,7 @@ public class SecondsToLockPreferencesTest extends MyPreferencesActivityInstrumen
         mAppState.isPasswordValid(ApplicationPasswordTest.PASSWORD);
         mAppPassword = ApplicationPassword.getInstance();
         mFragment = mActivity.getFragment();
-        mSecondsToLock = getListPreference(R.string.pref_time_to_lock_key);
+        mSecondsToLock = getListPreference();
         mEntryValues = mSecondsToLock.getEntryValues();
     }
 
@@ -159,9 +159,9 @@ public class SecondsToLockPreferencesTest extends MyPreferencesActivityInstrumen
                 mSecondsToLock.getKey());
     }
 
-    private ListPreference getListPreference(int resource){
+    private ListPreference getListPreference(){
         return (ListPreference)mFragment
-                .findPreference(getResourceString(resource));
+                .findPreference(getResourceString(R.string.pref_time_to_lock_key));
     }
 
     private String getResourceString( int rStringId){

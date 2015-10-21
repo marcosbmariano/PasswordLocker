@@ -2,20 +2,19 @@ package com.marcos.autodatabases.sql;
 
 import android.test.AndroidTestCase;
 import android.util.Log;
-
-import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.SQLConstants;
 
 /**
  * Created by mark on 4/28/15.
  */
 public class SQLSelectStatementTest extends AndroidTestCase {
-    private String tableName = "myTable";
+
     private SQLSelectStatement mSelectStatement;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        String tableName = "myTable";
         mSelectStatement = new SQLSelectStatement();
         mSelectStatement.setTableName(tableName);
     }

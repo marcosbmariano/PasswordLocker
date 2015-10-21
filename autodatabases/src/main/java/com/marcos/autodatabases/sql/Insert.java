@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
  */
 public class Insert {
 
-    private SQLInsertCommand mSQLInsert;
+    private final SQLInsertCommand mSQLInsert;
 
     private Insert() {
         mSQLInsert = new SQLInsertCommand();

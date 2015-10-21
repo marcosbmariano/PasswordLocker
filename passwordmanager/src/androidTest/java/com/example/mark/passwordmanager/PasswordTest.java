@@ -15,11 +15,11 @@ import static com.example.mark.passwordmanager.meter.PasswordMeter.PasswordStren
 public class PasswordTest extends AndroidTestCase
         implements PasswordMeter.PasswordMeterListener, PasswordGenerator.PasswordGeneratorListener{
 
-    PasswordMeter mMeter;
-    PasswordGenerator mGenerator;
-    PasswordMeter.PasswordStrength stCompared;
-    RawData mPassword;
-    int passwordLength;
+    private PasswordMeter mMeter;
+    private PasswordGenerator mGenerator;
+    private PasswordMeter.PasswordStrength stCompared;
+    private RawData mPassword;
+    private int passwordLength;
 
     @Override
     protected void setUp() throws Exception {
@@ -168,7 +168,7 @@ public class PasswordTest extends AndroidTestCase
     }
     @FlakyTest
     public void testStrong3(){
-        mPassword = new RawData("bQg2?vQ2J~".toCharArray());
+        mPassword = new RawData("bQg2?vQ2J~3".toCharArray());
         stCompared = STRONG;
         mMeter.checkPasswordStrength(mPassword);
     }

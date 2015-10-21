@@ -1,3 +1,0 @@
-get the password in byte format form the password field1
-        //check for password strength
-compare to password field 2;

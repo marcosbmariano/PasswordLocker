@@ -10,7 +10,7 @@ public final class RawData {
     public RawData(char[] data){
         this(PasswordUtils.charToBytes(data));
     }
-    public RawData(byte[] data){
+    private RawData(byte[] data){
         try{
             mRawData = data.clone();
         } catch (NullPointerException e){

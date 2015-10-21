@@ -29,37 +29,37 @@ public abstract class ClassSelector<E> {
     protected E getResult(Object obj){
         return selectMethod(getClassName(obj));
     }
-    protected E getResult(byte x){
+    protected E getResult(byte x){ //todo check this argument
         return getByte();
     }
 
     protected E getResult(int x){
         return getInt();
-    }
+    } //todo check this argument
 
     protected E getResult(short x){
         return getShort();
-    }
+    } //todo check this argument
 
     protected E getResult(long x){
         return getLong();
-    }
+    } //todo check this argument
 
     protected E getResult(char x){
         return getChar();
-    }
+    } //todo check this argument
 
     protected E getResult(boolean x){
         return getBoolean();
-    }
+    } //todo check this argument
 
     protected E getResult(double x){
         return getDouble();
-    }
+    } //todo check this argument
 
     protected E getResult(float x){
         return getFloat();
-    }
+    } //todo check this argument
 
     protected String getClassName(Object obj){
         if ( null == obj){

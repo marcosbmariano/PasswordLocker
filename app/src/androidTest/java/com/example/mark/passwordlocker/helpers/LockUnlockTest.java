@@ -71,6 +71,7 @@ public class LockUnlockTest extends PLMainActivityIntrumentationTest {
 
     public void test6ApplicationNotUnlockByPassword3(){
         String password = null;
+        //noinspection ConstantConditions
         assertFalse("mAppState.isPasswordValid", mAppState.isPasswordValid(password));
         assertTrue("mDatabaseKey.isApplicationLocked", mDatabaseKey.isApplicationLocked());
         assertTrue("mAppState.isApplicationLocked", mAppState.isApplicationLocked());

@@ -11,7 +11,7 @@ import java.util.Map;
 class SQLUpdateCommand extends SQLCommandBase {
     private final static String SET = " SET ";
     private final static String UPDATE = "UPDATE ";
-    private SQLWhereHelper mWhereHelper;
+    private final SQLWhereHelper mWhereHelper;
 
 
     SQLUpdateCommand(){
@@ -27,8 +27,8 @@ class SQLUpdateCommand extends SQLCommandBase {
         insertColumnsAndValues(columnName,value);
     }
 
-    String getColumnsAndValuesStatement(){
-        return setupColumnAndValuesforUpdate(getColumnsAndValues());
+    private String getColumnsAndValuesStatement(){
+        return setupColumnAndValuesForUpdate(getColumnsAndValues());
     }
 
     void addMapColumnsAndValues(Map<String, Object> map){
@@ -36,8 +36,8 @@ class SQLUpdateCommand extends SQLCommandBase {
     }
 
 
-    String setupColumnAndValuesforUpdate(Map<String, Object> map){
-        StringBuffer result = new StringBuffer(150);
+    String setupColumnAndValuesForUpdate(Map<String, Object> map){
+        StringBuilder result = new StringBuilder();
         Iterator<String> columns = map.keySet().iterator();
 
         while(columns.hasNext()){

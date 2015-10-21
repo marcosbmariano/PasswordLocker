@@ -10,16 +10,13 @@ import android.util.Log;
  */
 public class CharListTest extends AndroidTestCase {
 
-    CharList list = new CharList(12);
-    int valueOfEmpties;
-    int totalTypes;
-
-
+    private CharList list = new CharList(12);
+    private int valueOfEmpties;
 
 
     public void testTEst(){
         int popTimes = 17;
-        totalTypes = 16;
+        int totalTypes = 16;
         valueOfEmpties = popTimes - totalTypes;
         int manytime = 0;
         for(int i = 0; i < 1000; i++){
@@ -31,7 +28,7 @@ public class CharListTest extends AndroidTestCase {
         Log.e("how many", "times "+ manytime);
     }
 
-    public void goiaba(int [] result){
+    private void goiaba(int [] result){ //TODO change this name
 
             assertEquals("0",4,result[0]);
             assertEquals("1",4,result[1]);
@@ -41,7 +38,7 @@ public class CharListTest extends AndroidTestCase {
     }
 
 
-    public int [] runCode(int popTimes){
+    private int [] runCode(int popTimes){
         int [] array = new int[5];
         for ( int i = 0; i < popTimes; i++){
             int type = list.popType();

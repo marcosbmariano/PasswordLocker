@@ -12,12 +12,11 @@ class CharList {
 
     //TODo implement ITERATOR!!!
     private final int CASE_TYPES = 4;
-    final int [] mArray;
-    //private final int mLength;
+    private final int [] mArray;
     private int mCurrentIndex;
     private int mSize;
 
-    private Random mRandom;
+    private final Random mRandom;
 
 
     CharList(int length){
@@ -33,7 +32,7 @@ class CharList {
         return  mSize;
     }
 
-    int [] fillTypeArray(int size){
+    private int [] fillTypeArray(int size){
         int [] result = new int[CASE_TYPES];
         mCurrentIndex = mRandom.nextInt(CASE_TYPES);
 
@@ -44,7 +43,7 @@ class CharList {
         return result;
     }
 
-    int popType(){
+    int popType(){ //Todo fix this mess
 
         int lastIndex = mCurrentIndex;
         mCurrentIndex = getRandomIndex();
@@ -96,15 +95,20 @@ class CharList {
 
     boolean isLastType(){
         int result = 0;
-        for ( int i = 0; i < mArray.length; i++){
-            if( mArray[i] > 0){
-                result++;
-            }
+//        for ( int i = 0; i < mArray.length; i++){
+//            if( mArray[i] > 0){
+//                result++;
+//            }
+//        }
+
+        for( int value : mArray){
+            if ( value > 0 ) { result++; }
         }
+
         return !(result > 1);
     }
 
-    boolean isTypeEmpty(int type){
+    private boolean isTypeEmpty(int type){
         return mArray[type] <= 0;
     }
 
@@ -118,7 +122,7 @@ class CharList {
         return result;
     }
 
-    int getRandomIndex(){
+    private int getRandomIndex(){
         return mRandom.nextInt(CASE_TYPES);
     }
 
@@ -128,7 +132,7 @@ class CharList {
 
 
     //get next loops infinitely
-    int getNextIndex(){
+    private int getNextIndex(){
         final int LAST_INDEX = 3;
         if ( mCurrentIndex == LAST_INDEX){
             return 0;

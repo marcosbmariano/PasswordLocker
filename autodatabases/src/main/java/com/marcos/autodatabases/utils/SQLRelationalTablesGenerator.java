@@ -12,7 +12,7 @@ import static com.marcos.autodatabases.utils.SQLConstants.*;
 /**
  * Created by mark on 5/1/15.
  */
-public class SQLRelationalTablesGenerator {
+class SQLRelationalTablesGenerator {
     private String mFirstTableName;
     private String mSecondTableName;
     private String mRelationalTableName;
@@ -69,7 +69,7 @@ public class SQLRelationalTablesGenerator {
     private void setForeignKeys(Class<? extends Model> aClass, Field field){
         mFirstForeignKey = aClass.getSimpleName() + ID;
         mSecondForeignKey = ReflectionUtils.getSimpleClassName(
-                ReflectionUtils.getClassNameOfFieldUnderHasmany(field)) + ID;
+                ReflectionUtils.getClassNameOfFieldUnderHasMany(field)) + ID;
     }
 
 

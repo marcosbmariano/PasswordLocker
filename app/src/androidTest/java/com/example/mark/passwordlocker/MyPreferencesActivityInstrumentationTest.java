@@ -9,13 +9,13 @@ import com.example.mark.passwordlocker.activities.MyPreferenceActivity;
  */
 public class MyPreferencesActivityInstrumentationTest extends
         ActivityInstrumentationTestCase2<MyPreferenceActivity> {
-    public static MyPreferenceActivity myPreferenceActivity;
+    private static MyPreferenceActivity myPreferenceActivity;
 
     public MyPreferencesActivityInstrumentationTest(){
         super(MyPreferenceActivity.class);
     }
 
-    public MyPreferenceActivity getMyPreferenceActivity(){
+    protected MyPreferenceActivity getMyPreferenceActivity(){
         if (null == myPreferenceActivity){
             myPreferenceActivity = getActivity();
         }

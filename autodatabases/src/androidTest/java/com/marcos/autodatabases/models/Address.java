@@ -34,7 +34,7 @@ public class Address extends Model {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(@SuppressWarnings("SameParameterValue") int number) {
         this.number = number;
     }
 

@@ -8,7 +8,7 @@ import com.marcos.autodatabases.utils.SQLConstants;
  * Created by marcos on 11/24/14.
  */
 public class Update {
-    private SQLUpdateCommand mSQLUpdateCommand;
+    private final SQLUpdateCommand mSQLUpdateCommand;
 
     Update() {
         mSQLUpdateCommand = new SQLUpdateCommand();

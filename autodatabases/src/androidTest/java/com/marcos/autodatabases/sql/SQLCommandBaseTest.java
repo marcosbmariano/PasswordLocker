@@ -1,8 +1,6 @@
 package com.marcos.autodatabases.sql;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
-
 import java.util.Map;
 
 /**
@@ -36,7 +34,7 @@ public class SQLCommandBaseTest extends AndroidTestCase {
             mForTest.getSQLStatement();
             fail();
         } catch (IllegalStateException e){
-
+            //do nothing
         }
     }
 
@@ -46,7 +44,7 @@ public class SQLCommandBaseTest extends AndroidTestCase {
             mForTest.getSQLStatement();
             fail();
         } catch (IllegalStateException e){
-
+            //do nothing
         }
     }
 

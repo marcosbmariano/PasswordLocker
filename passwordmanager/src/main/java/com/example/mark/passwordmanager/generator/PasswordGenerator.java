@@ -11,10 +11,6 @@ import java.util.Random;
  */
 public class PasswordGenerator   {
 
-    private final int NUMBERS = 0;
-    private final int LOWER = 1;
-    private final int CAPS = 2;
-    private final int SYMBOLS = 3;
     //TODO take care of length thresolds!!!!!
 
     private PasswordGeneratorListener mListener;
@@ -58,6 +54,10 @@ public class PasswordGenerator   {
 
 
     private char getCharacter(int type){
+        final int NUMBERS = 0;
+        final int LOWER = 1;
+        final int CAPS = 2;
+        final int SYMBOLS = 3;
 
         switch (type){
             case NUMBERS:
@@ -102,7 +102,7 @@ public class PasswordGenerator   {
 
 
 
-    class PasswordGeneratorTask extends AsyncTask<Integer, Void, RawData> {
+    private class PasswordGeneratorTask extends AsyncTask<Integer, Void, RawData> {
 
         @Override
         protected RawData doInBackground(Integer... params) {

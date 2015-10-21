@@ -15,8 +15,8 @@ import com.example.mark.passwordmanager.RawData;
 public class PasswordGeneratorTest extends AndroidTestCase implements
         PasswordGenerator.PasswordGeneratorListener {
 
-    PasswordGenerator gen = new PasswordGenerator(this);
-    int actualPasswordLength;
+    private final PasswordGenerator gen = new PasswordGenerator(this);
+    private int actualPasswordLength;
 
     public void testPasswordLength1(){
          actualPasswordLength = 8;

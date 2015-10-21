@@ -9,8 +9,8 @@ import java.util.Arrays;
  * Created by mark on 3/6/15.
  */
 public class PasswordRawTest extends AndroidTestCase {
-    final char [] pass = {'0','1','2','3','4','5','6','7'};
-    RawData password = new RawData(pass);
+    private final char [] pass = {'0','1','2','3','4','5','6','7'};
+    private RawData password = new RawData(pass);
 
 
     public void testSecurity1(){

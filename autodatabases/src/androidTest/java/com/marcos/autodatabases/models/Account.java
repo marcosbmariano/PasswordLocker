@@ -48,7 +48,4 @@ public class Account extends Model{
         return name;
     }
 
-    public String getLastName(){
-        return lastName;
-    }
 }

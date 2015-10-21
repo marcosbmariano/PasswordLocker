@@ -13,20 +13,20 @@ import com.example.mark.passwordlocker.helpers.ApplicationState;
  * Created by mark on 7/20/15.
  */
 public class ScreenLockBroadReceiver extends BroadcastReceiver {
-    private ApplicationState mApplicationState;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        mApplicationState = ApplicationState.getInstance();
+        ApplicationState applicationState = ApplicationState.getInstance();
 
         if ( intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
-            mApplicationState.lockApplication();
+            applicationState.lockApplication();
             Log.e("inside BroadReceiver", "lockApp");
 
         }else if ( intent.getAction().equals(Intent.ACTION_SCREEN_ON)  ){
             if (ApplicationPreferences.getInstance().isToUnlockApplicationOnScreenOn()) {
-                mApplicationState.unlockApplication();
+                applicationState.unlockApplication();
                 Log.e("inside BroadReceiver", "unlockApp");
             }
         }

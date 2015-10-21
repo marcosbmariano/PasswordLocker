@@ -1,18 +1,15 @@
 package com.marcos.autodatabases.utils;
 
 
-import android.util.Log;
 
 import com.marcos.autodatabases.models.Model;
-
-import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Field;
-import java.util.List;
+
 
 /**
  * Created by marcos on 11/13/14.
  */
-// Noninstantiable utility class
+// Non instantiable utility class
  class ReflectionUtils {
 
     private ReflectionUtils(){
@@ -31,7 +28,7 @@ import java.util.List;
         return aClass;
     }
 
-    public static String getClassNameOfFieldUnderHasmany(Field field) {
+    public static String getClassNameOfFieldUnderHasMany(Field field) {
 
         if ( isFieldRightType(field) ){
             return getClassNameFromField(field);

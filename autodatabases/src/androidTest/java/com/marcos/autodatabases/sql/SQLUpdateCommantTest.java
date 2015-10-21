@@ -1,12 +1,7 @@
 package com.marcos.autodatabases.sql;
 
 import android.test.AndroidTestCase;
-import android.util.Log;
-
-import com.marcos.autodatabases.models.Model;
 import com.marcos.autodatabases.utils.SQLConstants;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,7 +9,7 @@ import java.util.Map;
  * Created by mark on 4/27/15.
  */
 public class SQLUpdateCommantTest extends AndroidTestCase {
-    private String mTableName = "myTable";
+    private final String mTableName = "myTable";
     private SQLUpdateCommand mUpdate;
 
     @Override
@@ -29,7 +24,7 @@ public class SQLUpdateCommantTest extends AndroidTestCase {
         values.put("Age", 23);
         values.put("Weight", 174.3);
         String expected = "name = 'Maria', Age = 23, Weight = 174.3";
-        assertTrue(expected.equals(mUpdate.setupColumnAndValuesforUpdate(values)));
+        assertTrue(expected.equals(mUpdate.setupColumnAndValuesForUpdate(values)));
     }
 
     public void test1(){

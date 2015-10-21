@@ -8,8 +8,8 @@ import java.util.List;
  * Created by mark on 4/27/15.
  */
 class SQLInsertCommand extends SQLCommandBase {
-    private String INSERT_INTO = "INSERT INTO ";
-    private static String VALUES = "VALUES";
+    private final static String INSERT_INTO = "INSERT INTO ";
+    private final static String VALUES = "VALUES";
 
     SQLInsertCommand(){
         appendToStatement(INSERT_INTO);
@@ -20,7 +20,7 @@ class SQLInsertCommand extends SQLCommandBase {
         insertColumnsAndValues(column, value);
     }
 
-    String getColumnAndValuesForInsert(){
+    private String getColumnAndValuesForInsert(){
         StringBuilder result= new StringBuilder(150);
         result.append(getColumnsAsString());
         result.append(VALUES);
@@ -31,7 +31,7 @@ class SQLInsertCommand extends SQLCommandBase {
     private String getColumnsAsString(){
         String columnsList = getColumns().toString();
         int length = columnsList.length();
-        return insertBetweenParentheses( columnsList.toString().substring(1, length -1) );
+        return insertBetweenParentheses( columnsList.substring(1, length -1) );
     }
 
 
@@ -51,7 +51,7 @@ class SQLInsertCommand extends SQLCommandBase {
     }
 
     private String insertBetweenParentheses(String text){
-        return " ( " + text.toString() + " ) ";
+        return " ( " + text + " ) ";
     }
 
     @Override

@@ -33,7 +33,7 @@ public class SQLiteUtils {
     }
 
     public static String getTableNameFromHasManyField(Field field) {
-        String className = ReflectionUtils.getClassNameOfFieldUnderHasmany(field);
+        String className = ReflectionUtils.getClassNameOfFieldUnderHasMany(field);
         Class<? extends Model> aClass = ReflectionUtils.getModelClassFromClassName(className);
 
         return getTableNameFromClass(aClass);
@@ -63,7 +63,7 @@ public class SQLiteUtils {
                 String relationalTable = getTableNameFromClass(aClass)
                         + getTableNameFromHasManyField(field);
 
-                String className = ReflectionUtils.getClassNameOfFieldUnderHasmany(field);
+                String className = ReflectionUtils.getClassNameOfFieldUnderHasMany(field);
 
                 Class<? extends Model> modelClass =
                         ReflectionUtils.getModelClassFromClassName(className);

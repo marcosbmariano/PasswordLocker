@@ -17,7 +17,7 @@ public class User extends Model {
 
 
     public User(){
-        //All the Model subclasses must have a zero argument constructor or default contructor
+        //All the Model subclasses must have a zero argument constructor or default constructor
     }
 
     @Column(name = "Number")
@@ -56,7 +56,7 @@ public class User extends Model {
 
     public List<Costumer> getCostumersChildren(){
         List<Model> list = this.getChildren(Costumer.class);
-        List<Costumer> costumersList = new ArrayList<Costumer>();
+        List<Costumer> costumersList = new ArrayList<>();
         costumersList.addAll((List<Costumer>)(List<?>) list);
 
         return costumersList;
@@ -66,22 +66,8 @@ public class User extends Model {
         super.save();
     }
 
-
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public List<Costumer> getCostumers() {
-        return costumers;
-    }
-
-    public void setCostumers(List<Costumer> costumers) {
-        this.costumers = costumers;
     }
 
     public short getmShort() {
@@ -98,10 +84,6 @@ public class User extends Model {
 
     public void setmByte(byte mByte) {
         this.mByte = mByte;
-    }
-
-    public long getmLong() {
-        return mLong;
     }
 
     public void setmLong(long mLong) {

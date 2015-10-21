@@ -16,8 +16,7 @@ import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 public class NotificationIconManager implements
         ApplicationPreferences.PreferencesNotificationDisplayListener{
     private static Context mContext;
-    private static ApplicationPreferences mAppPreferences;
-    private int mId = 76597607;
+    private final int mId = 76597607;
     private static NotificationManager mNotificationManager;
     private static Notification mNotification;
 
@@ -35,14 +34,15 @@ public class NotificationIconManager implements
         }
 
         mNotificationManager = getmNotificationManager();
-        mAppPreferences = ApplicationPreferences.getInstance();
-        mAppPreferences.addPreferencesNotificationDisplayListener(this);
+        //mAppPreferences = ApplicationPreferences.getInstance();
+        ApplicationPreferences.addPreferencesNotificationDisplayListener(this);
         ifDisplayableBuildNotification();
     }
 
 
     private void ifDisplayableBuildNotification(){
-        if (mAppPreferences.isNotificationDisplayable()){
+
+        if (ApplicationPreferences.getInstance().isNotificationDisplayable()){
             displayShorcut();
         }
     }

@@ -72,7 +72,9 @@ public class ModelTest extends AndroidTestCase {
         User user2 = (User)Model.getModel(User.class, user.getId());
         User user3 = null;
 
+        //noinspection ConstantConditions
         assertFalse(user.equals(user3));
+        //noinspection EqualsWithItself
         assertTrue(user.equals(user));
         assertTrue(user.equals(user1));
         assertTrue(user1.equals(user));

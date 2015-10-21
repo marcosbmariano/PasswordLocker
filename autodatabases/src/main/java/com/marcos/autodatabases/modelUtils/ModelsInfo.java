@@ -15,7 +15,7 @@ public class ModelsInfo {
     private static ModelsInfo instance = null;
     private static List<ModelInfo> mModelsInfo;
     private static List<Class<? extends Model>> classList;
-    private HashMap<String, Class<? extends Model>> mAllRelationalTables;
+    private final HashMap<String, Class<? extends Model>> mAllRelationalTables;
 
     private ModelsInfo() {
         classList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class ModelsInfo {
     }
 
     public List<String> getSchemas() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         List<ModelInfo> modelsList = getModelsInfo();
         for (ModelInfo models : modelsList) {
             list.addAll(models.getSchemas());

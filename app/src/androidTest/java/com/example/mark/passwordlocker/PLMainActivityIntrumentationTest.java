@@ -18,7 +18,7 @@ public class PLMainActivityIntrumentationTest extends
 
     }
 
-    public PLMainActivity getMainActivity(){
+    protected PLMainActivity getMainActivity(){
         if ( null == mainActivity){
             mainActivity = getActivity();
         }

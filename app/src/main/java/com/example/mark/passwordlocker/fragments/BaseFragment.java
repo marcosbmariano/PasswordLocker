@@ -12,7 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 public class BaseFragment extends Fragment {
 
 
-    public void hideActionBar(boolean hide){
+    void hideActionBar(boolean hide){
 
         ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 /**
@@ -35,10 +34,8 @@ public class ExpandableView extends RelativeLayout implements View.OnClickListen
         setupViews(v);
         setAttributes(context,attr);
         toggleText();
-
-
-
     }
+
 
     private void setAttributes(Context context, AttributeSet attr){
         String text, label;
@@ -54,8 +51,6 @@ public class ExpandableView extends RelativeLayout implements View.OnClickListen
         } finally {
             a.recycle();
         }
-
-
     }
 
     private void setupViews(View v){
@@ -67,26 +62,19 @@ public class ExpandableView extends RelativeLayout implements View.OnClickListen
     }
 
 
-
-
-
-    @Override
-    public boolean isInEditMode() {
-        return super.isInEditMode();
-    }
-
     @Override
     public void onClick(View v) {
         toggleText();
     }
 
-    public void toggleText(){
+    private void toggleText(){
         if (mHideText){
-            mHideText = !mHideText;
+            mHideText = false;//!mHideText;
             mText.setVisibility(GONE);
             mIcon.setImageResource(R.drawable.ic_closed1);
         }else{
-            mHideText = !mHideText;
+
+            mHideText = true;//!mHideText;
             mText.setVisibility(VISIBLE);
             mIcon.setImageResource(R.drawable.ic_open);
 

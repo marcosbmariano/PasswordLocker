@@ -7,14 +7,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.marcos.autodatabases.utils.SQLConstants.CREATE_TABLE;
 import static com.marcos.autodatabases.utils.SQLConstants.PRIMARY_KEY;
 
 
 /**
  * Created by mark on 5/1/15.
  */
-public class SQLColumnsGenerator {
+class SQLColumnsGenerator {
 
     private SQLColumnsGenerator(){}
 

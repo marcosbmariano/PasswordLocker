@@ -35,7 +35,6 @@ import com.marcos.autodatabases.utils.DatabaseHelper;
 public class PLMainActivity extends ActionBarActivity  implements AccountsAdapter.AccountsAdapterUpdate,
         MyService.ServiceCallBack{
 
-    private DatabaseHelper mDataHelper = null;
     private ApplicationPassword mApplicationPassword;
     private ApplicationState mApplicationState;
     private MyService mService;
@@ -69,6 +68,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     }
 
     private void setupDatabase(){
+        DatabaseHelper mDataHelper; //TODO check if those methods should not be static
         mDataHelper = DatabaseHelper.getInstance();
         mDataHelper.addModel(AccountRecord.class);
         mDataHelper.createDatabase();
@@ -108,14 +108,14 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         if (isApplicationPasswordDefined()){
             if (mApplicationState.isApplicationLocked()){
 
-                swapFragment(R.id.MainFragContainer, getAppPassEnterFrag());
+                swapFragment( getAppPassEnterFrag());
             }else{
-                swapFragment(R.id.MainFragContainer, getRecyclerViewFragment());
+                swapFragment( getRecyclerViewFragment());
             }
 
         }else{
             hideActionBar();
-            swapFragment(R.id.MainFragContainer, new NewUserPassFrag());
+            swapFragment( new NewUserPassFrag());
         }
     }
 
@@ -133,14 +133,15 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         return mRecyclerViewFragment;
     }
 
-    boolean isApplicationPasswordDefined(){
+    private boolean isApplicationPasswordDefined(){
         if ( null == mApplicationPassword){
             mApplicationPassword = ApplicationPassword.getInstance();
         }
         return mApplicationPassword.isPasswordDefined();
     }
 
-    private void swapFragment(int container, Fragment fragment){
+    private void swapFragment(Fragment fragment){
+        int container = R.id.MainFragContainer;
         getSupportFragmentManager().beginTransaction()
                 .replace(container, fragment, fragment.getClass().getSimpleName())
                 .commit();
@@ -167,13 +168,13 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     MyService.MyBinder binder = (MyService.MyBinder) service;
                     mService = binder.getService();
-                    MyService.addObserver(PLMainActivity.this);
+                    MyService.addObserver(PLMainActivity.this); //TODO why this is static?
                     mIsServiceBound = true;
                 }
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
                     mIsServiceBound = false;
-                    mService.deleteObsever(PLMainActivity.this);
+                    MyService.deleteObsever(PLMainActivity.this); //TODO why this is static?
                 }
             };
         }

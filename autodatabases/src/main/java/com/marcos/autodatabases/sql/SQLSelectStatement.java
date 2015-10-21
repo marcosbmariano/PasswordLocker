@@ -4,10 +4,10 @@ package com.marcos.autodatabases.sql;
  * Created by mark on 4/28/15.
  */
 class SQLSelectStatement extends SQLCommandBase {
-    private static String SELECT = "SELECT ";
-    private static String FROM = " FROM ";
-    private static String BETWEEN_SELECT_AND_FROM = "*";
-    private SQLWhereHelper mWhereHelper;
+    private final static String SELECT = "SELECT ";
+    private final static String FROM = " FROM ";
+    private String BETWEEN_SELECT_AND_FROM = "*";
+    private final SQLWhereHelper mWhereHelper;
 
     SQLSelectStatement(){
         appendToStatement(SELECT);

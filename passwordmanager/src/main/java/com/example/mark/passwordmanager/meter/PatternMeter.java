@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
  */
 abstract class PatternMeter {
 
-    Pattern pattern;
-    RawData password;
+    private Pattern pattern;
+    private RawData password; //todo check if it is never assigned
 
     PatternMeter(){
 
@@ -21,6 +21,10 @@ abstract class PatternMeter {
 
     final void setPattern(Pattern pattern){
         this.pattern = pattern;
+    }
+
+    final void setPassword(RawData password){
+        this.password = password;
     }
 
 
@@ -42,8 +46,8 @@ abstract class PatternMeter {
     }
 
     private int patternPercentage(int occur, int length){
-        int perc = ( (100 * occur) / length );
-        return  perc;
+        //int perc = ( (100 * occur) / length );
+        return  ( (100 * occur) / length );
     }
 
     private int calculatePatternStrength(int percentage){

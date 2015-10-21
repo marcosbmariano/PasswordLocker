@@ -50,7 +50,7 @@ public class PasswordUtils {
     }
 
 
-
+    //TODO check if this is better
 //    public static String asHex(byte buf[]) {
 //        StringBuffer strbuf = new StringBuffer(buf.length * 2);
 //        int i;

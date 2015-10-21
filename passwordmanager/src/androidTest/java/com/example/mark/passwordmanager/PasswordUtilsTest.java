@@ -8,9 +8,9 @@ import java.util.Arrays;
  * Created by mark on 3/12/15.
  */
 public class PasswordUtilsTest extends AndroidTestCase {
-    char [] charArray = {'ￏ', '6', 'ﾫ',  '{', 'ￗ', 'd', 'ﾃ',' ', 'ﾡ', '￞', 's','ﾓ', 'z', '￞', 'g', 'a', 'ﾹ', '.',
+    private final char [] charArray = {'ￏ', '6', 'ﾫ',  '{', 'ￗ', 'd', 'ﾃ',' ', 'ﾡ', '￞', 's','ﾓ', 'z', '￞', 'g', 'a', 'ﾹ', '.',
      '￾', '�', 'c', 'ﾎ', '.', '￠', 'j', 'y',  '￞', '￀', 'H', '['};
-    byte [] bytesArray = {-49, 54, -85, 0, 123, -41, 100, -125, 7, -95, -34, 115, -109, 122, -34, 103, 97, -71,
+    private final byte [] bytesArray = {-49, 54, -85, 0, 123, -41, 100, -125, 7, -95, -34, 115, -109, 122, -34, 103, 97, -71,
             46, -2, -3, 99, -114, 46, -32, 106, 121, 92, -34, -64, 72, 91 };
 
     public void testCharToBytesToChar(){
