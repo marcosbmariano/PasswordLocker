@@ -1,10 +1,12 @@
 package com.example.mark.passwordlocker.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,12 +26,12 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-
         View v = inflater.inflate(R.layout.app_enter_pass_frag, container, false);
 
         setupWidgtes(v);
-        hideActionBar(true);
+        setAppBarVisibible(false);
+        setFloatingButtonVisible(false);
+
         return v;
     }
 
@@ -38,6 +40,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         mBtnShowHint.setVisibility(View.GONE);
         mBtnShowHint.setOnClickListener(this);
         mPassword = (EditText)v.findViewById(R.id.et_app_enter_pass_pass);
+
         v.findViewById(R.id.bt_app_enter_pass_enter).setOnClickListener(this);
     }
 
@@ -57,11 +60,19 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
                 break;
 
             default:
+                //do nothing
         }
+    }
+
+    private void hideSoftKeyBoard(){
+        InputMethodManager manager =
+                (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
     }
 
     private void checkPassword(){
         if ( isPasswordValid() ){
+            hideSoftKeyBoard();
             changeFragment();
 
         }else{

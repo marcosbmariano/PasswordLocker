@@ -35,12 +35,5 @@ public class Costumer extends Model {
     }
 
 
-//    public List<Address> getAdress() {
-//        return adress;
-//    }
-
-//    public void setAdress(List<Address> adress) {
-//        this.adress = adress;
-//    }
 
 }

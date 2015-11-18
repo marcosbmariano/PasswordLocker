@@ -1,5 +1,6 @@
 package com.example.mark.passwordlocker.fragments;
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,8 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.adapters.AccountsAdapter;
+
 
 
 /**
@@ -23,9 +27,15 @@ public class RecyclerViewFragment extends BaseFragment {
                             ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.recycler_view_layout, container, false);
-        hideActionBar(false);
+        setAppBarVisibible(true);
+        setFloatingButtonVisible(true);
         setupViews(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void setupViews(View v){

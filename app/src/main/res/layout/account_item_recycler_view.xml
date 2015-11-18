@@ -12,54 +12,55 @@
     card_view:cardElevation="8dp">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="start">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
+            android:text="Account"
             android:id="@+id/tvAccount"
-            android:layout_alignBottom="@+id/imBtnCopyClipboardPassword"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="25dp" />
+            android:layout_alignParentStart="true" />
 
-        <ImageButton
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:src="@drawable/ic_add"
-            android:id="@+id/imBtnCopyClipboardPassword"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentTop="true"
+            android:text="password"
+            android:id="@+id/tvPassword"
+            android:layout_gravity="center"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
+            android:layout_alignTop="@+id/tvAccount"
             android:layout_toLeftOf="@+id/imBtnViewPassword"
-            android:layout_toStartOf="@+id/imBtnViewPassword"
-            android:layout_marginRight="19dp"
-            android:layout_marginEnd="19dp" />
+            android:layout_toStartOf="@+id/imBtnViewPassword" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:src="@drawable/ic_add"
+            android:background="@mipmap/ic_view_password"
             android:id="@+id/imBtnViewPassword"
-            android:layout_gravity="right"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imBtnCopyClipboardPassword"
+            android:layout_toStartOf="@+id/imBtnCopyClipboardPassword" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:background="@mipmap/ic_clipboard"
+            android:id="@+id/imBtnCopyClipboardPassword"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="29dp"
-            android:layout_marginEnd="29dp" />
+            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tvPassword"
-            android:layout_below="@+id/imBtnCopyClipboardPassword"
-            android:layout_alignRight="@+id/imBtnCopyClipboardPassword"
-            android:layout_alignEnd="@+id/imBtnCopyClipboardPassword"
-            android:layout_marginRight="54dp"
-            android:layout_marginEnd="54dp" />
 
     </RelativeLayout>
 

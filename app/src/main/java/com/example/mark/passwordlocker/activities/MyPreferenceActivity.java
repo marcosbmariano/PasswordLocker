@@ -3,6 +3,8 @@ package com.example.mark.passwordlocker.activities;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
@@ -11,27 +13,41 @@ import com.example.mark.passwordlocker.services.MyService;
 
 
 
-public class MyPreferenceActivity extends PreferenceActivity
+public class MyPreferenceActivity extends AppCompatActivity
         implements MyService.ServiceCallBack, ApplicationState.ApplicationStateObserver{
+
     private boolean mIsActivityVisible = false;
     private Prefs1Fragment mFragment;
+    private Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIsActivityVisible = true;
-        MyService.addObserver(this);
         setContentView(R.layout.preferences_layout);
 
+        addToObervers();
+        setupToolBar();
+        setupFragments();
+
+    }
+
+    private void addToObervers(){
+        MyService.addObserver(this);
+        ApplicationState.addObserver(this);
+
+    }
+
+    private void setupFragments(){
         mFragment = getFragment();
         getFragmentManager().beginTransaction()
                 .replace(R.id.preference_container, mFragment,
                         Prefs1Fragment.class.getName())
                 .commit();
-
-        ApplicationState.addObserver(this);
-
     }
+
+
+
 //
 //    @Override
 //    public void onBuildHeaders(List<Header> target) {
@@ -42,6 +58,13 @@ public class MyPreferenceActivity extends PreferenceActivity
 //    protected boolean isValidFragment(String fragmentName) {
 //        return Prefs1Fragment.class.getName().equals(fragmentName);
 //    }
+
+    private void setupToolBar(){
+        mToolBar = (Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
 
     public Prefs1Fragment getFragment(){
         if ( null == mFragment){
@@ -104,7 +127,6 @@ public class MyPreferenceActivity extends PreferenceActivity
         public void onPause() {
             getPreferenceManager().getSharedPreferences()
                     .unregisterOnSharedPreferenceChangeListener(ApplicationPreferences.getInstance());
-
             super.onPause();
         }
     }
@@ -112,7 +134,6 @@ public class MyPreferenceActivity extends PreferenceActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_preferences, menu);
         return true;
     }

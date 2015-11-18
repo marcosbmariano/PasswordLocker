@@ -7,16 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
 import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
-import com.example.mark.passwordlocker.account.AccountSensitiveData;
 import com.example.mark.passwordlocker.adapters.AccountsAdapter;
 import com.example.mark.passwordlocker.alerts.NewAccountDialog;
 import com.example.mark.passwordlocker.fragments.NewUserPassFrag;
@@ -28,13 +30,14 @@ import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordlocker.notifications.NotificationIconManager;
 import com.example.mark.passwordlocker.services.MyService;
-import com.example.mark.passwordmanager.RawData;
 import com.marcos.autodatabases.utils.DatabaseHelper;
 
 
-public class PLMainActivity extends ActionBarActivity  implements AccountsAdapter.AccountsAdapterUpdate,
+public class PLMainActivity extends AppCompatActivity implements AccountsAdapter.AccountsAdapterUpdate,
         MyService.ServiceCallBack{
 
+    private FloatingActionButton mFloatingButton;
+    private Toolbar mToolbar;
     private ApplicationPassword mApplicationPassword;
     private ApplicationState mApplicationState;
     private MyService mService;
@@ -51,11 +54,24 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plmain);
-
+        setupWidgets();
         setupSingletons();
         setFirstFragment();
         setupDatabase();
         launchService();
+    }
+
+    private void setupWidgets(){
+        mToolbar = (Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+
+        mFloatingButton = (FloatingActionButton) findViewById(R.id.fab);
+        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NewAccountDialog().show(getSupportFragmentManager(), null);
+            }
+        });
     }
 
 
@@ -114,7 +130,7 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
             }
 
         }else{
-            hideActionBar();
+           // hideActionBar(); //fix
             swapFragment( new NewUserPassFrag());
         }
     }
@@ -187,32 +203,30 @@ public class PLMainActivity extends ActionBarActivity  implements AccountsAdapte
         return true;
     }
 
-    private void hideActionBar(){
-        ActionBar actionBar = getSupportActionBar();
-        if ( actionBar != null){
-                actionBar.hide();
-        }
-    }
+//    private void hideActionBar(){
+//        if(null != mToolbar){
+//            mToolbar.setVisibility(View.GONE);
+//        }
+//    }
+//
+//    private void hideFloatingButton(){
+//        if(null != mFloatingButton){
+//            mFloatingButton.setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        switch (id){
-            case R.id.action_add_account:
-                new NewAccountDialog().show(getSupportFragmentManager(), null);
-                return true;
-
-            case R.id.action_settings:
-                Intent intent  = new Intent(this, MyPreferenceActivity.class);
-                startActivity(intent);
-                return true;
+        if ( item.getItemId() == R.id.action_settings){
+            startActivity(new Intent(this, MyPreferenceActivity.class));
+            return true;
         }
        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void callOnBackPressed() {
+    public void callOnBackPressed() { //fix
         onBackPressed();
     }
 
