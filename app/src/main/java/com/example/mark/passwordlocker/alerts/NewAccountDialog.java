@@ -1,12 +1,16 @@
 package com.example.mark.passwordlocker.alerts;
 
 
+import android.content.Context;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.mark.passwordlocker.account.AccountRecord;
@@ -15,6 +19,7 @@ import com.example.mark.passwordlocker.account.AccountSensitiveData;
 import com.example.mark.passwordlocker.fragments.PassCreationFrag;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
+import com.example.mark.passwordlocker.helpers.TransitionSingleton;
 import com.example.mark.passwordmanager.RawData;
 import com.example.mark.passwordmanager.generator.PasswordGenerator;
 
@@ -24,7 +29,7 @@ import com.example.mark.passwordmanager.generator.PasswordGenerator;
 
 
 
-public class NewAccountDialog extends DialogFragment
+public class NewAccountDialog extends Fragment
         implements View.OnClickListener, PasswordGenerator.PasswordGeneratorListener{
 
     private EditText mETAccountName;
@@ -35,7 +40,7 @@ public class NewAccountDialog extends DialogFragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.new_pass_account, container);
+        View view = inflater.inflate(R.layout.new_pass_account, container, false);
         setupWidgets(view);
         setupFragment();
         mApplicationState = ApplicationState.getInstance();
@@ -82,11 +87,10 @@ public class NewAccountDialog extends DialogFragment
                 break;
 
             case R.id.btn_new_pass_cancel:
-                dismiss();
+                hideScreen();
                 break;
         }
     }
-
 
     private void handleNewAccount(){
 
@@ -100,10 +104,19 @@ public class NewAccountDialog extends DialogFragment
             AccountSensitiveData accountSensitiveData = //TODO modify this
                     new AccountSensitiveData(new RawData(mETAccountName.getText().toString())
                             ,mPassCreationFrag.getRawPassword());
-            dismiss();
+            hideScreen();
             saveNewAccount(accountSensitiveData);
         }
 
+    }
+
+    public void hideScreen(){
+
+        InputMethodManager imm =
+                (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+        TransitionSingleton.getInstance().toggleScene();
     }
 
     private void saveNewAccount(AccountSensitiveData account){

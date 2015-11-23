@@ -122,7 +122,7 @@ public class UserCasesTest extends ActivityInstrumentationTestCase2<PLMainActivi
 
     private void tryToAddNewAccount(String account, String password, String confirmationPass){
         //press add account button
-        onView(withId(R.id.action_add_account)).perform(click());
+        //onView(withId(R.id.action_add_account)).perform(click());
 
         onView(withId(R.id.et_new_account_account)).perform(typeText(account));
         //type password

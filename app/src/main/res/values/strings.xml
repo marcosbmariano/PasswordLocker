@@ -77,11 +77,7 @@
     <string name="need_help_tutorial6">
         This principle is similar to the Information Assurance principle of Defense in Depth that
         the US National Security Agency developed.</string>
-
-
-
-
-
+    <string name="title_activity_second">SecondActivity</string>
 
 
 </resources>

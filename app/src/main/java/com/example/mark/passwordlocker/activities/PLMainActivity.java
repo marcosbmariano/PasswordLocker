@@ -2,20 +2,24 @@ package com.example.mark.passwordlocker.activities;
 
 
 
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 
 import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
@@ -28,6 +32,8 @@ import com.example.mark.passwordlocker.helpers.ApplicationPassword;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.DatabaseKey;
+import com.example.mark.passwordlocker.helpers.TransitionHelper;
+import com.example.mark.passwordlocker.helpers.TransitionSingleton;
 import com.example.mark.passwordlocker.notifications.NotificationIconManager;
 import com.example.mark.passwordlocker.services.MyService;
 import com.marcos.autodatabases.utils.DatabaseHelper;
@@ -36,6 +42,8 @@ import com.marcos.autodatabases.utils.DatabaseHelper;
 public class PLMainActivity extends AppCompatActivity implements AccountsAdapter.AccountsAdapterUpdate,
         MyService.ServiceCallBack{
 
+
+    private TransitionSingleton mTransitionHelper;
     private FloatingActionButton mFloatingButton;
     private Toolbar mToolbar;
     private ApplicationPassword mApplicationPassword;
@@ -53,13 +61,18 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plmain);
+        setContentView(R.layout.second_activity);
         setupWidgets();
+        lockWidgets();
+        setupTransionHelper();
         setupSingletons();
         setFirstFragment();
         setupDatabase();
         launchService();
+
     }
+
+
 
     private void setupWidgets(){
         mToolbar = (Toolbar)findViewById(R.id.app_bar);
@@ -69,11 +82,39 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new NewAccountDialog().show(getSupportFragmentManager(), null);
+                mTransitionHelper.toggleScene();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.add_account_layout, new NewAccountDialog())
+                        .commit();
             }
         });
+
+
     }
 
+    private void lockWidgets(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mToolbar.setVisibility(View.INVISIBLE);
+                mFloatingButton.setVisibility(View.INVISIBLE);
+                findViewById(R.id.add_account_layout).setVisibility(View.INVISIBLE);
+                Log.e("inside runer", "Tomate cru");
+            }
+        });
+
+    }
+
+    private void setupTransionHelper(){
+
+        mTransitionHelper = TransitionSingleton.getInstance();
+        mTransitionHelper.setActivity(this);
+        mTransitionHelper.setRootLayout(R.id.main_container);
+        mTransitionHelper.setFirstSceneViewsAndState(mToolbar, TransitionHelper.ViewState.VISIBLE);
+        mTransitionHelper.setFirstSceneViewsAndState(mFloatingButton, TransitionHelper.ViewState.VISIBLE);
+        mTransitionHelper.setFirstSceneViewsAndState(
+                findViewById(R.id.add_account_layout), TransitionHelper.ViewState.GONE);
+    }
 
     private void setupSingletons(){
         DatabaseKey.setContext(this);
@@ -115,6 +156,8 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
         super.onDestroy();
     }
 
+    //this is method is called by MyService any time the status
+    //of the application changes, lock to unlock and vice-versa
     @Override
     public void updateActivity() {
         setFirstFragment();
@@ -123,10 +166,11 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
     private void setFirstFragment(){
         if (isApplicationPasswordDefined()){
             if (mApplicationState.isApplicationLocked()){
-
                 swapFragment( getAppPassEnterFrag());
+                lockWidgets();
             }else{
                 swapFragment( getRecyclerViewFragment());
+                mTransitionHelper.setFirstScene();
             }
 
         }else{
@@ -203,18 +247,6 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
         return true;
     }
 
-//    private void hideActionBar(){
-//        if(null != mToolbar){
-//            mToolbar.setVisibility(View.GONE);
-//        }
-//    }
-//
-//    private void hideFloatingButton(){
-//        if(null != mFloatingButton){
-//            mFloatingButton.setVisibility(View.GONE);
-//        }
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -233,7 +265,6 @@ public class PLMainActivity extends AppCompatActivity implements AccountsAdapter
     private void launchNotificationIconManager(){
         NotificationIconManager.setContext(this);
     }
-
 
     @Override
     public boolean isActivityVisible() {

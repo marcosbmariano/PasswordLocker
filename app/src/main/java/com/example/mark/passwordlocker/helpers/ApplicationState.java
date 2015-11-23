@@ -51,11 +51,9 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     }
 
     private void setCounterToLockApplication(){
-        Log.e("SetCounterToLock", " this is the new seconds " + getSecondsToLockApp());
         if ( getSecondsToLockApp() >= 30 ){
             mCounter = new Counter(this, getSecondsToLockApp());
             mCounter.startCounter();
-            Log.e("SetCounterToLock", " this is counter seconds " + mCounter.getSeconds());
         }
     }
 

@@ -1,55 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_new_account"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_new_account_account"
-        android:hint="@string/hint_enter_account"
-        android:layout_centerHorizontal="true"
-        android:singleLine="true"
-        android:layout_gravity="center" />
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_account_container"
-        android:layout_below="@+id/et_new_account_account"
-        android:layout_centerHorizontal="true" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/tomarnocu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/et_new_account_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="@string/hint_enter_account"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/new_account_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tomarnocu"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/new_account_container"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
         <Button
+            android:id="@+id/btn_new_pass_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gen pass"
-            android:id="@+id/btn_new_pass_acc_generate"/>
+            android:text="cancel" />
+
         <Button
+            android:id="@+id/btn_new_pass_acc_generate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/btn_new_pass_acc_save"/>
+            android:text="gen pass" />
+
         <Button
+            android:id="@+id/btn_new_pass_acc_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cancel"
-            android:id="@+id/btn_new_pass_cancel" />
+            android:text="Save" />
+
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

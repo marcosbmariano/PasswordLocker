@@ -22,12 +22,12 @@ public class ScreenLockBroadReceiver extends BroadcastReceiver {
 
         if ( intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
             applicationState.lockApplication();
-            Log.e("inside BroadReceiver", "lockApp");
+
 
         }else if ( intent.getAction().equals(Intent.ACTION_SCREEN_ON)  ){
             if (ApplicationPreferences.getInstance().isToUnlockApplicationOnScreenOn()) {
                 applicationState.unlockApplication();
-                Log.e("inside BroadReceiver", "unlockApp");
+
             }
         }
 
