@@ -1,11 +1,9 @@
-package com.example.mark.passwordlocker.alerts;
+package com.example.mark.passwordlocker.fragments;
 
 
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.account.AccountSensitiveData;
-import com.example.mark.passwordlocker.fragments.PassCreationFrag;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordlocker.helpers.TransitionSingleton;
@@ -29,7 +26,7 @@ import com.example.mark.passwordmanager.generator.PasswordGenerator;
 
 
 
-public class NewAccountDialog extends Fragment
+public class NewAccountFragment extends Fragment
         implements View.OnClickListener, PasswordGenerator.PasswordGeneratorListener{
 
     private EditText mETAccountName;
@@ -70,8 +67,8 @@ public class NewAccountDialog extends Fragment
 
     @Override
     public void onStop() {
-        mApplicationState.resumeLock();
         super.onStop();
+        mApplicationState.resumeLock();
     }
 
     @Override
@@ -111,7 +108,6 @@ public class NewAccountDialog extends Fragment
     }
 
     public void hideScreen(){
-
         InputMethodManager imm =
                 (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -127,27 +123,14 @@ public class NewAccountDialog extends Fragment
     private void generatePassword(){
         PasswordGenerator passwordGenerator = new PasswordGenerator(this);
         ApplicationPreferences pref = ApplicationPreferences.getInstance();
-        passwordGenerator.generatePassword( pref.getGeneratedPasswordLength() );
+        passwordGenerator.generatePassword(pref.getGeneratedPasswordLength());
     }
 
     @Override
     public void passwordGeneratorCallBack(RawData password) {
         mPassCreationFrag.setPassword(password);
-        displayGeneratedPassword(password);
     }
 
-    private void displayGeneratedPassword(RawData password){
-        DisplayGeneratedPass alert = new DisplayGeneratedPass();
-        alert = setArguments(alert, password.getDataCharArray());
-        alert.show(getActivity().getSupportFragmentManager(),"");
-    }
 
-    private DisplayGeneratedPass setArguments( DisplayGeneratedPass frag, char [] arguments){
-        Bundle args = new Bundle();
-        args.putCharArray(
-                DisplayGeneratedPass.GENERATED_PASSWORD, arguments);
-        frag.setArguments(args);
 
-        return frag;
-    }
 }

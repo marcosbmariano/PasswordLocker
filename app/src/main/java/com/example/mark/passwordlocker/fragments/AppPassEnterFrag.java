@@ -22,6 +22,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
 
     private EditText mPassword;
     private Button mBtnShowHint;
+    private static ResultPassEnter mActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,6 +45,10 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         v.findViewById(R.id.bt_app_enter_pass_enter).setOnClickListener(this);
     }
 
+    public void setObserver(ResultPassEnter observer){
+        mActivity = observer;
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -64,17 +69,9 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void hideSoftKeyBoard(){
-        InputMethodManager manager =
-                (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),0);
-    }
-
     private void checkPassword(){
         if ( isPasswordValid() ){
-            hideSoftKeyBoard();
-            changeFragment();
-
+            mActivity.updateFromPasswordCheck();
         }else{
             Toast.makeText(getActivity(), "Password Not Valid!" , Toast.LENGTH_LONG).show();
             ifHasHintShowBtn();
@@ -93,15 +90,6 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         return result;
     }
 
-    private void changeFragment(){
-        if( !ApplicationState.getInstance().isApplicationLocked()){
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.MainFragContainer, new RecyclerViewFragment())
-                    .commit();
-        }
-
-    }
-
     private void ifHasHintShowBtn(){
         if ( hasHint()){
             mBtnShowHint.setVisibility(View.VISIBLE);
@@ -109,6 +97,11 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
     }
     private boolean hasHint(){
         return ApplicationPassword.getInstance().hasHint();
+    }
+
+
+    public interface ResultPassEnter{
+        void updateFromPasswordCheck();
     }
 
 }

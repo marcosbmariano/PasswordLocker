@@ -27,8 +27,7 @@ public class RecyclerViewFragment extends BaseFragment {
                             ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.recycler_view_layout, container, false);
-        setAppBarVisibible(true);
-        setFloatingButtonVisible(true);
+
         setupViews(rootView);
         return rootView;
     }

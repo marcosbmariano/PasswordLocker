@@ -3,17 +3,23 @@ package com.example.mark.passwordlocker.helpers;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mark on 7/23/15.
+ *
+ * this class is responsible to keep track of the application state ( locked / unlocked) and
+ * warn its observers of any state change
+ *
  */
 public class ApplicationState implements ApplicationPreferences.PreferencesSecondsToLockObserver,
         Counter.CounterCallBack{
     private static ApplicationPassword mApplicationPassword;
     private static ApplicationPreferences mPreferences;
     private static ApplicationState mInstance;
-    private static List<ApplicationStateObserver> mObservers;
+    private static Set<ApplicationStateObserver> mObservers = new HashSet<>();
     private Counter mCounter;
     private boolean mIsLockSuspended = false;
 
@@ -22,7 +28,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         mApplicationPassword = ApplicationPassword.getInstance();
         mPreferences = ApplicationPreferences.getInstance();
         mPreferences.addPreferencesAppLockObserver(this);
-        mObservers = new ArrayList<>();
     }
 
     public static ApplicationState getInstance(){
@@ -32,12 +37,10 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         return mInstance;
     }
 
-
-
     //this method is called by the ApplicationPreferences class when there is a change in
     //the seconds to lock the application
     @Override
-    public void updateSeconds(int seconds) {
+    public void updateSeconds(int seconds) { //todo check if the parameter can be removed
         updateCounter();
     }
 
@@ -47,7 +50,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     private int getSecondsToLockApp(){
         return getAppPreferences().getSecondsToLockApplication();
-
     }
 
     private void setCounterToLockApplication(){
@@ -101,7 +103,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         return result;
     }
 
-
     public void unlockApplication( ){
         if ( mApplicationPassword.isKeyValid() )  {
             Log.e("unlockApplication", "Key is valid");
@@ -112,7 +113,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     }
 
     private void updateObservers(){
-
         if (null != mObservers){
             for ( ApplicationStateObserver observer : mObservers){
 
@@ -130,13 +130,12 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     }
 
     public static void addObserver(ApplicationStateObserver observer){
-        if ( !mObservers.contains(observer)){
             mObservers.add(observer);
-        }
+
     }
 
     public static void deleteObserver(ApplicationStateObserver observer){
-        if (null != mObservers && mObservers.contains(observer)){
+        if (null != mObservers ){//&& mObservers.contains(observer)){
             mObservers.remove(observer);
         }
     }
@@ -147,9 +146,6 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
         }
         return mPreferences;
     }
-
-
-
 
     public interface ApplicationStateObserver {
         void applicationIsLocked();

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +39,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         if ( null == context){
             throw new IllegalArgumentException("Context must not be null!");
         }
+
         AccountRecord.addObservers(this);
         updatedAccounts();
         mAccountsList = getCurrentAccountsList();
@@ -63,12 +63,6 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         return new VH(itemView, mContext);
     }
 
-
-
-    private void updatedAccounts(){
-        mAccountsRecord = AccountRecord.getAllAccounts();
-    }
-
     @Override
     public void onBindViewHolder(VH holder, int position) {
         AccountRecord account = mAccountsRecord.get(position);
@@ -86,6 +80,9 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         updatedAccounts();
         mAccountsList = getCurrentAccountsList();
         notifyDataSetChanged();
+    }
+    private void updatedAccounts(){
+        mAccountsRecord = AccountRecord.getAllAccounts();
     }
 
 
@@ -127,7 +124,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
                 public void onClick(View v) {
 
                     copyPasswordToClipboard(getAccountRecord().getAccountPassword());
-                    AccountsAdapter.mActivity.callOnBackPressed();
+                    AccountsAdapter.mActivity.copyToClipboardPressed();
                 }
             });
 
@@ -186,7 +183,6 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip( ClipData.newPlainText("", password));
             setCounterToClearClipboard();
-            Log.e("inside clearClipboard", manager.getPrimaryClip().toString());
         }
 
         private void setCounterToClearClipboard(){
@@ -229,6 +225,6 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
 
 
     public interface AccountsAdapterUpdate{
-        void callOnBackPressed();
+        void copyToClipboardPressed();
     }
 }

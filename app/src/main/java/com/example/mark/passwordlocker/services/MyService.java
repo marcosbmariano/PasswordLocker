@@ -13,15 +13,17 @@ import com.example.mark.passwordlocker.broadcastReceiver.ScreenLockBroadReceiver
 import com.example.mark.passwordlocker.helpers.ApplicationState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mark on 7/20/15.
  */
-public class MyService extends Service implements ApplicationState.ApplicationStateObserver {
+public class MyService extends Service {
     private BroadcastReceiver mReceiver;
     private final IBinder mBinder = new MyBinder();
-    private static List<ServiceCallBack> mServiceObserver;
+    private static Set<ServiceCallBack> mServiceObserver = new HashSet<>();
 
     @Nullable
     @Override
@@ -37,8 +39,6 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_ANSWER);
         registerReceiver(mReceiver, filter);
-        ApplicationState.addObserver(this);
-        mServiceObserver = new ArrayList<>();
         Log.e("MyService", "Service is created");
     }
 
@@ -54,11 +54,9 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
         }
     }
 
-
     @Override
     public void onDestroy() {
         unregisterReceiver(mReceiver);
-        ApplicationState.deleteObserver(this);
         Log.e("MyReceiver", "ON Destroy");
         warnActivityOfDestruction();
         super.onDestroy();
@@ -66,27 +64,7 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
 
     private void warnActivityOfDestruction(){
         for ( ServiceCallBack listener : mServiceObserver){
-            if ( listener.isActivityVisible()){
                 listener.serviceDestroyed();
-            }
-        }
-    }
-
-    @Override
-    public void applicationIsLocked() {
-        updateObservers();
-    }
-
-    @Override
-    public void applicationIsUnlocked() {
-        updateObservers();
-    }
-
-    private void updateObservers(){
-        for ( ServiceCallBack listener : mServiceObserver){
-            if ( listener.isActivityVisible()){
-                listener.updateActivity();
-            }
         }
     }
 
@@ -97,8 +75,6 @@ public class MyService extends Service implements ApplicationState.ApplicationSt
     }
 
     public interface ServiceCallBack{
-        void updateActivity();
-        boolean isActivityVisible();
         void serviceDestroyed();
     }
 }

@@ -55,11 +55,8 @@ public final class ApplicationPassword extends SharedPrefsActor {
         if (null == mPreferences){
             mPreferences = ApplicationPreferences.getInstance();
         }
-
         return mPreferences;
     }
-
-
 
     public void saveApplicationPassword(String password){
         if ( !isPasswordDefined()){

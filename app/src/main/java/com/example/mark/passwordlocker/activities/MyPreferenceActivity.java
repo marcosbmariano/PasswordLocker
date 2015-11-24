@@ -1,5 +1,6 @@
 package com.example.mark.passwordlocker.activities;
 
+import android.content.Intent;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
@@ -14,28 +15,23 @@ import com.example.mark.passwordlocker.services.MyService;
 
 
 public class MyPreferenceActivity extends AppCompatActivity
-        implements MyService.ServiceCallBack, ApplicationState.ApplicationStateObserver{
+        implements ApplicationState.ApplicationStateObserver{
 
-    private boolean mIsActivityVisible = false;
     private Prefs1Fragment mFragment;
     private Toolbar mToolBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mIsActivityVisible = true;
         setContentView(R.layout.preferences_layout);
 
-        addToObervers();
+        addToObservers();
         setupToolBar();
         setupFragments();
-
     }
 
-    private void addToObervers(){
-        MyService.addObserver(this);
+    private void addToObservers(){
         ApplicationState.addObserver(this);
-
     }
 
     private void setupFragments(){
@@ -46,24 +42,10 @@ public class MyPreferenceActivity extends AppCompatActivity
                 .commit();
     }
 
-
-
-//
-//    @Override
-//    public void onBuildHeaders(List<Header> target) {
-//        loadHeadersFromResource(R.xml.preferences_header, target);
-//    }
-//
-//    @Override
-//    protected boolean isValidFragment(String fragmentName) {
-//        return Prefs1Fragment.class.getName().equals(fragmentName);
-//    }
-
     private void setupToolBar(){
         mToolBar = (Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     public Prefs1Fragment getFragment(){
@@ -75,23 +57,28 @@ public class MyPreferenceActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        mIsActivityVisible = true;
         if(ApplicationState.getInstance().isApplicationLocked()){
-            onNavigateUp();
+            moveToFirstActivity();
+        }else{
+            ApplicationState.addObserver(this);
         }
         super.onResume();
-
     }
 
     @Override
     protected void onPause() {
-        mIsActivityVisible = false;
+        ApplicationState.deleteObserver(this);
         super.onPause();
     }
 
+    //this method is called in case the
     @Override
     public void applicationIsLocked() {
-        onNavigateUp();
+        moveToFirstActivity();
+    }
+
+    private void moveToFirstActivity(){
+        startActivity(new Intent(this, PLMainActivity.class));
     }
 
     @Override
@@ -104,15 +91,6 @@ public class MyPreferenceActivity extends AppCompatActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-            // Make sure default values are applied.  In a real app, you would
-            // want this in a shared function that is used to retrieve the
-            // SharedPreferences wherever they are needed.
-
-            //PreferenceManager.setDefaultValues(getActivity(),
-            // R.xml.preferences, false);
-
-            // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
         }
 
@@ -131,24 +109,10 @@ public class MyPreferenceActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_preferences, menu);
         return true;
     }
-
-    @Override
-    public void updateActivity() {
-        onNavigateUp();
-    }
-
-    @Override
-    public boolean isActivityVisible() {
-        return mIsActivityVisible;
-    }
-
-    @Override
-    public void serviceDestroyed() { /*Do nothing*/ }
 
 }
