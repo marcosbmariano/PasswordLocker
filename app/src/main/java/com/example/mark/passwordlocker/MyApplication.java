@@ -17,6 +17,7 @@ public class MyApplication extends Application {
         super.onCreate();
         setupSingletons();
         setupDatabase();
+
     }
 
     private void setupSingletons(){
@@ -32,4 +33,5 @@ public class MyApplication extends Application {
         mDataHelper.addModel(AccountRecord.class);
         mDataHelper.createDatabase();
     }
+
 }

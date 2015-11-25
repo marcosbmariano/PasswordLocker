@@ -22,9 +22,8 @@ import com.example.mark.passwordmanager.generator.PasswordGenerator;
 
 /**
  * Created by mark on 1/14/15.
+ *
  */
-
-
 
 public class NewAccountFragment extends Fragment
         implements View.OnClickListener, PasswordGenerator.PasswordGeneratorListener{
@@ -39,7 +38,7 @@ public class NewAccountFragment extends Fragment
 
         View view = inflater.inflate(R.layout.new_pass_account, container, false);
         setupWidgets(view);
-        setupFragment();
+        setupPasswordHandlerFragment();
         mApplicationState = ApplicationState.getInstance();
 
         return view;
@@ -58,7 +57,7 @@ public class NewAccountFragment extends Fragment
         v.findViewById(R.id.btn_new_pass_acc_generate).setOnClickListener(this);
     }
 
-    private void setupFragment(){
+    private void setupPasswordHandlerFragment(){
         mPassCreationFrag = new PassCreationFrag();
         getChildFragmentManager().beginTransaction()
                 .add(R.id.new_account_container, mPassCreationFrag, "")

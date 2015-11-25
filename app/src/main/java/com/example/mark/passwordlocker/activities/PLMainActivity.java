@@ -4,10 +4,13 @@ package com.example.mark.passwordlocker.activities;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.inputmethod.InputMethodManager;
+
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.fragments.NewUserPassFrag;
 import com.example.mark.passwordlocker.fragments.AppPassEnterFrag;
@@ -63,6 +66,11 @@ public class PLMainActivity extends AppCompatActivity implements
             //if user never set a password
             swapFragment(new NewUserPassFrag());
         }
+    }
+
+    private void hideKeyBoard(){
+        ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
     private AppPassEnterFrag getAppPassEnterFrag(){

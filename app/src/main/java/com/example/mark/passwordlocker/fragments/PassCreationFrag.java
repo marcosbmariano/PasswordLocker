@@ -3,14 +3,18 @@ package com.example.mark.passwordlocker.fragments;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.mark.passwordlocker.R;
@@ -49,7 +53,6 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
                              @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.app_pass_creation_frag, container, false);
-
         setupWidgets(v);
 
         return v;
@@ -63,10 +66,10 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
         mEdTPassConfirmation.addTextChangedListener(new ConfirmationChecker());
 
         mTVStrengthLabel = (TextView)v.findViewById(R.id.tv_pass_creat_strength);
-        mTVStrengthLabel.setVisibility(View.INVISIBLE);
+        mTVStrengthLabel.setVisibility(View.GONE);
 
         mImgVPassCheck = (ImageView)v.findViewById(R.id.iv_app_pass_crea_check);
-        mImgVPassCheck.setVisibility(View.INVISIBLE);
+        mImgVPassCheck.setVisibility(View.GONE);
 
         setupHint(v);
 
@@ -125,6 +128,12 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
             mPasswordValid = false;
         }
 
+    }
+
+    private void setPasswordConfirmation(){
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_check);
+        ImageSpan imageSpan = new ImageSpan(drawable);
+        SpannableString spString = new SpannableString(" ");
     }
 
     public boolean isPasswordConfirmationValid(){

@@ -2,56 +2,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    >
 
     <LinearLayout
         android:id="@+id/tomarnocu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
 
         <EditText
             android:id="@+id/et_new_account_account"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:ems="10"
             android:hint="@string/hint_enter_account"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:gravity="center" />
 
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/new_account_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tomarnocu"
         android:layout_centerHorizontal="true"
-        android:paddingLeft="16dp" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/new_account_container"
         android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/btn_new_pass_cancel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="cancel" />
 
         <Button
             android:id="@+id/btn_new_pass_acc_generate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="gen pass" />
 
         <Button
             android:id="@+id/btn_new_pass_acc_save"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Save" />
 
     </LinearLayout>

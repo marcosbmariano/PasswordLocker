@@ -71,11 +71,18 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
 
     private void checkPassword(){
         if ( isPasswordValid() ){
+            hideKeyBoard();
             mActivity.updateFromPasswordCheck();
         }else{
             Toast.makeText(getActivity(), "Password Not Valid!" , Toast.LENGTH_LONG).show();
             ifHasHintShowBtn();
         }
+    }
+
+
+    private void hideKeyBoard(){
+        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
     }
 
     private boolean isPasswordValid(){

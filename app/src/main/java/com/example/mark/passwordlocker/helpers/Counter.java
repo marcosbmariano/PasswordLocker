@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * Created by mark on 7/17/15.
  */
 public class Counter { //TODO Runnable or AsyncTask?
-    private final CounterCallBack mObserver;
+    private CounterCallBack mObserver;
     private String mTag;
     private final int mSeconds;
 
@@ -29,8 +29,10 @@ public class Counter { //TODO Runnable or AsyncTask?
             public void run() {
                 try{
                     TimeUnit.SECONDS.sleep(mSeconds);
-                    mObserver.calledByCounter(Counter.this);
-                    Log.e("Counter", "lcalledByCoynter " + mSeconds);
+                    if( null != mObserver){
+                        mObserver.calledByCounter(Counter.this);
+                        Log.e("Counter", "calledByCounter " + mSeconds);
+                    }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -52,6 +54,10 @@ public class Counter { //TODO Runnable or AsyncTask?
             return "null";
         }
         return mTag;
+    }
+
+    public void deactivateCounter(){
+        mObserver = null;
     }
 
     public interface CounterCallBack{
