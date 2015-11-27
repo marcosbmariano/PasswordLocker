@@ -43,7 +43,7 @@ public class MyPreferenceActivity extends AppCompatActivity
     }
 
     private void setupToolBar(){
-        mToolBar = (Toolbar)findViewById(R.id.app_bar);
+        mToolBar = (Toolbar)findViewById(R.id.app_bar_preferences);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

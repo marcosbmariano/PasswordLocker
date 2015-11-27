@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.adapters.AccountsAdapter;
@@ -44,17 +45,27 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
     private void setupWidgets(){
         mToolbar = (Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_lock);
+
 
         mFloatingButton = (FloatingActionButton) findViewById(R.id.fab);
-        mFloatingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTransitionHelper.toggleScene();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.add_account_layout, new NewAccountFragment())
-                        .commit();
-            }
-        });
+//        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTransitionHelper.toggleScene();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.add_account_layout, new NewAccountFragment())
+//                        .commit();
+//            }
+//        });
+    }
+
+    public void onClickFab(View v){
+        mTransitionHelper.toggleScene();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.add_account_layout, new NewAccountFragment())
+                .commit();
     }
 
     private void setupTransitionHelper(){
@@ -68,6 +79,7 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
     protected void onResume() {
         super.onResume();
 
+        setupWidgets();
         if(ApplicationState.getInstance().isApplicationLocked()){
             setFirstActivity();
         }else {
@@ -165,14 +177,22 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if ( item.getItemId() == R.id.action_settings){
-            startActivity(new Intent(this, MyPreferenceActivity.class));
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, MyPreferenceActivity.class));
+                return true;
+            case android.R.id.home:
+                ApplicationState.deleteObserver(this);
+                ApplicationState.getInstance().lockApplication();
+
+                //this is supposed to fall through default
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
-//    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
 

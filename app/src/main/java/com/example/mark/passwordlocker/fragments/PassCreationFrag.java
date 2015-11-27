@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -128,12 +130,6 @@ public class PassCreationFrag extends BaseFragment implements PasswordMeter.Pass
             mPasswordValid = false;
         }
 
-    }
-
-    private void setPasswordConfirmation(){
-        Drawable drawable = getResources().getDrawable(R.drawable.ic_check);
-        ImageSpan imageSpan = new ImageSpan(drawable);
-        SpannableString spString = new SpannableString(" ");
     }
 
     public boolean isPasswordConfirmationValid(){

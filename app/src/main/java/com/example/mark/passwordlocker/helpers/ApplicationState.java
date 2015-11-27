@@ -81,9 +81,7 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     //this is called by the counter when the define time is expired
     @Override
     public void calledByCounter(Counter counter ) {
-        if ( isToLockApplication() && secondsToLockMatchCounterSeconds() ){
             lockApplication();
-        }
     }
 
     public void suspendLock(){
@@ -96,8 +94,10 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
     }
 
     public void lockApplication(){
-        mApplicationPassword.lockPassword();
-        updateObservers();
+        if ( isToLockApplication() && secondsToLockMatchCounterSeconds() ) {
+            mApplicationPassword.lockPassword();
+            updateObservers();
+        }
     }
 
     public boolean isPasswordValid(String password){
@@ -135,11 +135,10 @@ public class ApplicationState implements ApplicationPreferences.PreferencesSecon
 
     public static void addObserver(ApplicationStateObserver observer){
             mObservers.add(observer);
-
     }
 
     public static void deleteObserver(ApplicationStateObserver observer){
-        if (null != mObservers ){//&& mObservers.contains(observer)){
+        if (null != mObservers ){
             mObservers.remove(observer);
         }
     }

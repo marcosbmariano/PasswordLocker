@@ -30,8 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_add"  />
-
+        android:src="@mipmap/ic_add"
+        android:onClick="onClickFab"
+        />
     <include layout="@layout/footer_layout" />
 
 </android.support.design.widget.CoordinatorLayout>

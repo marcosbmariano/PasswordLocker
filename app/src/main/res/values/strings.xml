@@ -18,11 +18,13 @@
     <string name="save">Save</string>
     <string name="back">Back</string>
     <string name="label">LabelLabel</string>
+
+    <!--password labels -->
     <string name="invalid">Invalid</string>
-    <string name="poor">poor</string>
-    <string name="weak">weak</string>
-    <string name="good">good</string>
-    <string name="strong">StrongS</string>
+    <string name="poor">POOR</string>
+    <string name="weak">WEAK</string>
+    <string name="good">GOOD</string>
+    <string name="strong">STRONG</string>
     <string name="add_acount">Add Account</string>
     <string name="hint_enter_account">Enter Account</string>
     <string name="label_new_account">Password strength</string>
@@ -77,7 +79,7 @@
     <string name="need_help_tutorial6">
         This principle is similar to the Information Assurance principle of Defense in Depth that
         the US National Security Agency developed.</string>
-    <string name="title_activity_second">SecondActivity</string>
+    <string name="title_activity_second">Accounts</string>
 
 
 </resources>
