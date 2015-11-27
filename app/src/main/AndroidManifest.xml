@@ -25,13 +25,12 @@
         </activity>
         <activity
             android:name=".activities.MyPreferenceActivity"
-            android:label="@string/app_name"
+            android:label="@string/preferences_activity_label"
             android:launchMode="singleInstance"
             android:noHistory="true"
-            android:parentActivityName=".activities.PLMainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.mark.passwordlocker.activities.PLMainActivity" />
+            android:parentActivityName=".activities.PLMainActivity"
+            android:theme="@style/AppTheme">
+
         </activity>
 
         <service android:name=".services.MyService" />

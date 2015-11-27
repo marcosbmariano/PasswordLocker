@@ -1,7 +1,6 @@
 package com.example.mark.passwordlocker.activities;
 
 import android.content.Intent;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +9,6 @@ import android.view.Menu;
 import com.example.mark.passwordlocker.R;
 import com.example.mark.passwordlocker.helpers.ApplicationPreferences;
 import com.example.mark.passwordlocker.helpers.ApplicationState;
-import com.example.mark.passwordlocker.services.MyService;
-
 
 
 public class MyPreferenceActivity extends AppCompatActivity

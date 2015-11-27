@@ -5,13 +5,17 @@ package com.example.mark.passwordlocker.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.mark.passwordlocker.account.AccountRecord;
 import com.example.mark.passwordlocker.R;
@@ -31,6 +35,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
     private List<String> mAccountsList;
     private final FragmentActivity mContext;
     private static AccountsAdapterUpdate mActivity;
+
 
 
     public AccountsAdapter(FragmentActivity context){
@@ -92,11 +97,14 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         private static final String PASSWORD_VISIBLE_TAG = "passwordVisible";
         private static final String CLEAR_CLIPBOARD_TAG = "clearClipboard";
         final View rootView;
+        final ViewGroup itemLayout;
         final ImageButton btnCopyToClipBoard;
         final ImageButton btnViewPassword;
         final TextView account;
+        final TextView passwordLabel;
         final TextView password;
         final FragmentActivity mActivity;
+        final ViewGroup recyclerViewMainLayout;
         private boolean passwordVisible = false;
 
 
@@ -104,11 +112,16 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             super(itemView);
             mActivity = context;
             rootView = itemView;
+            itemLayout = (ViewGroup)itemView.findViewById(R.id.rl_recycler_item_layout);
+            recyclerViewMainLayout = (ViewGroup) context.findViewById(R.id.rvAccounts);
+
             btnCopyToClipBoard = (ImageButton)itemView.findViewById(R.id.imBtnCopyClipboardPassword);
             btnViewPassword = (ImageButton)itemView.findViewById(R.id.imBtnViewPassword);
             account = (TextView) itemView.findViewById(R.id.tvAccount);
             password = (TextView) itemView.findViewById(R.id.tvPassword);
             password.setVisibility(View.GONE);
+            passwordLabel = (TextView) itemView.findViewById(R.id.tvPasswordLabel);
+            passwordLabel.setVisibility(View.GONE);
 
             rootView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -137,6 +150,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             });
         }
 
+
         private void togglePasswordVisibility(){
             if ( passwordVisible){
                 setPasswordInvisible();
@@ -147,15 +161,35 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
 
         private void setPasswordVisible(){
             passwordVisible = true;
+            runTransition();
             password.setVisibility(View.VISIBLE);
+            passwordLabel.setVisibility(View.VISIBLE);
+            itemLayout.getLayoutParams().height = getHeightInDP(84);
             setCounterToHidePassword();
         }
 
         private void setPasswordInvisible(){
             if ( passwordVisible){
                 passwordVisible = false;
+                runTransition();
+                itemLayout.getLayoutParams().height = getHeightInDP(48);
                 password.setText(" ");
                 password.setVisibility(View.GONE);
+                passwordLabel.setVisibility(View.GONE);
+            }
+        }
+
+        private int getHeightInDP(int pixels){
+            final  float scale = mActivity.getApplicationContext()
+                    .getResources().getDisplayMetrics().density;
+            return (int) (pixels * scale + 0.5f);
+        }
+
+        private void runTransition(){
+            if (Build.VERSION.SDK_INT >= 21 ){
+                AutoTransition transition = new AutoTransition();
+                transition.setDuration(100);
+                TransitionManager.beginDelayedTransition(recyclerViewMainLayout, transition);
             }
         }
 

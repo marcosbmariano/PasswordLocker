@@ -48,17 +48,8 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_lock);
 
-
         mFloatingButton = (FloatingActionButton) findViewById(R.id.fab);
-//        mFloatingButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mTransitionHelper.toggleScene();
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.add_account_layout, new NewAccountFragment())
-//                        .commit();
-//            }
-//        });
+
     }
 
     public void onClickFab(View v){
@@ -185,7 +176,6 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
             case android.R.id.home:
                 ApplicationState.deleteObserver(this);
                 ApplicationState.getInstance().lockApplication();
-
                 //this is supposed to fall through default
             default:
                 return super.onOptionsItemSelected(item);
