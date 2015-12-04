@@ -29,7 +29,7 @@
 <!--<fragment
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:name="com.example.mark.passwordlocker.fragments.NeedHelpFrag"
+        android:name="com.mark.passwordlocker.fragments.NeedHelpFrag"
         android:id="@+id/FGNeedHelp"
         android:background="?attr/colorPrimary"
         android:gravity="center"

@@ -32,7 +32,9 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_add"
         android:onClick="onClickFab"
-        />
+        android:importantForAccessibility="yes"
+        android:clickable="true"
+        android:adjustViewBounds="true" />
     <include layout="@layout/footer_layout" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.mark.passwordlocker.activities.SecondActivity"
+    tools:context="com.mark.passwordlocker.activities.SecondActivity"
     tools:showIn="@layout/second_activity">
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.mark.passwordlocker.fragments.RecyclerViewFragment"
+        android:name="com.mark.passwordlocker.fragments.RecyclerViewFragment"
         android:id="@+id/recycler_fragment"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
