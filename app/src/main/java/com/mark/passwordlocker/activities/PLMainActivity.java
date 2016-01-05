@@ -4,13 +4,13 @@ package com.mark.passwordlocker.activities;
 
 
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
-
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.fragments.NewUserPassFrag;
 import com.mark.passwordlocker.fragments.AppPassEnterFrag;
@@ -31,8 +31,6 @@ public class PLMainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
-        //call to setup observer
         getAppPassEnterFrag();
     }
 
@@ -42,13 +40,13 @@ public class PLMainActivity extends AppCompatActivity implements
         mApplicationPassword = ApplicationPassword.getInstance();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         setupSingletonsReferences();
         setFirstFragment();
         launchNotificationIconManager();
-
     }
 
     private void setFirstFragment() {
@@ -104,4 +102,7 @@ public class PLMainActivity extends AppCompatActivity implements
     public void updateFromPasswordCheck() {
         setFirstFragment();
     }
+
+
+
 }

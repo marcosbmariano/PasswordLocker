@@ -32,10 +32,10 @@ public class RecyclerViewFragment extends BaseFragment {
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
+//    @Override
+//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//    }
 
     private void setupViews(View v){
         final RecyclerView rvAccounts = (RecyclerView)v.findViewById(R.id.rvAccounts);

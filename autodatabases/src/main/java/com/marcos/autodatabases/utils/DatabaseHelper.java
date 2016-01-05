@@ -20,7 +20,6 @@ public class DatabaseHelper {
     private final String TAG_DB_NAME = "AA_DB_NAME";
     private final String TAG_DB_VERSION = "AA_DB_VERSION";
     private static Context mContext;
-    private static DatabaseHelper mInstance = null;
     private static SQLiteHelper mHelper; //todo why static?
     private SQLiteDatabase mDb;
     private static String DATABASE_NAME = "my_database.db";
@@ -36,6 +35,14 @@ public class DatabaseHelper {
         mHelper = new SQLiteHelper(mContext, DATABASE_NAME, DATABASE_VERSION);
     }
 
+    public static DatabaseHelper getInstance() {
+        return Holder.sInstace;
+    }
+
+    private static class Holder{
+        private static DatabaseHelper sInstace = new DatabaseHelper();
+    }
+
     public static void setupContext(Context context){
         mContext = context;
     }
@@ -47,13 +54,6 @@ public class DatabaseHelper {
         }
         SQLiteDatabase db = getWritable(); //getWritable creates a database
         db.close();
-    }
-
-    public static DatabaseHelper getInstance() {
-        if (mInstance == null) {
-            mInstance = new DatabaseHelper();
-        }
-        return mInstance;
     }
 
     public String getDatabaseName() {

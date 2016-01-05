@@ -1,10 +1,13 @@
 package com.mark.passwordlocker.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.mark.passwordlocker.R;
+import com.mark.passwordlocker.application.MyApplication;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,34 +18,28 @@ import java.util.Set;
  */
 public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
 
+    public static final String UPDATE_SECONDS_TO_LOCK =
+            "com.mark.passwordlocker.helpers.UPDATE_SECONDS_TO_LOCK";
+    public static final String SECONDS_TO_LOCK = "com.mark.passwordlocker.helpers.SECONDS_TO_LOCK";
 
     private static final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
-    //private final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
     private static Context mContext;
-    private static ApplicationPreferences mInstance;
-    //private static SharedPreferences mApplicationsPreferences;
-    private static Set<PreferencesSecondsToLockObserver> mLockObservers;
     private static PreferencesNotificationDisplayListener mDisplayNotificationListener;
 
 
-    private ApplicationPreferences(){
-        if (null == mContext){
-            throw new NullPointerException(
-                    "ApplicationPreferences must have a valid context reference, use setContext.");
-        }
+    private ApplicationPreferences(Context context){
+        mContext = context;
         setPreferencesDefaultValues();
-        //setupPreferences();
     }
 
-    //private void setupPreferences(){
-   //     mApplicationsPreferences = getSharedPreferences();
-   // }
 
     public static ApplicationPreferences getInstance(){
-        if ( null == mInstance){
-            mInstance = new ApplicationPreferences();
-        }
-        return mInstance;
+        return Holder.sInstance;
+    }
+
+    private static class Holder{
+        private static ApplicationPreferences sInstance =
+                new ApplicationPreferences(MyApplication.getAppContext());
     }
 
     public static void setContext(Context context){
@@ -92,13 +89,14 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
     }
 
 
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         final String SHORT_CUT_NOTIFICATION_KEY = "SHOW_NOTIFICATION";
 
         switch (key){
             case TIME_TO_LOCK_KEY:
-                updateLockPreferencesListener();
+                broadcastSecondsToLock();
                 break;
 
             case SHORT_CUT_NOTIFICATION_KEY:
@@ -109,23 +107,12 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
         }
     }
 
-    public void addPreferencesAppLockObserver(
-            PreferencesSecondsToLockObserver observer){
-        if(null == mLockObservers){
-            mLockObservers = new HashSet<>();
-        }
-        mLockObservers.add(observer);
-
-    }
-    private void updateLockPreferencesListener(){
-        if ( null == mLockObservers){
-            throw new IllegalStateException("PreferencesSecondsToLockObserver is null");
-        }
-        Iterator<PreferencesSecondsToLockObserver> observers = mLockObservers.iterator();
-        while( observers.hasNext()){
-            observers.next().updateSeconds(getSecondsToLockApplication());
-        }
-
+    private void broadcastSecondsToLock(){ //TODO fix this
+        Intent localIntent = new Intent();
+        localIntent.setAction(UPDATE_SECONDS_TO_LOCK);
+        //localIntent.putExtra(SECONDS_TO_LOCK, seconds);
+        //localIntent.addCategory(Intent.CATEGORY_DEFAULT); TODO why category DEFAULT
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(localIntent);
     }
 
     public static void addPreferencesNotificationDisplayListener(
@@ -141,7 +128,4 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
         void updateIsToShowNotification(boolean showNotification);
     }
 
-    public interface PreferencesSecondsToLockObserver { //todo check this
-        void updateSeconds(int seconds);
-    }
 }

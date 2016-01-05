@@ -2,6 +2,8 @@ package com.mark.passwordlocker.helpers;
 
 import android.content.Context;
 
+import com.mark.passwordlocker.application.MyApplication;
+
 
 /**
  * Created by mark on 3/12/15.
@@ -11,28 +13,20 @@ public final class DatabaseKey extends SharedPrefsActor {
     private static Context mContext;
     private static ApplicationPassword mApplicationPassword;
     private static ApplicationState mApplicationState;
-    private static DatabaseKey mDatabaseKeyInstance;
 
 
-    private DatabaseKey(){
-        if ( null == mContext){
-            throw new NullPointerException(
-                    "DatabaseKey must have a valid Context reference before being used!");
-        }else{
+    private DatabaseKey(Context context){
+            mContext = context;
             mApplicationPassword = ApplicationPassword.getInstance();
             mApplicationState = ApplicationState.getInstance();
-        }
-    }
-
-    public static void setContext( Context context){
-        mContext = context;
     }
 
     public static DatabaseKey getInstance(){
-        if ( null == mDatabaseKeyInstance){
-            mDatabaseKeyInstance = new DatabaseKey();
-        }
-        return mDatabaseKeyInstance;
+        return Holder.sInstance;
+    }
+
+    private static class Holder{
+        private static DatabaseKey sInstance = new DatabaseKey(MyApplication.getAppContext());
     }
 
 
