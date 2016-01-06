@@ -1,6 +1,5 @@
 package com.mark.passwordlocker.activities;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +20,14 @@ import android.view.View;
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.adapters.AccountsAdapter;
 import com.mark.passwordlocker.application.MyApplication;
-import com.mark.passwordlocker.broadcastReceiver.ScreenLockBroadReceiver;
+import com.mark.passwordlocker.counter.LockPasswordTask;
+import com.mark.passwordlocker.counter.TaskManager;
 import com.mark.passwordlocker.fragments.NewAccountFragment;
 import com.mark.passwordlocker.helpers.ApplicationPassword;
-import com.mark.passwordlocker.helpers.ApplicationState;
 import com.mark.passwordlocker.helpers.TransitionSingleton;
 import com.mark.passwordlocker.services.ScreenOnOfService;
+
+import java.util.concurrent.locks.Lock;
 
 public class SecondActivity extends AppCompatActivity implements AccountsAdapter.AccountsAdapterUpdate {
 
@@ -83,9 +83,9 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
     @Override
     protected void onResume() {
         super.onResume();
-
         setupWidgets();
-        if(ApplicationState.getInstance().isApplicationLocked()){
+        LockPasswordTask.getInstance().startTimer();
+        if(ApplicationPassword.getInstance().isPasswordLocked()){
             gotoFirstActivity();
         }else {
             if( null == mAppLockBrReceiver){
@@ -129,7 +129,7 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
                 return true;
             case android.R.id.home:
                 unregisterAppLockBrReceiver();
-                ApplicationState.getInstance().lockApplication(); //TODO substitute this by password lock
+                ApplicationPassword.getInstance().lockPassword(); //TODO substitute this by password lock
                 System.exit(1);
 
             default:
@@ -137,7 +137,7 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
         }
     }
 
-    private void gotoFirstActivity(){ //TODO why not finish?
+    private void gotoFirstActivity(){
         Intent intent = new Intent(this, PLMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -148,7 +148,7 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
         mAppLockBrReceiver = new AppLockBrReceiver();
         LocalBroadcastManager.getInstance(MyApplication.getAppContext())
                 .registerReceiver(mAppLockBrReceiver,
-                        new IntentFilter(ApplicationPassword.LOCK_APP));
+                        new IntentFilter(ApplicationPassword.APPLICATION_IS_LOCKED));
     }
 
     private void unregisterAppLockBrReceiver(){
@@ -174,7 +174,7 @@ public class SecondActivity extends AppCompatActivity implements AccountsAdapter
     private class AppLockBrReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ApplicationPassword.LOCK_APP)){
+            if (intent.getAction().equals(ApplicationPassword.APPLICATION_IS_LOCKED)){
                 gotoFirstActivity();
             }
         }

@@ -19,8 +19,9 @@ import android.widget.TextView;
 import com.mark.passwordlocker.account.AccountRecord;
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.alerts.DeleteAccountAlert;
+import com.mark.passwordlocker.counter.HidePasswordTask;
 import com.mark.passwordlocker.helpers.ApplicationPreferences;
-import com.mark.passwordlocker.helpers.Counter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
     }
 
 
-    public static final class VH extends RecyclerView.ViewHolder implements Counter.CounterCallBack{
+    public static final class VH extends RecyclerView.ViewHolder {
         final static private ApplicationPreferences mAppPreferences
                 = ApplicationPreferences.getInstance();
         private static final String PASSWORD_VISIBLE_TAG = "passwordVisible";
@@ -167,7 +168,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             setCounterToHidePassword();
         }
 
-        private void setPasswordInvisible(){
+        public void setPasswordInvisible(){
             if ( passwordVisible){
                 passwordVisible = false;
                 runTransition();
@@ -193,9 +194,13 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         }
 
         private void setCounterToHidePassword(){
-            Counter counter = new Counter(this, mAppPreferences.getSecondsToHidePassword());
-            counter.setTag(PASSWORD_VISIBLE_TAG);
-            counter.startCounter();
+            //Counter counter = new Counter(this, mAppPreferences.getSecondsToHidePassword());
+            //counter.setTag(PASSWORD_VISIBLE_TAG);
+            //counter.startCounter();
+            HidePasswordTask task = new HidePasswordTask(VH.this);
+
+
+
         }
 
         private AccountRecord getAccountRecord(){
@@ -219,24 +224,24 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         }
 
         private void setCounterToClearClipboard(){
-            Counter counter = new Counter(this, mAppPreferences.getClipBoardSeconds());
-            counter.setTag(CLEAR_CLIPBOARD_TAG);
-            counter.startCounter();
+            //Counter counter = new Counter(this, mAppPreferences.getClipBoardSeconds());
+            //counter.setTag(CLEAR_CLIPBOARD_TAG);
+            //counter.startCounter();
         }
 
-        @Override
-        public void calledByCounter(Counter counter) {
-            String tag = counter.getTag();
-            switch (tag){
-                case CLEAR_CLIPBOARD_TAG:
-                    clearClipBoard();
-                    break;
-                case PASSWORD_VISIBLE_TAG:
-                    hidePassword();
-                    break;
-                default:
-            }
-        }
+//        @Override
+//        public void calledByCounter(Counter counter) {
+//            String tag = counter.getTag();
+//            switch (tag){
+//                case CLEAR_CLIPBOARD_TAG:
+//                    clearClipBoard();
+//                    break;
+//                case PASSWORD_VISIBLE_TAG:
+//                    hidePassword();
+//                    break;
+//                default:
+//            }
+//        }
 
         private void hidePassword(){
             mActivity.runOnUiThread(new Runnable() {

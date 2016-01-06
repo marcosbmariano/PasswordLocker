@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.alerts.ShowHintAlert;
 import com.mark.passwordlocker.helpers.ApplicationPassword;
-import com.mark.passwordlocker.helpers.ApplicationState;
 
 /**
  * Created by mark on 1/13/15.
@@ -91,8 +90,7 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         mPassword.setText("");
 
         if (!password.isEmpty()){
-            ApplicationState appState = ApplicationState.getInstance();
-            result = appState.isPasswordValid(password);
+            result = ApplicationPassword.getInstance().unlockApplication(password);
         }
         return result;
     }

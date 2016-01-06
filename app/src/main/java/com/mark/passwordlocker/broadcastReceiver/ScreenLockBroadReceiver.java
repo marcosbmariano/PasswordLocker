@@ -20,15 +20,12 @@ public class ScreenLockBroadReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("ScreenLockBroadReceiver", "OnReceive");
 
         if ( intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
             ApplicationPassword.getInstance().lockPassword();
 
-            Log.e("ScreenLockBroadReceiver", "SCREEN OFF");
 
         }else if ( intent.getAction().equals(Intent.ACTION_SCREEN_ON)  ){
-            Log.e("ScreenLockBroadReceiver", "SCREEN ON");
             if (ApplicationPreferences.getInstance().isToUnlockApplicationOnScreenOn()) {
                 ApplicationPassword.getInstance().unlockApplication();
             }

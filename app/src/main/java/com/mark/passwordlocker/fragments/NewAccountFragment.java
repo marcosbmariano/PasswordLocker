@@ -14,8 +14,9 @@ import android.widget.Toast;
 import com.mark.passwordlocker.account.AccountRecord;
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.account.AccountSensitiveData;
+import com.mark.passwordlocker.counter.LockPasswordTask;
+import com.mark.passwordlocker.counter.TaskManager;
 import com.mark.passwordlocker.helpers.ApplicationPreferences;
-import com.mark.passwordlocker.helpers.ApplicationState;
 import com.mark.passwordlocker.helpers.TransitionSingleton;
 import com.example.mark.passwordmanager.RawData;
 import com.example.mark.passwordmanager.generator.PasswordGenerator;
@@ -30,7 +31,7 @@ public class NewAccountFragment extends Fragment
 
     private EditText mETAccountName;
     private PassCreationFrag mPassCreationFrag;
-    private ApplicationState mApplicationState;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -39,7 +40,7 @@ public class NewAccountFragment extends Fragment
         View view = inflater.inflate(R.layout.new_pass_account, container, false);
         setupWidgets(view);
         setupPasswordHandlerFragment();
-        mApplicationState = ApplicationState.getInstance();
+
 
         return view;
     }
@@ -47,7 +48,7 @@ public class NewAccountFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        mApplicationState.suspendLock();
+        LockPasswordTask.getInstance().suspendTimer();
     }
 
     private void setupWidgets(View v){
@@ -67,7 +68,7 @@ public class NewAccountFragment extends Fragment
     @Override
     public void onStop() {
         super.onStop();
-        mApplicationState.resumeLock();
+        LockPasswordTask.getInstance().resumeTimer();
     }
 
     @Override

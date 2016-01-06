@@ -3,7 +3,7 @@ package com.mark.passwordlocker.account;
 
 import android.util.Log;
 
-import com.mark.passwordlocker.helpers.ApplicationState;
+import com.mark.passwordlocker.helpers.ApplicationPassword;
 import com.mark.passwordlocker.helpers.DatabaseKey;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.RawData;
@@ -164,7 +164,7 @@ public final class AccountRecord extends Model {
     }
 
     private boolean isApplicationLocked(){
-        return ApplicationState.getInstance().isApplicationLocked();
+        return ApplicationPassword.getInstance().isPasswordLocked(); //ApplicationState.getInstance().isApplicationLocked();
     }
 
     public void save(){
@@ -252,8 +252,6 @@ public final class AccountRecord extends Model {
             }
         }
     }
-
-
 
     byte [] getAccountIv(){
         thrownExceptionIfLocked();

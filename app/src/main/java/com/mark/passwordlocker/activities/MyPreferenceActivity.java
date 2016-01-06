@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import com.mark.passwordlocker.R;
+import com.mark.passwordlocker.helpers.ApplicationPassword;
 import com.mark.passwordlocker.helpers.ApplicationPreferences;
-import com.mark.passwordlocker.helpers.ApplicationState;
 
 
 public class MyPreferenceActivity extends AppCompatActivity {
@@ -33,8 +33,8 @@ public class MyPreferenceActivity extends AppCompatActivity {
 
     private void registerReceiver(){
         mReceiver = new MyBroadcastReceiver();
-        IntentFilter filter = new IntentFilter(ApplicationState.APPLICATION_IS_UNLOCKED);
-        filter.addAction(ApplicationState.APPLICATION_IS_LOCKED);
+        IntentFilter filter = new IntentFilter(ApplicationPassword.APPLICATION_IS_UNLOCKED);
+        filter.addAction(ApplicationPassword.APPLICATION_IS_LOCKED);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
     }
 
@@ -62,7 +62,7 @@ public class MyPreferenceActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(ApplicationState.getInstance().isApplicationLocked()){
+        if(ApplicationPassword.getInstance().isPasswordLocked()){
             moveToFirstActivity();
         }
         super.onResume();
@@ -86,11 +86,11 @@ public class MyPreferenceActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if( intent.getAction().equals(ApplicationState.APPLICATION_IS_LOCKED)){
+            if( intent.getAction().equals(ApplicationPassword.APPLICATION_IS_LOCKED)){
                 moveToFirstActivity();
                 Log.e("Inside MyPreferencesActivity", "APP is locked");
             }
-            if (intent.getAction().equals(ApplicationState.APPLICATION_IS_UNLOCKED)){
+            if (intent.getAction().equals(ApplicationPassword.APPLICATION_IS_UNLOCKED)){ //TODO should remove it?
                 Log.e("Inside MyPreferencesActivity", "APP is unlocked");
             }
         }

@@ -15,7 +15,6 @@ import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.fragments.NewUserPassFrag;
 import com.mark.passwordlocker.fragments.AppPassEnterFrag;
 import com.mark.passwordlocker.helpers.ApplicationPassword;
-import com.mark.passwordlocker.helpers.ApplicationState;
 import com.mark.passwordlocker.notifications.NotificationIconManager;
 
 
@@ -24,7 +23,6 @@ public class PLMainActivity extends AppCompatActivity implements
         AppPassEnterFrag.ResultPassEnter {
 
     private ApplicationPassword mApplicationPassword;
-    private ApplicationState mApplicationState;
     private AppPassEnterFrag mAppPassEnterFrag;
 
     @Override
@@ -36,7 +34,7 @@ public class PLMainActivity extends AppCompatActivity implements
 
 
     private void setupSingletonsReferences(){
-        mApplicationState = ApplicationState.getInstance();
+        //mApplicationState = ApplicationState.getInstance();
         mApplicationPassword = ApplicationPassword.getInstance();
     }
 
@@ -53,7 +51,7 @@ public class PLMainActivity extends AppCompatActivity implements
         //if the user has set a app password
         if (isApplicationPasswordDefined()) {
             //if the application is locked, user will enter the app password
-            if (mApplicationState.isApplicationLocked()) {
+            if (mApplicationPassword.isPasswordLocked()) {
                 swapFragment(getAppPassEnterFrag());
 
             } else {

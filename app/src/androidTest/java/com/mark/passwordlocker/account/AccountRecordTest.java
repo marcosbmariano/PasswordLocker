@@ -5,7 +5,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.mark.passwordlocker.PLMainActivityIntrumentationTest;
 import com.mark.passwordlocker.helpers.ApplicationPasswordTest;
-import com.mark.passwordlocker.helpers.ApplicationState;
 import com.example.mark.passwordmanager.PasswordUtils;
 import com.example.mark.passwordmanager.cipher.PasswordCipher;
 

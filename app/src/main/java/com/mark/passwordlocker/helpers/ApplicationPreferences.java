@@ -18,8 +18,7 @@ import java.util.Set;
  */
 public class ApplicationPreferences implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    public static final String UPDATE_SECONDS_TO_LOCK =
-            "com.mark.passwordlocker.helpers.UPDATE_SECONDS_TO_LOCK";
+
     public static final String SECONDS_TO_LOCK = "com.mark.passwordlocker.helpers.SECONDS_TO_LOCK";
 
     private static final String TIME_TO_LOCK_KEY = "SECONDS_TO_LOCK";
@@ -109,7 +108,7 @@ public class ApplicationPreferences implements SharedPreferences.OnSharedPrefere
 
     private void broadcastSecondsToLock(){ //TODO fix this
         Intent localIntent = new Intent();
-        localIntent.setAction(UPDATE_SECONDS_TO_LOCK);
+        localIntent.setAction(SECONDS_TO_LOCK);
         //localIntent.putExtra(SECONDS_TO_LOCK, seconds);
         //localIntent.addCategory(Intent.CATEGORY_DEFAULT); TODO why category DEFAULT
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(localIntent);

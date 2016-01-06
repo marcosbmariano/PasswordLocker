@@ -12,13 +12,12 @@ public final class DatabaseKey extends SharedPrefsActor {
     private final String PREFERENCES_NAME = "database_pref";
     private static Context mContext;
     private static ApplicationPassword mApplicationPassword;
-    private static ApplicationState mApplicationState;
+
 
 
     private DatabaseKey(Context context){
             mContext = context;
             mApplicationPassword = ApplicationPassword.getInstance();
-            mApplicationState = ApplicationState.getInstance();
     }
 
     public static DatabaseKey getInstance(){
@@ -31,7 +30,7 @@ public final class DatabaseKey extends SharedPrefsActor {
 
 
     boolean isApplicationLocked(){
-        return mApplicationState.isApplicationLocked();
+        return mApplicationPassword.isPasswordLocked();
     }
 
     public byte [] getKey(){
@@ -42,7 +41,7 @@ public final class DatabaseKey extends SharedPrefsActor {
     }
 
     public byte [] getIv(){
-        if ( mApplicationState.isApplicationLocked() ){
+        if ( isApplicationLocked() ){
             throw new IllegalStateException("The Iv cannot be used if the Application is locked!!");
         }
         return mApplicationPassword.getAppIv();
@@ -50,7 +49,7 @@ public final class DatabaseKey extends SharedPrefsActor {
     }
 
     public byte [] getSalt(){
-        if ( mApplicationState.isApplicationLocked() ){
+        if ( isApplicationLocked() ){
             throw new IllegalStateException("The Salt cannot be used if the Application is locked!!");
         }
         return mApplicationPassword.getAppKey();

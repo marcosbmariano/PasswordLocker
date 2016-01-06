@@ -8,7 +8,6 @@ import android.util.Log;
 import com.mark.passwordlocker.account.AccountRecord;
 import com.mark.passwordlocker.activities.PLMainActivity;
 import static com.mark.passwordlocker.helpers.ApplicationPasswordTest.PASSWORD;
-import com.mark.passwordlocker.helpers.ApplicationState;
 
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
