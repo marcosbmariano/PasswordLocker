@@ -19,8 +19,7 @@ import android.widget.TextView;
 import com.mark.passwordlocker.account.AccountRecord;
 import com.mark.passwordlocker.R;
 import com.mark.passwordlocker.alerts.DeleteAccountAlert;
-import com.mark.passwordlocker.counter.HidePasswordTask;
-import com.mark.passwordlocker.helpers.ApplicationPreferences;
+import com.mark.passwordlocker.counter.ViewHolderTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +72,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         AccountRecord account = mAccountsRecord.get(position);
         holder.rootView.setTag(account);
         holder.account.setText(mAccountsList.get(position));
+        holder.setname(account.getAccount());
     }
 
     @Override
@@ -92,10 +92,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
 
 
     public static final class VH extends RecyclerView.ViewHolder {
-        final static private ApplicationPreferences mAppPreferences
-                = ApplicationPreferences.getInstance();
-        private static final String PASSWORD_VISIBLE_TAG = "passwordVisible";
-        private static final String CLEAR_CLIPBOARD_TAG = "clearClipboard";
+        private ViewHolderTask mViewHolderTask;
         final View rootView;
         final ViewGroup itemLayout;
         final ImageButton btnCopyToClipBoard;
@@ -106,6 +103,17 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         final FragmentActivity mActivity;
         final ViewGroup recyclerViewMainLayout;
         private boolean passwordVisible = false;
+
+
+        //TODO remove this
+        String name;
+
+        public void setname(String name){
+            this.name = name;
+        }
+        public String getname(){
+            return name;
+        }
 
 
         public VH(View itemView, final FragmentActivity context) {
@@ -154,6 +162,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
         private void togglePasswordVisibility(){
             if ( passwordVisible){
                 setPasswordInvisible();
+                getViewHolderTask().cancelTask();
             } else{
                 setPasswordVisible();
             }
@@ -165,14 +174,14 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             password.setVisibility(View.VISIBLE);
             passwordLabel.setVisibility(View.VISIBLE);
             itemLayout.getLayoutParams().height = getHeightInDP(84);
-            setCounterToHidePassword();
+            setTaskToHidePassword();
         }
 
         public void setPasswordInvisible(){
             if ( passwordVisible){
                 passwordVisible = false;
                 runTransition();
-                itemLayout.getLayoutParams().height = getHeightInDP(48);
+                itemLayout.getLayoutParams().height = getHeightInDP(48);//TODO // FIXME: 1/6/16
                 password.setText(" ");
                 password.setVisibility(View.GONE);
                 passwordLabel.setVisibility(View.GONE);
@@ -193,14 +202,8 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             }
         }
 
-        private void setCounterToHidePassword(){
-            //Counter counter = new Counter(this, mAppPreferences.getSecondsToHidePassword());
-            //counter.setTag(PASSWORD_VISIBLE_TAG);
-            //counter.startCounter();
-            HidePasswordTask task = new HidePasswordTask(VH.this);
-
-
-
+        private void setTaskToHidePassword(){
+            getViewHolderTask().hidePassword();
         }
 
         private AccountRecord getAccountRecord(){
@@ -220,44 +223,26 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.VH>
             ClipboardManager manager = (ClipboardManager) mActivity.
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip( ClipData.newPlainText("", password));
-            setCounterToClearClipboard();
+            setTimerToClearClipboard();
         }
 
-        private void setCounterToClearClipboard(){
-            //Counter counter = new Counter(this, mAppPreferences.getClipBoardSeconds());
-            //counter.setTag(CLEAR_CLIPBOARD_TAG);
-            //counter.startCounter();
+        private ViewHolderTask getViewHolderTask(){
+            if( null != mViewHolderTask){
+                return mViewHolderTask;
+            }
+            mViewHolderTask = new ViewHolderTask(this);
+            return mViewHolderTask;
         }
 
-//        @Override
-//        public void calledByCounter(Counter counter) {
-//            String tag = counter.getTag();
-//            switch (tag){
-//                case CLEAR_CLIPBOARD_TAG:
-//                    clearClipBoard();
-//                    break;
-//                case PASSWORD_VISIBLE_TAG:
-//                    hidePassword();
-//                    break;
-//                default:
-//            }
-//        }
-
-        private void hidePassword(){
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setPasswordInvisible();
-                }
-            });
+        private void setTimerToClearClipboard(){
+            getViewHolderTask().clearClipboard();
         }
 
-        private void clearClipBoard(){ //TODO test this
 
+        public final void clearClipBoard(){ //TODO test this
             ClipboardManager manager = (ClipboardManager) mActivity.
                     getSystemService(Context.CLIPBOARD_SERVICE);
             manager.setPrimaryClip(ClipData.newPlainText(" "," "));
-            //ClipData data =  manager.getPrimaryClip();
         }
     }
 

@@ -29,8 +29,9 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
         View v = inflater.inflate(R.layout.app_enter_pass_frag, container, false);
 
         setupWidgtes(v);
-        setAppBarVisibible(false);
+
         setFloatingButtonVisible(false);
+        setAppBarVisibible(false);
 
         return v;
     }
@@ -80,8 +81,11 @@ public class AppPassEnterFrag extends BaseFragment implements View.OnClickListen
 
 
     private void hideKeyBoard(){
-        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+       View view = getActivity().getCurrentFocus();//TODO fix this, not ok
+        if( null != view) {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private boolean isPasswordValid(){
